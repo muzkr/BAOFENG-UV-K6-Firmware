@@ -9,3 +9,6 @@ bf_uvk6
 !Libraries/CMSIS/Device/suport/**/*.s
 .vscode
 .pio
+
+/.venv
+/build
