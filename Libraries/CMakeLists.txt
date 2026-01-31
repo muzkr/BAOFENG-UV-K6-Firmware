@@ -26,3 +26,10 @@ target_sources(kd32_driver INTERFACE
     StdPeriph_Driver/src/KD32f328_usart.c
     StdPeriph_Driver/src/KD32f328_wwdg.c
 )
+
+# -------------------------
+#   printf
+
+add_library(printf INTERFACE)
+target_include_directories(printf INTERFACE printf)
+target_sources(printf INTERFACE printf/printf.c)

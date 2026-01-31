@@ -19,6 +19,7 @@ enum WORKMODE_Type
 /***********************************************************************************************/    
 
 extern void App_10msTask(void);
+extern void App_50msTask(void);
 extern void App_100msTask(void);
 extern void App_500msTask(void);
 extern void AppRunTask(void);

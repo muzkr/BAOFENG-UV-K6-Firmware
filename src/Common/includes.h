@@ -2,7 +2,8 @@
     #define _includes_h
 
 #include <ctype.h>
-#include <stdio.h>
+// #include <stdio.h>
+#include "printf.h"
 #include <string.h>
 #include <stdlib.h>
 //---------------------------

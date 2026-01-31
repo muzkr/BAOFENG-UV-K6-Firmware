@@ -1,8 +1,9 @@
 
 #include "kd32f3xx.h"
 
+#define SYSCLK_FREQ_48MHz 48000000
+// #define SYSCLK_FREQ_96MHz 96000000
 
-#define SYSCLK_FREQ_96MHz  96000000    
 /**
   * @}
   */

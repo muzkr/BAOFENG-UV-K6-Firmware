@@ -2,7 +2,11 @@
 add_library(app INTERFACE)
 target_link_libraries(app INTERFACE kd32_driver)
 
+target_link_libraries(app INTERFACE printf)
+target_compile_definitions(app INTERFACE PRINTF_INCLUDE_CONFIG_H)
+
 target_include_directories(app INTERFACE
+    .
     Voice
     Interface
     Gui
