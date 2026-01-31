@@ -1,6 +1,6 @@
 #include "includes.h"
 
-__IO STR_INTFUN UserVectors[10] __attribute__((at(0x20001000))) __attribute__((section(".intfun")));
+__IO STR_INTFUN UserVectors[10] __attribute__((section(".intfun")));
 
 //定时1ms
 void SysTick_Init(void)
