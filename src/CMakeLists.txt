@@ -1,35 +1,4 @@
 
-# -------------------------
-#   kd32_driver
-
-add_library(kd32_driver INTERFACE)
-
-target_include_directories(kd32_driver INTERFACE 
-    Libraries/CMSIS/Include
-    Libraries/CMSIS/Device
-    Libraries/StdPeriph_Driver/inc
-)
-
-target_sources(kd32_driver INTERFACE 
-    Libraries/StdPeriph_Driver/src/KD32f328_adc.c
-    Libraries/StdPeriph_Driver/src/KD32f328_crc.c
-    Libraries/StdPeriph_Driver/src/KD32f328_dma.c
-    Libraries/StdPeriph_Driver/src/KD32f328_exti.c
-    Libraries/StdPeriph_Driver/src/KD32f328_flash.c
-    Libraries/StdPeriph_Driver/src/KD32f328_gpio.c
-    Libraries/StdPeriph_Driver/src/KD32f328_iwdg.c
-    Libraries/StdPeriph_Driver/src/KD32f328_misc.c
-    Libraries/StdPeriph_Driver/src/KD32f328_pwr.c
-    Libraries/StdPeriph_Driver/src/KD32f328_rcc.c
-    Libraries/StdPeriph_Driver/src/KD32f328_spi.c
-    Libraries/StdPeriph_Driver/src/KD32f328_tim.c
-    Libraries/StdPeriph_Driver/src/KD32f328_usart.c
-    Libraries/StdPeriph_Driver/src/KD32f328_wwdg.c
-)
-
-# -------------------------
-#   app
-
 add_library(app INTERFACE)
 target_link_libraries(app INTERFACE kd32_driver)
 
@@ -47,8 +16,8 @@ target_include_directories(app INTERFACE
 
 target_sources(app INTERFACE
     # Startup files
-    Libraries/CMSIS/Device/support/gcc/startup_kd32f328xb.S
-    Libraries/CMSIS/Device/system_kd32f328.c
+    startup_kd32f328xb.S
+    system_kd32f328.c
     syscalls.c
 
     # Common

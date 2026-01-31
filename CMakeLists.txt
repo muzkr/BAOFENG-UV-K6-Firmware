@@ -32,7 +32,9 @@ message("Binary name: " ${EXE_NAME})
 
 add_executable(${EXE_NAME})
 
+add_subdirectory(Libraries)
 add_subdirectory(src)
+
 target_link_libraries(${EXE_NAME} app)
 target_compile_definitions(${EXE_NAME} PRIVATE $<$<CONFIG:Debug>:DEBUG>)
 
