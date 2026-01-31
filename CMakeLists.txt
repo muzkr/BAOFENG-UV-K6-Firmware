@@ -21,18 +21,20 @@ message("Build type: " ${CMAKE_BUILD_TYPE})
 
 enable_language(C CXX ASM)
 
-set(EXE_NAME ${CMAKE_PROJECT_NAME})
-add_executable(${EXE_NAME})
-
-add_subdirectory(src)
-target_link_libraries(${EXE_NAME} app)
-target_compile_definitions(${EXE_NAME} PRIVATE $<$<CONFIG:Debug>:DEBUG>)
-
 execute_process(  
     COMMAND git rev-parse --short HEAD  
     OUTPUT_VARIABLE GIT_HASH  
     OUTPUT_STRIP_TRAILING_WHITESPACE  
 )
+
+set(EXE_NAME ${CMAKE_PROJECT_NAME}-${GIT_HASH})
+message("Binary name: " ${EXE_NAME})
+
+add_executable(${EXE_NAME})
+
+add_subdirectory(src)
+target_link_libraries(${EXE_NAME} app)
+target_compile_definitions(${EXE_NAME} PRIVATE $<$<CONFIG:Debug>:DEBUG>)
 
 target_compile_definitions(${EXE_NAME} PRIVATE GIT_HASH="${GIT_HASH}")
 
