@@ -110,17 +110,25 @@ SECTIONS
 
   } >RAM AT> FLASH
 
-  ASSERT(_edata <= 0x20001000, ".data section overflow into .bss region")
-
-  /* Uninitialized data section into "RAM" Ram type memory */
-  .bss 0x20001000 :
+  /* Uninitialized data section into "RAM" Ram type memory  
+   * Memory layout:  
+   *   - .bss.LARGE* objects use RAM from _sbss to 0x20001000  
+   *   - .intfun section fixed at 0x20001000 (UserVectors interrupt table)  
+   *   - Regular .bss objects follow after .intfun  
+   */ 
+  . = ALIGN(4);
+  .bss :
   {
     /* This is used by the startup in order to initialize the .bss section */
     _sbss = .;         /* define a global symbol at bss start */
     __bss_start__ = _sbss;
-    
-    KEEP(*(.intfun))
-    *(.bss)
+
+    *(.bss.LARGE*)              /* Large .bss objects placed before .intfun to utilize available RAM */  
+
+    . = ABSOLUTE(0x20001000);   /* Jump to fixed address for .intfun */
+    KEEP(*(.intfun))            /* UserVectors[] interrupt table must be at 0x20001000 */
+
+    *(.bss)                     /* Regular .bss objects placed after .intfun */ 
     *(.bss*)
     *(COMMON)
 
