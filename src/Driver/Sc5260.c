@@ -12,29 +12,36 @@
 /*********************************************************************/
 U8 gLcdBuffer[8][128];
 /*********************************************************************/
-void SC5260_delay( U8  i )
+
+// In ~120 ns
+void SC5260_delay(U32 i)
 {
-    while( i-- )
+    const register U32 f = SystemCoreClock;
+    while (i--)
     {
-        // __nop();
-        // __nop();
-		__ASM volatile("nop");
-		__ASM volatile("nop");
-	}
+        if (f > 48000000)
+        {
+            __NOP();
+            __NOP();
+            __NOP();
+            __NOP();
+            __NOP();
+        }
+    }
 }
 
 void SC5260_writeCmd( U8  dat )
 {
     LCD_CS_L;
 	LCD_RS_L;
-    SC5260_delay(10);
+    SC5260_delay(1);
     
     while(RESET == SPI_I2S_GetFlagStatus(SPI2, SPI_I2S_FLAG_TXE));
     SPI_SendData8(SPI2, dat);
     while(SET == SPI_I2S_GetFlagStatus(SPI2, SPI_I2S_FLAG_BSY)); 
-    SC5260_delay(10);
+    SC5260_delay(1);
     LCD_CS_H;
-	SC5260_delay(10);
+	SC5260_delay(1);
 }	
 
 void SC5260_writeDat( U8  dat )
@@ -61,13 +68,13 @@ extern void SC5260_FillScreen(U8 value)
 
         LCD_CS_L;
     	LCD_RS_H;
-    	SC5260_delay(10);
+    	SC5260_delay(1);
 		for( j = 0; j < 132; j++ )
 		{
             SC5260_writeDat( value );
 		}
 	}
-	SC5260_delay(10);
+	SC5260_delay(1);
     LCD_CS_H;
 }
 
@@ -262,7 +269,7 @@ extern void LCD_UpdateFullScreen(void)
 
 	    LCD_CS_L;
     	LCD_RS_H;
-    	SC5260_delay(10);
+    	SC5260_delay(1);
         for( j = 0; j < 128; j++ )
         {
      	    if(g_radioInform.DisplayStyles)
@@ -275,7 +282,7 @@ extern void LCD_UpdateFullScreen(void)
      	    } 
 		}
 	}
-	SC5260_delay(10);
+	SC5260_delay(1);
     LCD_CS_H;
 }
 
@@ -288,7 +295,7 @@ extern void LCD_UpdateStateBar(void)
 
     LCD_CS_L;
 	LCD_RS_H;
-	SC5260_delay(10);
+	SC5260_delay(1);
     for( j = 0; j < 128; j++ )
     {
  	    if(g_radioInform.DisplayStyles)
@@ -300,7 +307,7 @@ extern void LCD_UpdateStateBar(void)
  	        SC5260_writeDat(gLcdBuffer[0][j] );
  	    } 
 	}
-	SC5260_delay(10);
+	SC5260_delay(1);
     LCD_CS_H;
 }
 
@@ -315,7 +322,7 @@ extern void LCD_UpdateWorkAre(void)
 
 	    LCD_CS_L;
     	LCD_RS_H;
-    	SC5260_delay(10);
+    	SC5260_delay(1);
         for( j = 0; j < 128; j++ )
         {
      	    if(g_radioInform.DisplayStyles)
@@ -328,7 +335,7 @@ extern void LCD_UpdateWorkAre(void)
      	    } 
 		}
 	}
-	SC5260_delay(10);
+	SC5260_delay(1);
     LCD_CS_H;
 }
 

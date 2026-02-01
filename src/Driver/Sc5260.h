@@ -1,7 +1,7 @@
 #ifndef __SC5260_H
     #define __SC5260_H
 
-extern U8 gLcdBuffer[8][128];
+extern U8 gLcdBuffer[8][128] __attribute__((section(".bss.LARGE")));
 
 extern void SC5260_Init(void);
 extern void SC5620_SetContpastRatio(U8 level);

@@ -1,5 +1,9 @@
 #include "includes.h"
 
+static U8 g_msCont;
+static U8 g_10msCont;
+static U8 g_100msCont;
+
 extern void SysTickHandler(void)
 {
     g_msCont++;

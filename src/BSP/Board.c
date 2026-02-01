@@ -32,22 +32,22 @@ void Gpio_Init(void)
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_NOPULL;
     GPIO_Init(GPIOA, &GPIO_InitStructure);
-    GPIO_Write(GPIOA,0X0104);
+    GPIO_Write(GPIOA, GPIO_Pin_2 | GPIO_Pin_8); // FLASH_CS, POW_EN
 
     //初始化GPIOA 输入上拉相关PIN
-    GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_15;
+    GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_15; // POW_DET
     GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_IN;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_UP;
     GPIO_Init(GPIOA, &GPIO_InitStructure);
 
     //初始化ADC使用的GPIO
-    GPIO_InitStructure.GPIO_Pin  = GPIO_Pin_0 | GPIO_Pin_1;
+    GPIO_InitStructure.GPIO_Pin  = GPIO_Pin_0 | GPIO_Pin_1; // VOX_DET, BAT_DET
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;
     GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL; 
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
 
-    //初始化SPI1接口
+    //初始化SPI1接口 (SPI flash)
     GPIO_InitStructure.GPIO_Pin   =  GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7;
     GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_AF;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
@@ -82,7 +82,7 @@ void Gpio_Init(void)
   
     GPIO_Init(GPIOB, &GPIO_InitStructure);
 
-    //初始化SPI2接口
+    //初始化SPI2接口 (LCD controller)
     GPIO_PinAFConfig(GPIOB, GPIO_PinSource13, GPIO_AF_0);
     GPIO_PinAFConfig(GPIOB, GPIO_PinSource15, GPIO_AF_0);
 
@@ -228,7 +228,7 @@ void SPI2_Init(void)
     SPI_InitStructure.SPI_CPOL = SPI_CPOL_High;
     SPI_InitStructure.SPI_CPHA = SPI_CPHA_2Edge;
     SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;
-    SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_4;
+    SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_4; // 48 MHz / 4 -> 12 MHz (SC5260 20 MHz max)
     SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;
     SPI_InitStructure.SPI_CRCPolynomial = 0;
     SPI_Init(SPI2, &SPI_InitStructure);

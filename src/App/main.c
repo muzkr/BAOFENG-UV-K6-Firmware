@@ -1,7 +1,12 @@
 #include "includes.h"
 #include "stdio.h"
 
-void BeepPowerOn(void)
+void _putchar(char c)
+{
+    uartSendChar((U8)c);
+}
+
+static void BeepPowerOn(void)
 {
     if(g_radioInform.OpFlag1.Bit.b2 == 1)
     {

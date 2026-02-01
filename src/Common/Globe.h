@@ -16,10 +16,7 @@ extern STR_CHANNEL_VFO g_ChannelVfoInfo;
 extern STR_CH_VFO_INFO *g_CurrentVfo;
 extern STR_INPUTBOX g_inputbuf;
 
-extern volatile U8 g_msCont;
 extern volatile U8 g_msFlag;
-extern volatile U8 g_10msCont;
-extern volatile U8 g_100msCont;
 extern volatile U8 g_10msFlag;
 extern volatile U8 g_50msFlag;
 extern volatile U8 g_100msFlag;

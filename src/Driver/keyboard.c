@@ -7,27 +7,37 @@ static U8 SubmitKey = 0;
 
 #define KeyReadDelay()                  DelayUs(5)
 
+// Cols: Side keys, L0, L1, L2, L3, L4
 const U16 keyscanTab1[] = { 0x0E11, 0x0E10, 0x0E01, 0x0A11, 0x0611, 0x0C11};  // 扫描列表_输出高电平
 const U16 keyscanTab2[] = { 0x0000, 0x0001, 0x0010, 0x0400, 0x0800, 0x0200};  // 扫描列表_输出低电平
 
 #define MASK_MATRIX_LINE           0x6003
-#define MASK_MATRIX_LINE_1         0x4003
-#define MASK_MATRIX_LINE_2         0x2003
-#define MASK_MATRIX_LINE_3         0x6001
-#define MASK_MATRIX_LINE_4         0x6002
+#define MASK_MATRIX_LINE_1         0x4003 // K0 low
+#define MASK_MATRIX_LINE_2         0x2003 // K1 low
+#define MASK_MATRIX_LINE_3         0x6001 // K3 low
+#define MASK_MATRIX_LINE_4         0x6002 // K2 low
         
 // 矩阵键值
 const KeyID_Enum KEYBOARD_TABLE[][4] =
 {
-    { KEYID_NONE,KEYID_SIDEKEY1,   KEYID_NONE,      KEYID_SIDEKEY2},
-    { KEYID_7,     KEYID_8,        KEYID_WELL,      KEYID_9,      },
-    { KEYID_4,     KEYID_5,        KEYID_0,         KEYID_6,      },
-    { KEYID_1,     KEYID_2,        KEYID_STAR,      KEYID_3,      },
-    { KEYID_MENU,  KEYID_UP,       KEYID_EXIT,      KEYID_DOWN,   },
-    { KEYID_VM,    KEYID_AB,       KEYID_NONE,      KEYID_BAND,   },
+    // Lines: K0, K1, K3, K2
+    { KEYID_NONE,KEYID_SIDEKEY1,   KEYID_NONE,      KEYID_SIDEKEY2}, // Side keys
+    { KEYID_7,     KEYID_8,        KEYID_WELL,      KEYID_9,      }, // L0
+    { KEYID_4,     KEYID_5,        KEYID_0,         KEYID_6,      }, // L1
+    { KEYID_1,     KEYID_2,        KEYID_STAR,      KEYID_3,      }, // L2
+    { KEYID_MENU,  KEYID_UP,       KEYID_EXIT,      KEYID_DOWN,   }, // L3
+    { KEYID_VM,    KEYID_AB,       KEYID_NONE,      KEYID_BAND,   }, // L4
 };
 
-static U16 KEY_ReadGpioInput(GPIO_TypeDef* GPIOx)
+/**
+ * Returns a bitmap: 
+ * - Bit 14: K1 
+ * - Bit 13: K0
+ * - Bit 1: K3
+ * - Bit 0: K2
+ * 
+ */
+static U16 KEY_ReadGpioInput()
 {
     U8 readBit;
     U16 readData = 0x00;
@@ -52,7 +62,7 @@ KeyID_Enum GetKeyCode(void)
         GPIO_ResetBits( GPIOB, keyscanTab2[i] );
         
         KeyReadDelay();
-        switch( KEY_ReadGpioInput(GPIOB) & MASK_MATRIX_LINE )
+        switch( KEY_ReadGpioInput() & MASK_MATRIX_LINE )
         {
             case MASK_MATRIX_LINE_1:  return KEYBOARD_TABLE[i][0];
             case MASK_MATRIX_LINE_2:  return KEYBOARD_TABLE[i][1];

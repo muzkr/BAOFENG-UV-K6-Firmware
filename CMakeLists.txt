@@ -12,7 +12,7 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Debug")
 endif()
 
-set(CMAKE_PROJECT_NAME bf_uv_k6_firmware)
+set(CMAKE_PROJECT_NAME bf_k6_firmware)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 

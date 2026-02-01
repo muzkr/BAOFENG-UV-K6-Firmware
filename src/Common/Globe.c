@@ -10,10 +10,7 @@ STR_INPUTBOX g_inputbuf;
 STR_CHANNEL_VFO g_ChannelVfoInfo;
 STR_CH_VFO_INFO *g_CurrentVfo;
 
-volatile U8 g_msCont;
 volatile U8 g_msFlag;
-volatile U8 g_10msCont;
-volatile U8 g_100msCont;
 volatile U8 g_10msFlag;
 volatile U8 g_50msFlag;
 volatile U8 g_100msFlag;
