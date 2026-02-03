@@ -46,7 +46,7 @@ extern void ProgromInit(void)
 * 返　　回:
 * 说    明：
 ***********************************************************************/
-extern void UartSendBuf(U8 *buf,U16 len)
+extern void UartSendBuf(const U8 *buf,U16 len)
 {
     U16 i;
     

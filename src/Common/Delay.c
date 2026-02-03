@@ -10,7 +10,8 @@ void DelayUs(U16 n)// 1US
     /** 
      *  6 inst per loop. For CPU freq f MHz: 6 * N * (1/f) = 1
      *   => N = f / 6
-     * 
+     */
+    /**
 080025a4 <DelayUs>:
  80025a4:	b082      	sub	sp, #8
  80025a6:	466b      	mov	r3, sp

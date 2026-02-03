@@ -10,7 +10,7 @@
 #define LCD_RST_H               GPIOB->BSRR = GPIO_Pin_8
 #define LCD_RST_L               GPIOB->BRR  = GPIO_Pin_8
 /*********************************************************************/
-U8 gLcdBuffer[8][128];
+U8 gLcdBuffer[8][128] __attribute__((section(".bss.LARGE")));
 /*********************************************************************/
 
 // In ~120 ns
@@ -207,7 +207,7 @@ void SC5260_DisplaySmallArea( U8 posY, U8 posX, U8 length,U8 wide,const U8 *pdat
 void SC5260_ClearArea( U8 posY, U8 posX, U8 length,U8 wide,U8 fillData)
 {
     U8 i = 0;
-    U8 *pdat;
+    U8 *pdat = NULL;
     
 
 	if( wide == 0 || length == 0 )

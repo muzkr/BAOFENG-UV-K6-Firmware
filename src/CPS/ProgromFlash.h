@@ -79,7 +79,7 @@ extern const U8  strModelType[];
 extern Boolean CheckLinkHead(void);
 extern void ProgromInit(void);
 extern void CheckProgromMode(U8  rxData);
-extern void UartSendBuf(U8  *buf,U16 len);
+extern void UartSendBuf(const U8  *buf,U16 len);
 extern void EnterProgromMode(void);
 extern void EnterFlashProgromMode(void);
 
