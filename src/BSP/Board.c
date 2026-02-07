@@ -1,4 +1,5 @@
 #include "includes.h"
+#include "kd32f328_it.h"
 
 __IO STR_INTFUN UserVectors[10] __attribute__((section(".intfun")));
 
@@ -310,7 +311,7 @@ void USART1_Handler(void)
     }
 }
 
-void DMA1Int_Handler(void)
+void DMA1_Channel4_5_IRQHandler(void)
 {
     if(DMA_GetITStatus(DMA1_IT_GL5))
     {     
@@ -322,9 +323,10 @@ void DMA1Int_Handler(void)
 
 extern void Board_Init(void)
 {
-    UserVectors[0].intHandle = SysTickHandler;
-    UserVectors[1].intHandle = USART1_Handler;
-    UserVectors[3].intHandle = DMA1Int_Handler;
+    UserVectors[0].intHandle = SysTick_Handler;
+    UserVectors[1].intHandle = USART1_IRQHandler;
+    UserVectors[2].intHandle = USART2_IRQHandler;
+    UserVectors[3].intHandle = DMA1_Channel4_5_IRQHandler;
 
     SysTick_Init();
     NVIC_Configuration();

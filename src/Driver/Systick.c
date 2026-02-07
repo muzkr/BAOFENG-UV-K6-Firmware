@@ -4,7 +4,7 @@ static U8 g_msCont;
 static U8 g_10msCont;
 static U8 g_100msCont;
 
-extern void SysTickHandler(void)
+void SysTick_Handler(void)
 {
     g_msCont++;
     g_msFlag = TRUE;
