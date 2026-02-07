@@ -66,8 +66,8 @@ extern void AudioHard_Init(void)
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1, ENABLE);
 
     /* DMA1 Channel5 Config */
-    DMA_DeInit(DMA1_Channel5);    
-    DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)0x40012C4C;
+    DMA_DeInit(DMA1_Channel5);
+    DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)&TIM1->DMAR;
     DMA_InitStructure.DMA_MemoryBaseAddr = (uint32_t)g_voiceInform.voicePlay.dmaBufA;
     DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralDST;
     DMA_InitStructure.DMA_BufferSize = 1024;
@@ -87,7 +87,7 @@ extern void AudioHard_Init(void)
     /* DMA1 Channel5 enable */
     DMA_Cmd(DMA1_Channel5, ENABLE);
 
-    GPIO_PinAFConfig(GPIOA, GPIO_PinSource11,GPIO_AF_2);
+    GPIO_PinAFConfig(GPIOA, GPIO_PinSource11,GPIO_AF_2); // PA11 as TIM1 CH4
     
     GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_11;
     GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_AF;
@@ -99,9 +99,9 @@ extern void AudioHard_Init(void)
     /* TIMER configuration 设置载波频率为48K 
     配置每4次改变PWM 1次实现输出频率固定为8K*/
     TIM_TimeBaseStructure.TIM_Prescaler = 0;   
-    TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;   
-    TIM_TimeBaseStructure.TIM_Period = 2000;          
-    TIM_TimeBaseStructure.TIM_ClockDivision = 0x0;    
+    TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+    TIM_TimeBaseStructure.TIM_Period = 1000;
+    TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
     TIM_TimeBaseStructure.TIM_RepetitionCounter = 5; //6 固定为8K
     TIM_TimeBaseInit(TIM1, &TIM_TimeBaseStructure);
         

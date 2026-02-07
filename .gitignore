@@ -12,3 +12,5 @@ bf_uvk6
 
 /.venv
 /build
+/tools
+/requirements.txt
