@@ -27,7 +27,7 @@ execute_process(
     OUTPUT_STRIP_TRAILING_WHITESPACE  
 )
 
-set(EXE_NAME ${CMAKE_PROJECT_NAME}-${GIT_HASH})
+set(EXE_NAME vec_patch-${GIT_HASH})
 message("Binary name: " ${EXE_NAME})
 
 add_executable(${EXE_NAME})

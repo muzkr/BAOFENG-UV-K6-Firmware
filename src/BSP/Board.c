@@ -321,6 +321,8 @@ void DMA1_Channel4_5_IRQHandler(void)
     }
 }
 
+#include "vec_patch.h"
+
 extern void Board_Init(void)
 {
     UserVectors[0].intHandle = SysTick_Handler;
@@ -331,15 +333,26 @@ extern void Board_Init(void)
     SysTick_Init();
     NVIC_Configuration();
     Gpio_Init();
-    SPI2_Init();
+    // SPI2_Init();
     Usart_Init();
-    UserADC_Init();
-    SpiFlash_Init();
-    AudioHard_Init();
+    // UserADC_Init();
+    // SpiFlash_Init();
+    // AudioHard_Init();
 
-    UserADC_GetValOfBatt();
+    // UserADC_GetValOfBatt();
 
     SC5260_Init();
-    __enable_irq();
+    // __enable_irq();
+
+    vec_patch();
+
+    while(1)
+    {
+        // Blink: PB7
+        GPIO_WriteBit(GPIOB, GPIO_Pin_7, Bit_SET);
+        DelayMs(200);
+        GPIO_WriteBit(GPIOB, GPIO_Pin_7, Bit_RESET);
+        DelayMs(200);
+    }
 }
 
