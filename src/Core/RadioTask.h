@@ -1,5 +1,5 @@
 #ifndef __RADIOTASK_H
-    #define __RADIOTASK_H
+#define __RADIOTASK_H
 
 extern void RfOff(void);
 extern void RxReset(void);

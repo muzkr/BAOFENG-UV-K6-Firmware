@@ -1,5 +1,5 @@
 #ifndef __APPTASK_H
-    #define __APPTASK_H
+#define __APPTASK_H
 
 enum WORKMODE_Type
 {
@@ -16,13 +16,12 @@ enum WORKMODE_Type
     MODE_PROGRAM,
     MODE_FLASH_PROGRAM
 };
-/***********************************************************************************************/    
+/***********************************************************************************************/
 
 extern void App_10msTask(void);
 extern void App_50msTask(void);
 extern void App_100msTask(void);
 extern void App_500msTask(void);
 extern void AppRunTask(void);
-
 
 #endif

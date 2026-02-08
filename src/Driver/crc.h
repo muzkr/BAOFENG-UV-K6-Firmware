@@ -1,5 +1,5 @@
 /* Copyright 2024 Binny
- * 
+ *
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 #ifndef DRIVER_CRC_H
 #define DRIVER_CRC_H
 
-extern uint16_t CRC_ValidationCalc(uint8_t *buf,uint16_t len);
+extern uint16_t CRC_ValidationCalc(uint8_t *buf, uint16_t len);
 
 #endif
-

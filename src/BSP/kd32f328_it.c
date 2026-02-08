@@ -11,7 +11,6 @@ void HardFault_Handler(void)
   NVIC_SystemReset();
 }
 
-
 void SVC_Handler(void)
 {
 }

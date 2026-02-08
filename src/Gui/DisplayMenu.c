@@ -1,1087 +1,1053 @@
 #include "includes.h"
 
-#define EnS                           "abc"
-#define EnL                           "ABC"
-#define Num                           "123"
-#define Pinyin                        " PY"
+#define EnS "abc"
+#define EnL "ABC"
+#define Num "123"
+#define Pinyin " PY"
 
 String disBuf[17];
 
-const STR_MENU_ITEM MenuList[] = 
-{
-    {vo_Null,   "CHL Name","ÐÅµÀÃû³Æ"},
-    {vo_Null,   "RX Frequency","½ÓÊÕÆµÂÊ" },
-    {vo_Null,   "TX Frequency","·¢ÉäÆµÂÊ"},
-    {vo_CTCSS,  "R-CTCSS","½ÓÊÕÄ£ÄâÑÇÒô"},
-    {vo_DCS,    "R-DCS","½ÓÊÕÊý×ÖÑÇÒô"},
-    {vo_CTCSS,  "T-CTCSS","·¢ÉäÄ£ÄâÑÇÒô"},
-    {vo_DCS,    "T-DCS","·¢ÉäÊý×ÖÑÇÒô"},
-    {vo_Chlbandwidth,"BandWidth","ÐÅµÀ´ø¿í"},
-    {vo_power,  "TXP","·¢Éä¹¦ÂÊ"},
-    {vo_Null,   "Silence Mode" ,"¾²ÔëÄ£Ê½" },
-    {vo_Null,   "TX Forbid","·¢Éä½ûÖ¹"},
-    {vo_Freqdir,"Shift DIR","Æµ²î·½Ïò"},
-    {vo_Offsetfreq,"OFFSET","Æµ²îÆµÂÊ"},
-    {vo_Memorychl,"MEMCH","ÐÅµÀ´æ´¢"},
-    {vo_Deletechl,"DELCH","ÐÅµÀÉ¾³ý"},
-    {vo_Null,    "VFO FreqRang","VFOÉ¨Ãè·¶Î§"},
-    {vo_Null,    "Scan Mode","É¨ÃèÄ£Ê½"},
-    {vo_Null,    "DTMFST","²àÒô¿ª¹Ø"},
-    {vo_Null,    "PTT ID","DTMF·¢Âë"},
-    {vo_Null,    "PTT-LT","·¢Âë¸½¼ÓÑÓ³Ù" },
-    {vo_Squelch, "Squelch","¾²ÔëµÈ¼¶"},
-    {vo_savemode,"RX Save","Ê¡µçÄ£Ê½"},
-    {vo_VOX,     "VOX Switch","Éù¿Ø¿ª¹Ø"},
-    {vo_Null,    "VOX Level","Éù¿ØµÈ¼¶"},
-    {vo_Null,    "VOX Delay","Éù¿ØÑÓÊ±"},
-    {vo_Txovertime,"TX OVer Time","·¢Éä³¬Ê±"},
-    {vo_Voicepromrt,"Language","²Ëµ¥ÓïÑÔ"},
-    {vo_Null,    "VOICE","ÓïÒôÌáÊ¾¿ª¹Ø"},
-    {vo_Null,    "Menu HangTime","²Ëµ¥¹ÒÆðÊ±¼ä"},
-    {vo_Beepprompt,"BEEP PROMPT","°´¼üÒô¿ª¹Ø"},
-    {vo_Null,    "Roger Beep","Í¨»°½áÊøÌáÊ¾Òô"},
-    {vo_Null,    "POWER ON TYPE","¿ª»ú»­ÃæÑ¡Ôñ"},
-    {vo_Null,    "Power On Tone","¿ª»úÌáÊ¾Òô"},
-    {vo_Null,    "Power on MSG","¿ª»úÐÅÏ¢"},
-    {vo_Null,    "POWER ON PWD","¿ª»úÃÜÂë"},
-    {vo_Dualstandby,"Dual Watch","Ë«ÆµÊØºò"},
-    {vo_Null,    "MDF-A","A¶ÎÏÔÊ¾Ä£Ê½"},
-    {vo_Null,    "MDF-B","B¶ÎÏÔÊ¾Ä£Ê½"},
-    {vo_Null,    "RP-STE","ÖÐ¼ÌÎ²ÒôÏû³ý"},
-    {vo_Null,    "RPT-RL","ÖÐ¼ÌÎ²ÉùÑÓÊ±"},
-    {vo_Null,    "ALERT","ÖÐ¼Ì¼¤»îÒôÆµ" },
-    {vo_Step,    "Freq Step","²½½øÆµÂÊ"},
-    {vo_Busylockout,"Busy Lockout","·±Ã¦Ëø¶¨"},
-    {vo_Null,    "Side Tone","Î²ÒôÏû³ý"},
-    {vo_Null,    "Alarm Mode","±¨¾¯Ä£Ê½"},
-    {vo_Null,    "PF1","²à¼ü1¶Ì°´"},
-    {vo_Null,    "PF1 LONG PRESS","²à¼ü1³¤°´" },
-    {vo_Null,    "PF2", "²à¼ü2¶Ì°´"},
-    {vo_Null,    "ABR","×Ô¶¯±³¹âµÆ"},
-    {vo_Null,    "Brightness","LCD¶Ô±È¶È"},
-    {vo_Null,    "LCD Reflex","·´ÉäÆÁÄ»"},
-    {vo_Null,    "AUTOLOCK","×Ô¶¯¼üÅÌËø"},
-    {vo_Null,    "Radio Interrupt","ÊÕÒô´ò¶Ï"},
-    {vo_initialization,"Reset","»Ö¸´³ö³§ÉèÖÃ"},
-    {vo_Null,    "STOP WATCH","Ãë±í¹¦ÄÜ"},
-    {vo_Null,    "VERSION","°æ±¾ÐÅÏ¢"},
+const STR_MENU_ITEM MenuList[] =
+    {
+        {vo_Null, "CHL Name", "ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½"},
+        {vo_Null, "RX Frequency", "ï¿½ï¿½ï¿½ï¿½Æµï¿½ï¿½"},
+        {vo_Null, "TX Frequency", "ï¿½ï¿½ï¿½ï¿½Æµï¿½ï¿½"},
+        {vo_CTCSS, "R-CTCSS", "ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"},
+        {vo_DCS, "R-DCS", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"},
+        {vo_CTCSS, "T-CTCSS", "ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"},
+        {vo_DCS, "T-DCS", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"},
+        {vo_Chlbandwidth, "BandWidth", "ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½"},
+        {vo_power, "TXP", "ï¿½ï¿½ï¿½ä¹¦ï¿½ï¿½"},
+        {vo_Null, "Silence Mode", "ï¿½ï¿½ï¿½ï¿½Ä£Ê½"},
+        {vo_Null, "TX Forbid", "ï¿½ï¿½ï¿½ï¿½ï¿½Ö¹"},
+        {vo_Freqdir, "Shift DIR", "Æµï¿½î·½ï¿½ï¿½"},
+        {vo_Offsetfreq, "OFFSET", "Æµï¿½ï¿½Æµï¿½ï¿½"},
+        {vo_Memorychl, "MEMCH", "ï¿½Åµï¿½ï¿½æ´¢"},
+        {vo_Deletechl, "DELCH", "ï¿½Åµï¿½É¾ï¿½ï¿½"},
+        {vo_Null, "VFO FreqRang", "VFOÉ¨ï¿½è·¶Î§"},
+        {vo_Null, "Scan Mode", "É¨ï¿½ï¿½Ä£Ê½"},
+        {vo_Null, "DTMFST", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"},
+        {vo_Null, "PTT ID", "DTMFï¿½ï¿½ï¿½ï¿½"},
+        {vo_Null, "PTT-LT", "ï¿½ï¿½ï¿½ë¸½ï¿½ï¿½ï¿½Ó³ï¿½"},
+        {vo_Squelch, "Squelch", "ï¿½ï¿½ï¿½ï¿½È¼ï¿½"},
+        {vo_savemode, "RX Save", "Ê¡ï¿½ï¿½Ä£Ê½"},
+        {vo_VOX, "VOX Switch", "ï¿½ï¿½ï¿½Ø¿ï¿½ï¿½ï¿½"},
+        {vo_Null, "VOX Level", "ï¿½ï¿½ï¿½ØµÈ¼ï¿½"},
+        {vo_Null, "VOX Delay", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±"},
+        {vo_Txovertime, "TX OVer Time", "ï¿½ï¿½ï¿½ä³¬Ê±"},
+        {vo_Voicepromrt, "Language", "ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½"},
+        {vo_Null, "VOICE", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½"},
+        {vo_Null, "Menu HangTime", "ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½"},
+        {vo_Beepprompt, "BEEP PROMPT", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"},
+        {vo_Null, "Roger Beep", "Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½"},
+        {vo_Null, "POWER ON TYPE", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½"},
+        {vo_Null, "Power On Tone", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½"},
+        {vo_Null, "Power on MSG", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢"},
+        {vo_Null, "POWER ON PWD", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"},
+        {vo_Dualstandby, "Dual Watch", "Ë«Æµï¿½Øºï¿½"},
+        {vo_Null, "MDF-A", "Aï¿½ï¿½ï¿½ï¿½Ê¾Ä£Ê½"},
+        {vo_Null, "MDF-B", "Bï¿½ï¿½ï¿½ï¿½Ê¾Ä£Ê½"},
+        {vo_Null, "RP-STE", "ï¿½Ð¼ï¿½Î²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"},
+        {vo_Null, "RPT-RL", "ï¿½Ð¼ï¿½Î²ï¿½ï¿½ï¿½ï¿½Ê±"},
+        {vo_Null, "ALERT", "ï¿½Ð¼Ì¼ï¿½ï¿½ï¿½ï¿½ï¿½Æµ"},
+        {vo_Step, "Freq Step", "ï¿½ï¿½ï¿½ï¿½Æµï¿½ï¿½"},
+        {vo_Busylockout, "Busy Lockout", "ï¿½ï¿½Ã¦ï¿½ï¿½ï¿½ï¿½"},
+        {vo_Null, "Side Tone", "Î²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"},
+        {vo_Null, "Alarm Mode", "ï¿½ï¿½ï¿½ï¿½Ä£Ê½"},
+        {vo_Null, "PF1", "ï¿½ï¿½ï¿½1ï¿½Ì°ï¿½"},
+        {vo_Null, "PF1 LONG PRESS", "ï¿½ï¿½ï¿½1ï¿½ï¿½ï¿½ï¿½"},
+        {vo_Null, "PF2", "ï¿½ï¿½ï¿½2ï¿½Ì°ï¿½"},
+        {vo_Null, "ABR", "ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"},
+        {vo_Null, "Brightness", "LCDï¿½Ô±È¶ï¿½"},
+        {vo_Null, "LCD Reflex", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä»"},
+        {vo_Null, "AUTOLOCK", "ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"},
+        {vo_Null, "Radio Interrupt", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"},
+        {vo_initialization, "Reset", "ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"},
+        {vo_Null, "STOP WATCH", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"},
+        {vo_Null, "VERSION", "ï¿½æ±¾ï¿½ï¿½Ï¢"},
 };
 
-const STR_MENU_ITEM MenuFmList[] = 
-{
-    {vo_Null,    "FM MEMCH","FMÐÅµÀ´æ´¢"},
-    {vo_Null,    "FM BAND", "FM¹¤×÷Æµ¶Î"},
+const STR_MENU_ITEM MenuFmList[] =
+    {
+        {vo_Null, "FM MEMCH", "FMï¿½Åµï¿½ï¿½æ´¢"},
+        {vo_Null, "FM BAND", "FMï¿½ï¿½ï¿½ï¿½Æµï¿½ï¿½"},
 };
 
-const String *VoxCnStr[] = 
-{
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    "10"
+const String *VoxCnStr[] =
+    {
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10"};
+
+const String *BatSaveCnStr[] =
+    {
+        "ï¿½Ø±ï¿½",
+        "1:1",
+        "1:2",
+        "1:4",
+};
+const String *BatSaveEnStr[] =
+    {
+        "OFF",
+        "1:1",
+        "1:2",
+        "1:4",
 };
 
-const String *BatSaveCnStr[] = 
-{
-    "¹Ø±Õ",
-    "1:1",
-    "1:2",
-    "1:4",
+const String *OnOffCnStr[] =
+    {
+        "ï¿½Ø±ï¿½",
+        "ï¿½ï¿½ï¿½ï¿½"};
+const String *OnOffEnStr[] =
+    {
+        "OFF",
+        "ON"};
+
+const String *OnSelCnStr[] =
+    {
+        "ï¿½ï¿½ï¿½ï¿½"};
+const String *OnSelEnStr[] =
+    {
+        "ON"};
+
+const String *AlmodCnStr[] =
+    {
+        "ï¿½Ö³ï¿½ï¿½ï¿½ï¿½ï¿½",
+        "ï¿½ï¿½ï¿½Í±ï¿½ï¿½ï¿½ï¿½ï¿½",
+        "ï¿½ï¿½ï¿½Í±ï¿½ï¿½ï¿½ï¿½ï¿½"};
+const String *AlmodEnStr[] =
+    {
+        "ON SITE",
+        "SEND SOUND",
+        "SEND CODE"};
+
+const String *ScanmodCnStr[] =
+    {
+        "Ê±ï¿½ï¿½",
+        "ï¿½Ø²ï¿½",
+        "ï¿½ï¿½ï¿½ï¿½"};
+const String *ScanmodEnStr[] =
+    {
+        "TO",
+        "CO",
+        "SE"};
+
+const String *PttIdSelCnStr[] =
+    {
+        "ï¿½Ø±ï¿½",
+        "ï¿½ï¿½ï¿½ï¿½PTTï¿½ï¿½ï¿½ï¿½",
+        "ï¿½É¿ï¿½PTTï¿½ï¿½ï¿½ï¿½",
+        "Í¬Ê±ï¿½ï¿½ï¿½ï¿½"};
+const String *PttIdSelEnStr[] =
+    {
+        "OFF",
+        "BOT",
+        "EOT",
+        "BOTH"};
+
+const String *BandCnStr[] =
+    {
+        "Õ­ï¿½ï¿½",
+        "ï¿½ï¿½ï¿½ï¿½",
 };
-const String *BatSaveEnStr[] = 
-{
-    "OFF",
-    "1:1",
-    "1:2",
-    "1:4",
+const String *BandEnStr[] =
+    {
+        "WIDE",
+        "NARROW",
 };
 
-const String *OnOffCnStr[] = 
-{
-    "¹Ø±Õ",
-    "¿ªÆô"
-};
-const String *OnOffEnStr[] = 
-{
-    "OFF",
-    "ON"
+const String *TxPowerCnStr[] =
+    {
+        "ï¿½ß¹ï¿½ï¿½ï¿½",
+        "ï¿½Í¹ï¿½ï¿½ï¿½"};
+const String *TxPowerEnStr[] =
+    {
+        "HIGH",
+        "LOW"};
+
+const String *VfoStepStr[] =
+    {
+        "2.5 K",
+        "5.0 K",
+        "6.25 K",
+        "10.0 K",
+        "12.5 K",
+        "20.0 K",
+        "25.0 K",
+        "50.0 K",
 };
 
-const String *OnSelCnStr[] = 
-{
-    "¿ªÆô"
-};
-const String *OnSelEnStr[] = 
-{
-    "ON"
+const String *VfoDirCnStr[] =
+    {
+        "ï¿½Ø±ï¿½",
+        "+",
+        "-"};
+
+const String *VfoDirEnStr[] =
+    {
+        "OFF",
+        "+",
+        "-"};
+
+const String *ChDisCnStr[] =
+    {
+        "ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½",
+        "ï¿½Åµï¿½Æµï¿½ï¿½",
+        "ï¿½Åµï¿½ï¿½ï¿½",
+        "ï¿½ï¿½ï¿½ï¿½+Æµï¿½ï¿½"};
+
+const String *ChDisEnStr[] =
+    {
+        "NAME",
+        "FREQ",
+        "CH",
+        "NAME+FREQ"};
+
+const String *LanStr[] =
+    {
+        "ENGLISH",
+        "ï¿½ï¿½ï¿½ï¿½"};
+
+const String *DtmfSetSelCnStr[] =
+    {
+        "ï¿½Ø±ï¿½",
+        "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½",
+        "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½",
+        "ï¿½ï¿½ï¿½ï¿½+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"};
+const String *DtmfSetSelEnStr[] =
+    {
+        "OFF",
+        "DT-ST",
+        "ANI-ST",
+        "DT+ANI"};
+
+const String *DevResetCnStr[] =
+    {
+        "Æµï¿½ï¿½Ä£Ê½",
+        "È«ï¿½ï¿½"};
+
+const String *DevResetEnStr[] =
+    {
+        "VFO",
+        "All"};
+
+const String *ToneEnStr[] =
+    {
+        " 1000hz", // 0
+        " 1450hz", // 1
+        " 1750hz", // 2
+        " 2100hz", // 3
 };
 
-const String *AlmodCnStr[] = 
-{
-    "ÏÖ³¡±¨¾¯",
-    "·¢ËÍ±¨¾¯Òô",
-    "·¢ËÍ±¨¾¯Âë"
+const String *PwrOnCnStr[] =
+    {
+        "Ô¤ï¿½ï¿½Í¼ï¿½ï¿½",
+        "Ô¤ï¿½ï¿½ï¿½ï¿½Ï¢",
+        "ï¿½ï¿½Øµï¿½Ñ¹"};
+const String *PwrOnEnStr[] =
+    {
+        "LOGO",
+        "MESSAGE",
+        "VOLTAGE"};
+
+const String *SideKeyCnStr[] =
+    {
+        "ï¿½ï¿½",
+        "ï¿½Öµï¿½Í²ï¿½ï¿½ï¿½ï¿½",
+        "ï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½",
+        "É¨ï¿½è¿ªï¿½ï¿½",
+        "ï¿½ï¿½ï¿½Ø¿ï¿½ï¿½ï¿½",
+        "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½",
+        "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½",
 };
-const String *AlmodEnStr[] = 
-{
-    "ON SITE",
-    "SEND SOUND",
-    "SEND CODE"
+const String *SideKeyEnStr[] =
+    {
+        "None",
+        "Torch On/Off",
+        "Power Select ",
+        "Scan On/Off",
+        "VOX On/Off",
+        "Alarm on/off",
+        "Radio on/off",
 };
 
-const String *ScanmodCnStr[] = 
-{
-    "Ê±¼ä",
-    "ÔØ²¨",
-    "ËÑË÷"
-};
-const String *ScanmodEnStr[] = 
-{
-    "TO",
-    "CO",
-    "SE"
-};
+const String *RxEndTailSelCnStr[] =
+    {
+        "ï¿½Ø±ï¿½",
+        "MDC1200"};
 
-const String *PttIdSelCnStr[] = 
-{
-    "¹Ø±Õ",
-    "°´ÏÂPTT·¢Âë",
-    "ËÉ¿ªPTT·¢Âë",
-    "Í¬Ê±·¢Âë" 
-};
-const String *PttIdSelEnStr[] = 
-{
-    "OFF",
-    "BOT" ,
-    "EOT",
-    "BOTH"
-};
-
-const String *BandCnStr[] = 
-{
-    "Õ­´ø",
-	"¿í´ø",
-};
-const String *BandEnStr[] = 
-{
-    "WIDE",
-    "NARROW",
-};
-
-const String *TxPowerCnStr[] = 
-{
-    "¸ß¹¦ÂÊ",
-    "µÍ¹¦ÂÊ"
-};
-const String *TxPowerEnStr[] = 
-{
-    "HIGH",
-    "LOW"
-};
-
-const String *VfoStepStr[] = 
-{
-    "2.5 K",
-    "5.0 K",
-    "6.25 K",
-    "10.0 K",
-    "12.5 K",
-    "20.0 K",
-    "25.0 K",
-    "50.0 K",
-};
-
-const String *VfoDirCnStr[] = 
-{
-    "¹Ø±Õ",
-    "+",
-    "-"
-};
-
-const String *VfoDirEnStr[] = 
-{
-    "OFF",
-    "+",
-    "-"
-};
-
-const String *ChDisCnStr[] = 
-{
-    "ÐÅµÀÃû³Æ",
-    "ÐÅµÀÆµÂÊ",
-    "ÐÅµÀºÅ",
-    "Ãû³Æ+ÆµÂÊ"
-};
-
-const String *ChDisEnStr[] = 
-{
-    "NAME",
-    "FREQ",
-    "CH",    
-    "NAME+FREQ"
-};
-
-const String *LanStr[] = 
-{
-    "ENGLISH",
-    "ÖÐÎÄ"
-};
-
-const String *DtmfSetSelCnStr[] = 
-{
-    "¹Ø±Õ",
-    "°´¼ü²àÒô",
-    "Éí·ÝÂë",
-    "°´¼ü+Éí·ÝÂë"
-};
-const String *DtmfSetSelEnStr[] = 
-{
-    "OFF",
-    "DT-ST",
-    "ANI-ST",
-    "DT+ANI"
-};
-
-const String *DevResetCnStr[] = 
-{
-    "ÆµÂÊÄ£Ê½",
-    "È«²¿"
-};
-
-const String *DevResetEnStr[] = 
-{
-    "VFO",
-    "All"
-};
-
-const String *ToneEnStr[] = 
-{
-    " 1000hz",//0
-    " 1450hz",//1
-    " 1750hz",//2
-    " 2100hz",//3
-};
-
-const String *PwrOnCnStr[] = 
-{
-    "Ô¤ÉèÍ¼±ê",
-    "Ô¤ÉèÐÅÏ¢",
-    "µç³ØµçÑ¹"
-};
-const String *PwrOnEnStr[] = 
-{
-    "LOGO",
-    "MESSAGE",
-    "VOLTAGE"
-};
-
-const String *SideKeyCnStr[] = 
-{
-    "ÎÞ",
-    "ÊÖµçÍ²¿ª¹Ø",
-    "¹¦ÂÊÑ¡Ôñ",
-    "É¨Ãè¿ª¹Ø",
-    "Éù¿Ø¿ª¹Ø",
-    "¾¯±¨¿ª¹Ø",
-    "ÊÕÒô»ú¿ª¹Ø",
-};
-const String *SideKeyEnStr[] = 
-{
-    "None",
-    "Torch On/Off",
-    "Power Select ",
-    "Scan On/Off",
-    "VOX On/Off",
-    "Alarm on/off",
-    "Radio on/off",
-};
-
-const String *RxEndTailSelCnStr[] = 
-{
-    "¹Ø±Õ",
-    "MDC1200"
-};
-
-const String *RxEndTailSelEnStr[] = 
-{
-    "OFF",
-    "MDC1200"
-};
+const String *RxEndTailSelEnStr[] =
+    {
+        "OFF",
+        "MDC1200"};
 
 const String *TxEndToneCnStr[] =
-{
-    "¹Ø±Õ",
-    "àÖà½Òô",
-    "TONE1200"
-};
+    {
+        "ï¿½Ø±ï¿½",
+        "ï¿½ï¿½ï¿½ï¿½ï¿½",
+        "TONE1200"};
 
 const String *TxEndToneEnStr[] =
-{
-    "OFF",
-    "BEEP",
-    "TONE1200"
+    {
+        "OFF",
+        "BEEP",
+        "TONE1200"};
+
+const String *ReflexCnStr[] =
+    {
+        "ï¿½ï¿½ï¿½ï¿½",
+        "ï¿½ï¿½ï¿½ï¿½"};
+
+const String *ReflexEnStr[] =
+    {
+        "Normal",
+        "Reflex"};
+
+const String *PwrOnToneSelEnStr[] =
+    {
+        "None",
+        "Tone",
+        "Voice"};
+
+const String *PwrOnToneSelCnStr[] =
+    {
+        "ï¿½ï¿½",
+        "ï¿½ï¿½ï¿½ï¿½",
+        "ï¿½ï¿½ï¿½ï¿½"};
+
+const String *SpMuteSelCnStr[] =
+    {
+        "ï¿½ï¿½ï¿½ï¿½",
+        "ï¿½ï¿½ï¿½ï¿½+ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½ï¿½",
 };
 
-const String *ReflexCnStr[] = 
-{
-    "Õý³£",
-    "·´Éä"
+const String *SpMuteSelEnStr[] =
+    {
+        "CTDCS",
+        "CTDCS+Signaling",
 };
 
-const String *ReflexEnStr[] = 
-{
-    "Normal",
-    "Reflex"
+const String *DualSelCnStr[] =
+    {
+        "ï¿½Ø±ï¿½",
+        "Ë«ï¿½ï¿½Ë«ï¿½ï¿½",
+        "Ë«ï¿½Îµï¿½ï¿½ï¿½",
 };
 
-const String *PwrOnToneSelEnStr[] = 
-{
-    "None",
-    "Tone",
-    "Voice"
+const String *DualSelEnStr[] =
+    {
+        "OFF",
+        "Double Wait",
+        "Signal Wait"};
+
+const String *FMBandItemStr[] =
+    {
+        "76-108Mhz",
+        "65-76Mhz",
 };
 
-const String *PwrOnToneSelCnStr[] = 
-{
-    "ÎÞ",
-    "Òôµ÷",
-    "ÓïÒô"
-};
-
-const String *SpMuteSelCnStr[] = 
-{
-    "ÑÇÒô",
-    "ÑÇÒô+¿ÉÑ¡ÐÅÁî",
-};
-
-const String *SpMuteSelEnStr[] = 
-{
-    "CTDCS",
-    "CTDCS+Signaling",
-};
-
-const String *DualSelCnStr[] = 
-{
-    "¹Ø±Õ",
-    "Ë«¶ÎË«ÊØ",
-    "Ë«¶Îµ¥ÊØ",
-};
-
-const String *DualSelEnStr[] = 
-{
-    "OFF",
-    "Double Wait",
-    "Signal Wait"
-};
-
-const String *FMBandItemStr[] = 
-{
-    "76-108Mhz",
-    "65-76Mhz",
-};
-
-const U8 PttIDDelay[] = {0,1,2,4,6,8,10};
+const U8 PttIDDelay[] = {0, 1, 2, 4, 6, 8, 10};
 
 extern void Menu_GetSubItemString(U8 menuIndex)
-{   
-    if(g_menuInfo.menuType == 1)
+{
+    if (g_menuInfo.menuType == 1)
     {
-        switch(menuIndex)
+        switch (menuIndex)
         {
-            case 0:
-                if(CheckFmChActive(g_menuInfo.selectedItem))
-                {
-                    sprintf(disBuf,"CH-%02d",g_menuInfo.selectedItem+1); 
-                }
-                else
-                {
-                    sprintf(disBuf,"%02d",g_menuInfo.selectedItem+1); 
-                }
-                break;
-            case 1:
-                sprintf(disBuf,"%s",FMBandItemStr[g_menuInfo.selectedItem]); 
-            default:
-                break;
+        case 0:
+            if (CheckFmChActive(g_menuInfo.selectedItem))
+            {
+                sprintf(disBuf, "CH-%02d", g_menuInfo.selectedItem + 1);
+            }
+            else
+            {
+                sprintf(disBuf, "%02d", g_menuInfo.selectedItem + 1);
+            }
+            break;
+        case 1:
+            sprintf(disBuf, "%s", FMBandItemStr[g_menuInfo.selectedItem]);
+        default:
+            break;
         }
     }
     else
     {
-        switch(menuIndex)
+        switch (menuIndex)
         {
-            case S_CHNAME:
-                sprintf(disBuf,"%s",g_inputbuf.buf);
-                break;
-            case S_RXFREQ:
-            case S_TXFREQ:
-            case S_RXCTS:
-            case S_TXCTS: 
-            case S_OFFSE:
-            case S_VFOSCAN:
-                break;    
-            case S_RXDCS:
-            case S_TXDCS: 
-                if(g_menuInfo.selectedItem == 211)
+        case S_CHNAME:
+            sprintf(disBuf, "%s", g_inputbuf.buf);
+            break;
+        case S_RXFREQ:
+        case S_TXFREQ:
+        case S_RXCTS:
+        case S_TXCTS:
+        case S_OFFSE:
+        case S_VFOSCAN:
+            break;
+        case S_RXDCS:
+        case S_TXDCS:
+            if (g_menuInfo.selectedItem == 211)
+            {
+                if (g_sysRunPara.decoderCode)
                 {
-                    if(g_sysRunPara.decoderCode)
-                    {
-                        sprintf(disBuf,"%06X",(g_sysRunPara.decoderCode&0xFFFFFF)); 
-                    }
-                    else
-                    {
-                        memset(disBuf,' ',16);
-                    }
-                }
-                else if(g_menuInfo.selectedItem == 0 || g_menuInfo.selectedItem > 210)
-                {
-                    if(g_radioInform.language == LANG_CN)
-                    {
-                        sprintf(disBuf,"%s","¹Ø±Õ"); 
-                    }
-                    else
-                    {
-                        sprintf(disBuf,"%s","OFF"); 
-                    }
+                    sprintf(disBuf, "%06X", (g_sysRunPara.decoderCode & 0xFFFFFF));
                 }
                 else
                 {
-                    if(g_menuInfo.selectedItem > 105)
-                    {//·´Âë
-                        sprintf(disBuf,"D%03oI",DCS_TAB[g_menuInfo.selectedItem-106]); 
-                    }
-                    else
-                    {//ÕýÂë
-                        sprintf(disBuf,"D%03oN",DCS_TAB[g_menuInfo.selectedItem-1]);
-                    }
+                    memset(disBuf, ' ', 16);
                 }
-                break;
-            case S_WN: 
-                if(g_radioInform.language == LANG_CN)
+            }
+            else if (g_menuInfo.selectedItem == 0 || g_menuInfo.selectedItem > 210)
+            {
+                if (g_radioInform.language == LANG_CN)
                 {
-                    sprintf(disBuf,"%s",BandCnStr[g_menuInfo.selectedItem]); 
+                    sprintf(disBuf, "%s", "ï¿½Ø±ï¿½");
                 }
                 else
                 {
-                    sprintf(disBuf,"%s",BandEnStr[g_menuInfo.selectedItem]);
+                    sprintf(disBuf, "%s", "OFF");
                 }
-                break;
-            case S_TXPR: 
-                if(g_radioInform.language == LANG_CN)
-                {
-                    sprintf(disBuf,"%s",TxPowerCnStr[g_menuInfo.selectedItem]); 
-                }
-                else
-                {
-                    sprintf(disBuf,"%s",TxPowerEnStr[g_menuInfo.selectedItem]);
-                }
-                break;
-            case S_SPMUTE:
-                if(g_radioInform.language == LANG_CN)
-                {
-                    sprintf(disBuf,"%s",SpMuteSelCnStr[g_menuInfo.selectedItem]); 
+            }
+            else
+            {
+                if (g_menuInfo.selectedItem > 105)
+                { // ï¿½ï¿½ï¿½ï¿½
+                    sprintf(disBuf, "D%03oI", DCS_TAB[g_menuInfo.selectedItem - 106]);
                 }
                 else
-                {
-                    sprintf(disBuf,"%s",SpMuteSelEnStr[g_menuInfo.selectedItem]);
+                { // ï¿½ï¿½ï¿½ï¿½
+                    sprintf(disBuf, "D%03oN", DCS_TAB[g_menuInfo.selectedItem - 1]);
                 }
-                break;
-            case S_SFTD:
-                if(g_radioInform.language == LANG_CN)
-                {
-                    sprintf(disBuf,"%s",VfoDirCnStr[g_menuInfo.selectedItem]); 
-                }
-                else
-                {
-                    sprintf(disBuf,"%s",VfoDirEnStr[g_menuInfo.selectedItem]);
-                }
-                break;
-            case S_MEMCH: 
-            case S_DELCH:
-                if(CheckChannelActive(g_menuInfo.selectedItem, 0))
-                {
-                    sprintf(disBuf,"CH-%03d",g_menuInfo.selectedItem+1); 
-                }
-                else
-                {
-                    sprintf(disBuf,"%03d",g_menuInfo.selectedItem+1); 
-                }
-                break;
-            case S_SCREV:
-                if(g_radioInform.language == LANG_CN)
-                {
-                    sprintf(disBuf,"%s",ScanmodCnStr[g_menuInfo.selectedItem]); 
-                }
-                else
-                {
-                    sprintf(disBuf,"%s",ScanmodEnStr[g_menuInfo.selectedItem]);
-                }
-                break;
-            case S_DTST:
-                if(g_radioInform.language == LANG_CN)
-                {
-                    sprintf(disBuf,"%s",DtmfSetSelCnStr[g_menuInfo.selectedItem]); 
-                }
-                else
-                {
-                    sprintf(disBuf,"%s",DtmfSetSelEnStr[g_menuInfo.selectedItem]);
-                }
-                break;
-            case S_PTTID: 
-                if(g_radioInform.language == LANG_CN)
-                {
-                    sprintf(disBuf,"%s",PttIdSelCnStr[g_menuInfo.selectedItem]); 
-                }
-                else
-                {
-                    sprintf(disBuf,"%s",PttIdSelEnStr[g_menuInfo.selectedItem]);
-                }
-                break;
-            case S_PTTLT:
-                sprintf(disBuf,"%dMs",PttIDDelay[g_menuInfo.selectedItem]*100); 
-                break;
-            case S_SQL:
-                sprintf(disBuf,"%d",g_menuInfo.selectedItem);
-                break;
-            case S_SAVE: 
-                if(g_radioInform.language == LANG_CN)
-                {
-                    sprintf(disBuf,"%s",BatSaveCnStr[g_menuInfo.selectedItem]); 
-                }
-                else
-                {
-                    sprintf(disBuf,"%s",BatSaveEnStr[g_menuInfo.selectedItem]);
-                }
-                break;
-            case S_VOXLV: 
-                sprintf(disBuf,"%s",VoxCnStr[g_menuInfo.selectedItem]); 
-                break;
-            case S_VOXDLY:
-                {
-                    U8 time;
-                    time = g_menuInfo.selectedItem + 5;
-                    sprintf(disBuf,"%d.%dsec",time/10,time%10); 
-                }
-                break;
-            case S_TOT:
-                if(g_menuInfo.selectedItem == 0)
-                {
-                    if(g_radioInform.language == LANG_CN)
-                    {
-                        sprintf(disBuf,"%s","¹Ø±Õ"); 
-                    }
-                    else
-                    {
-                        sprintf(disBuf,"%s","OFF"); 
-                    }
-                }
-                else
-                {
-                    sprintf(disBuf,"%dS",g_menuInfo.selectedItem*15); 
-                }
-                break;
-            case S_LAN:
-                sprintf(disBuf,"%s",LanStr[g_menuInfo.selectedItem]); 
-                break;
-            case S_MENUEXIT:
-                if(g_menuInfo.selectedItem == 10)
-                {
-                    sprintf(disBuf,"60sec"); 
-                }
-                else
-                {
-                    sprintf(disBuf,"%dsec",(g_menuInfo.selectedItem+1)*5); 
-                }
-                break;
-            
-            case S_ROGE: 
-                if(g_radioInform.language == LANG_CN)
-                {
-                    sprintf(disBuf,"%s",TxEndToneCnStr[g_menuInfo.selectedItem]); 
-                }
-                else
-                {
-                    sprintf(disBuf,"%s",TxEndToneEnStr[g_menuInfo.selectedItem]);
-                }
-                break;
-            case S_PONTYPE:
-                if(g_radioInform.language == LANG_CN)
-                {
-                    sprintf(disBuf,"%s",PwrOnCnStr[g_menuInfo.selectedItem]); 
-                }
-                else
-                {
-                    sprintf(disBuf,"%s",PwrOnEnStr[g_menuInfo.selectedItem]);
-                }
-                break;
-            case S_PONTONE:
-                if(g_radioInform.language == LANG_CN)
-                {
-                    sprintf(disBuf,"%s",PwrOnToneSelCnStr[g_menuInfo.selectedItem]); 
-                }
-                else
-                {
-                    sprintf(disBuf,"%s",PwrOnToneSelEnStr[g_menuInfo.selectedItem]);
-                }
-                break;
-            case S_PONMSG:
-                {
-                    U8 i=0;
-                    memset(disBuf,0x00,16);
-                    for(i=0;i<16;i++)
-                    {
-                        if(powerOnMsg[i] == 0xFF || powerOnMsg[i] == 0x00)
-                        {
-                            break;
-                        }
-                        disBuf[i] = powerOnMsg[i];
-                    }
-                }
-                break;
-            case S_TDR:
-                if(g_radioInform.language == LANG_CN)
-                {
-                    sprintf(disBuf,"%s",DualSelCnStr[g_menuInfo.selectedItem]); 
-                }
-                else
-                {
-                    sprintf(disBuf,"%s",DualSelEnStr[g_menuInfo.selectedItem]);
-                }
-                break;
-            case S_MDF1: 
-            case S_MDF2: 
-                if(g_radioInform.language == LANG_CN)
-                {
-                    sprintf(disBuf,"%s",ChDisCnStr[g_menuInfo.selectedItem]); 
-                }
-                else
-                {
-                    sprintf(disBuf,"%s",ChDisEnStr[g_menuInfo.selectedItem]);
-                }
-                break;
-            case S_RPSTE:
-            case S_RPTRL:
-                if(g_menuInfo.selectedItem == 0)
-                {
-                    if(g_radioInform.language == LANG_CN)
-                    {
-                        sprintf(disBuf,"%s","¹Ø±Õ"); 
-                    }
-                    else
-                    {
-                        sprintf(disBuf,"%s","OFF"); 
-                    }
-                }
-                else
-                {
-                    sprintf(disBuf,"%dS",g_menuInfo.selectedItem); 
-                }
-                break;
-            case S_RTONE:
-                sprintf(disBuf,"%s",ToneEnStr[g_menuInfo.selectedItem]);
-                break;
-            case S_STEP: 
-                sprintf(disBuf,"%s",VfoStepStr[g_menuInfo.selectedItem]); 
-                break;
-            case S_ALMOD: 
-                if(g_radioInform.language == LANG_CN)
-                {
-                    sprintf(disBuf,"%s",AlmodCnStr[g_menuInfo.selectedItem]); 
-                }
-                else
-                {
-                    sprintf(disBuf,"%s",AlmodEnStr[g_menuInfo.selectedItem]);
-                }
-                break;
-            case S_SK1:
-            case S_SKL1:
-            case S_SK2:
-                if(g_radioInform.language == LANG_CN)
-                {
-                    sprintf(disBuf,"%s",SideKeyCnStr[g_menuInfo.selectedItem]); 
-                }
-                else
-                {
-                    sprintf(disBuf,"%s",SideKeyEnStr[g_menuInfo.selectedItem]);
-                }
-                break;
-            case S_ABR:  
-                if(g_menuInfo.selectedItem == 0)
-                {
-                    if(g_radioInform.language == LANG_CN)
-                    {
-                        sprintf(disBuf,"%s","¹Ø±Õ"); 
-                    }
-                    else
-                    {
-                        sprintf(disBuf,"%s","OFF"); 
-                    }
-                }
-                else
-                {
-                    if(g_menuInfo.selectedItem < 5)
-                    {
-                        sprintf(disBuf,"%dsec",g_menuInfo.selectedItem*5); 
-                    }
-                    else if(g_menuInfo.selectedItem == 5)
-                    {
-                        sprintf(disBuf,"30sec");
-                    }
-                    else
-                    {
-                        sprintf(disBuf,"%dmin",(g_menuInfo.selectedItem-5));
-                    }
-                }
-                break;
-            case S_BRIGHT:
-                sprintf(disBuf,"%d",g_menuInfo.selectedItem+1);
-                break;
-            case S_REFLEX:
-                if(g_radioInform.language == LANG_CN)
-                {
-                    sprintf(disBuf,"%s",ReflexCnStr[g_menuInfo.selectedItem]); 
-                }
-                else
-                {
-                    sprintf(disBuf,"%s",ReflexEnStr[g_menuInfo.selectedItem]);
-                }
-                break;
-            case S_AUTOLK: 
-                if(g_menuInfo.selectedItem == 0)
-                {
-                    if(g_radioInform.language == LANG_CN)
-                    {
-                        sprintf(disBuf,"%s","¹Ø±Õ"); 
-                    }
-                    else
-                    {
-                        sprintf(disBuf,"%s","OFF"); 
-                    }
-                }
-                else
-                {
-                    sprintf(disBuf,"%dS",g_menuInfo.selectedItem*5); 
-                }
-                break;
-            case S_RESET:  
-                if(g_radioInform.language == LANG_CN)
-                {
-                    sprintf(disBuf,"%s",DevResetCnStr[g_menuInfo.selectedItem]); 
-                }
-                else
-                {
-                    sprintf(disBuf,"%s",DevResetEnStr[g_menuInfo.selectedItem]);
-                }
-                break;
-            case S_TXFORBID:
-            case S_VOX: 
-            case S_VOIC:
-            case S_BEEP:
-            case S_PWR:
-            case S_BUSYLOCK:
-            case S_TAIL: 
-            case S_FMINT:  
-                if(g_radioInform.language == LANG_CN)
-                {
-                    sprintf(disBuf,"%s",OnOffCnStr[g_menuInfo.selectedItem]); 
-                }
-                else
-                {
-                    sprintf(disBuf,"%s",OnOffEnStr[g_menuInfo.selectedItem]);
-                }
-                break;
-            case S_WATCH:
-                if(g_radioInform.language == LANG_CN)
-                {
-                    sprintf(disBuf,"%s",OnSelCnStr[g_menuInfo.selectedItem]); 
-                }
-                else
-                {
-                    sprintf(disBuf,"%s",OnSelEnStr[g_menuInfo.selectedItem]);
-                }
-                break;
-            case S_INFO:
-                if(g_menuInfo.selectedItem == 0)
-                {
-                    if(g_radioInform.language == LANG_CN)
-                    {
-                        sprintf(disBuf,"Èí¼þ°æ±¾:%s","V0.01"); 
-                    }
-                    else
-                    {
-                        sprintf(disBuf,"Firmware:%s","V01  "); 
-                    }
-                }
-                else
-                {
-                    if(g_radioInform.language == LANG_CN)
-                    {
-                        sprintf(disBuf,"Ó²¼þ°æ±¾:%s","V0.01"); 
-                    }
-                    else
-                    {
-                        sprintf(disBuf,"Hardware:%s","V01  "); 
-                    }
-                }
-                break;
-            default:
-                break;
+            }
+            break;
+        case S_WN:
+            if (g_radioInform.language == LANG_CN)
+            {
+                sprintf(disBuf, "%s", BandCnStr[g_menuInfo.selectedItem]);
+            }
+            else
+            {
+                sprintf(disBuf, "%s", BandEnStr[g_menuInfo.selectedItem]);
+            }
+            break;
+        case S_TXPR:
+            if (g_radioInform.language == LANG_CN)
+            {
+                sprintf(disBuf, "%s", TxPowerCnStr[g_menuInfo.selectedItem]);
+            }
+            else
+            {
+                sprintf(disBuf, "%s", TxPowerEnStr[g_menuInfo.selectedItem]);
+            }
+            break;
+        case S_SPMUTE:
+            if (g_radioInform.language == LANG_CN)
+            {
+                sprintf(disBuf, "%s", SpMuteSelCnStr[g_menuInfo.selectedItem]);
+            }
+            else
+            {
+                sprintf(disBuf, "%s", SpMuteSelEnStr[g_menuInfo.selectedItem]);
+            }
+            break;
+        case S_SFTD:
+            if (g_radioInform.language == LANG_CN)
+            {
+                sprintf(disBuf, "%s", VfoDirCnStr[g_menuInfo.selectedItem]);
+            }
+            else
+            {
+                sprintf(disBuf, "%s", VfoDirEnStr[g_menuInfo.selectedItem]);
+            }
+            break;
+        case S_MEMCH:
+        case S_DELCH:
+            if (CheckChannelActive(g_menuInfo.selectedItem, 0))
+            {
+                sprintf(disBuf, "CH-%03d", g_menuInfo.selectedItem + 1);
+            }
+            else
+            {
+                sprintf(disBuf, "%03d", g_menuInfo.selectedItem + 1);
+            }
+            break;
+        case S_SCREV:
+            if (g_radioInform.language == LANG_CN)
+            {
+                sprintf(disBuf, "%s", ScanmodCnStr[g_menuInfo.selectedItem]);
+            }
+            else
+            {
+                sprintf(disBuf, "%s", ScanmodEnStr[g_menuInfo.selectedItem]);
+            }
+            break;
+        case S_DTST:
+            if (g_radioInform.language == LANG_CN)
+            {
+                sprintf(disBuf, "%s", DtmfSetSelCnStr[g_menuInfo.selectedItem]);
+            }
+            else
+            {
+                sprintf(disBuf, "%s", DtmfSetSelEnStr[g_menuInfo.selectedItem]);
+            }
+            break;
+        case S_PTTID:
+            if (g_radioInform.language == LANG_CN)
+            {
+                sprintf(disBuf, "%s", PttIdSelCnStr[g_menuInfo.selectedItem]);
+            }
+            else
+            {
+                sprintf(disBuf, "%s", PttIdSelEnStr[g_menuInfo.selectedItem]);
+            }
+            break;
+        case S_PTTLT:
+            sprintf(disBuf, "%dMs", PttIDDelay[g_menuInfo.selectedItem] * 100);
+            break;
+        case S_SQL:
+            sprintf(disBuf, "%d", g_menuInfo.selectedItem);
+            break;
+        case S_SAVE:
+            if (g_radioInform.language == LANG_CN)
+            {
+                sprintf(disBuf, "%s", BatSaveCnStr[g_menuInfo.selectedItem]);
+            }
+            else
+            {
+                sprintf(disBuf, "%s", BatSaveEnStr[g_menuInfo.selectedItem]);
+            }
+            break;
+        case S_VOXLV:
+            sprintf(disBuf, "%s", VoxCnStr[g_menuInfo.selectedItem]);
+            break;
+        case S_VOXDLY:
+        {
+            U8 time;
+            time = g_menuInfo.selectedItem + 5;
+            sprintf(disBuf, "%d.%dsec", time / 10, time % 10);
         }
-    }    
+        break;
+        case S_TOT:
+            if (g_menuInfo.selectedItem == 0)
+            {
+                if (g_radioInform.language == LANG_CN)
+                {
+                    sprintf(disBuf, "%s", "ï¿½Ø±ï¿½");
+                }
+                else
+                {
+                    sprintf(disBuf, "%s", "OFF");
+                }
+            }
+            else
+            {
+                sprintf(disBuf, "%dS", g_menuInfo.selectedItem * 15);
+            }
+            break;
+        case S_LAN:
+            sprintf(disBuf, "%s", LanStr[g_menuInfo.selectedItem]);
+            break;
+        case S_MENUEXIT:
+            if (g_menuInfo.selectedItem == 10)
+            {
+                sprintf(disBuf, "60sec");
+            }
+            else
+            {
+                sprintf(disBuf, "%dsec", (g_menuInfo.selectedItem + 1) * 5);
+            }
+            break;
+
+        case S_ROGE:
+            if (g_radioInform.language == LANG_CN)
+            {
+                sprintf(disBuf, "%s", TxEndToneCnStr[g_menuInfo.selectedItem]);
+            }
+            else
+            {
+                sprintf(disBuf, "%s", TxEndToneEnStr[g_menuInfo.selectedItem]);
+            }
+            break;
+        case S_PONTYPE:
+            if (g_radioInform.language == LANG_CN)
+            {
+                sprintf(disBuf, "%s", PwrOnCnStr[g_menuInfo.selectedItem]);
+            }
+            else
+            {
+                sprintf(disBuf, "%s", PwrOnEnStr[g_menuInfo.selectedItem]);
+            }
+            break;
+        case S_PONTONE:
+            if (g_radioInform.language == LANG_CN)
+            {
+                sprintf(disBuf, "%s", PwrOnToneSelCnStr[g_menuInfo.selectedItem]);
+            }
+            else
+            {
+                sprintf(disBuf, "%s", PwrOnToneSelEnStr[g_menuInfo.selectedItem]);
+            }
+            break;
+        case S_PONMSG:
+        {
+            U8 i = 0;
+            memset(disBuf, 0x00, 16);
+            for (i = 0; i < 16; i++)
+            {
+                if (powerOnMsg[i] == 0xFF || powerOnMsg[i] == 0x00)
+                {
+                    break;
+                }
+                disBuf[i] = powerOnMsg[i];
+            }
+        }
+        break;
+        case S_TDR:
+            if (g_radioInform.language == LANG_CN)
+            {
+                sprintf(disBuf, "%s", DualSelCnStr[g_menuInfo.selectedItem]);
+            }
+            else
+            {
+                sprintf(disBuf, "%s", DualSelEnStr[g_menuInfo.selectedItem]);
+            }
+            break;
+        case S_MDF1:
+        case S_MDF2:
+            if (g_radioInform.language == LANG_CN)
+            {
+                sprintf(disBuf, "%s", ChDisCnStr[g_menuInfo.selectedItem]);
+            }
+            else
+            {
+                sprintf(disBuf, "%s", ChDisEnStr[g_menuInfo.selectedItem]);
+            }
+            break;
+        case S_RPSTE:
+        case S_RPTRL:
+            if (g_menuInfo.selectedItem == 0)
+            {
+                if (g_radioInform.language == LANG_CN)
+                {
+                    sprintf(disBuf, "%s", "ï¿½Ø±ï¿½");
+                }
+                else
+                {
+                    sprintf(disBuf, "%s", "OFF");
+                }
+            }
+            else
+            {
+                sprintf(disBuf, "%dS", g_menuInfo.selectedItem);
+            }
+            break;
+        case S_RTONE:
+            sprintf(disBuf, "%s", ToneEnStr[g_menuInfo.selectedItem]);
+            break;
+        case S_STEP:
+            sprintf(disBuf, "%s", VfoStepStr[g_menuInfo.selectedItem]);
+            break;
+        case S_ALMOD:
+            if (g_radioInform.language == LANG_CN)
+            {
+                sprintf(disBuf, "%s", AlmodCnStr[g_menuInfo.selectedItem]);
+            }
+            else
+            {
+                sprintf(disBuf, "%s", AlmodEnStr[g_menuInfo.selectedItem]);
+            }
+            break;
+        case S_SK1:
+        case S_SKL1:
+        case S_SK2:
+            if (g_radioInform.language == LANG_CN)
+            {
+                sprintf(disBuf, "%s", SideKeyCnStr[g_menuInfo.selectedItem]);
+            }
+            else
+            {
+                sprintf(disBuf, "%s", SideKeyEnStr[g_menuInfo.selectedItem]);
+            }
+            break;
+        case S_ABR:
+            if (g_menuInfo.selectedItem == 0)
+            {
+                if (g_radioInform.language == LANG_CN)
+                {
+                    sprintf(disBuf, "%s", "ï¿½Ø±ï¿½");
+                }
+                else
+                {
+                    sprintf(disBuf, "%s", "OFF");
+                }
+            }
+            else
+            {
+                if (g_menuInfo.selectedItem < 5)
+                {
+                    sprintf(disBuf, "%dsec", g_menuInfo.selectedItem * 5);
+                }
+                else if (g_menuInfo.selectedItem == 5)
+                {
+                    sprintf(disBuf, "30sec");
+                }
+                else
+                {
+                    sprintf(disBuf, "%dmin", (g_menuInfo.selectedItem - 5));
+                }
+            }
+            break;
+        case S_BRIGHT:
+            sprintf(disBuf, "%d", g_menuInfo.selectedItem + 1);
+            break;
+        case S_REFLEX:
+            if (g_radioInform.language == LANG_CN)
+            {
+                sprintf(disBuf, "%s", ReflexCnStr[g_menuInfo.selectedItem]);
+            }
+            else
+            {
+                sprintf(disBuf, "%s", ReflexEnStr[g_menuInfo.selectedItem]);
+            }
+            break;
+        case S_AUTOLK:
+            if (g_menuInfo.selectedItem == 0)
+            {
+                if (g_radioInform.language == LANG_CN)
+                {
+                    sprintf(disBuf, "%s", "ï¿½Ø±ï¿½");
+                }
+                else
+                {
+                    sprintf(disBuf, "%s", "OFF");
+                }
+            }
+            else
+            {
+                sprintf(disBuf, "%dS", g_menuInfo.selectedItem * 5);
+            }
+            break;
+        case S_RESET:
+            if (g_radioInform.language == LANG_CN)
+            {
+                sprintf(disBuf, "%s", DevResetCnStr[g_menuInfo.selectedItem]);
+            }
+            else
+            {
+                sprintf(disBuf, "%s", DevResetEnStr[g_menuInfo.selectedItem]);
+            }
+            break;
+        case S_TXFORBID:
+        case S_VOX:
+        case S_VOIC:
+        case S_BEEP:
+        case S_PWR:
+        case S_BUSYLOCK:
+        case S_TAIL:
+        case S_FMINT:
+            if (g_radioInform.language == LANG_CN)
+            {
+                sprintf(disBuf, "%s", OnOffCnStr[g_menuInfo.selectedItem]);
+            }
+            else
+            {
+                sprintf(disBuf, "%s", OnOffEnStr[g_menuInfo.selectedItem]);
+            }
+            break;
+        case S_WATCH:
+            if (g_radioInform.language == LANG_CN)
+            {
+                sprintf(disBuf, "%s", OnSelCnStr[g_menuInfo.selectedItem]);
+            }
+            else
+            {
+                sprintf(disBuf, "%s", OnSelEnStr[g_menuInfo.selectedItem]);
+            }
+            break;
+        case S_INFO:
+            if (g_menuInfo.selectedItem == 0)
+            {
+                if (g_radioInform.language == LANG_CN)
+                {
+                    sprintf(disBuf, "ï¿½ï¿½ï¿½ï¿½ï¿½æ±¾:%s", "V0.01");
+                }
+                else
+                {
+                    sprintf(disBuf, "Firmware:%s", "V01  ");
+                }
+            }
+            else
+            {
+                if (g_radioInform.language == LANG_CN)
+                {
+                    sprintf(disBuf, "Ó²ï¿½ï¿½ï¿½æ±¾:%s", "V0.01");
+                }
+                else
+                {
+                    sprintf(disBuf, "Hardware:%s", "V01  ");
+                }
+            }
+            break;
+        default:
+            break;
+        }
+    }
 }
 
 extern void Menu_DisplayFreqError(void)
 {
     String disBuf[17];
-    
-    if(g_radioInform.language == LANG_CN)
+
+    if (g_radioInform.language == LANG_CN)
     {
-        TranStrToMiddle(disBuf, (String *)"ÆµÂÊ³¬³ö·¶Î§!",16);
+        TranStrToMiddle(disBuf, (String *)"Æµï¿½Ê³ï¿½ï¿½ï¿½ï¿½ï¿½Î§!", 16);
     }
     else
     {
-        TranStrToMiddle(disBuf, (String *)"out of range!",16);
+        TranStrToMiddle(disBuf, (String *)"out of range!", 16);
     }
     LCD_DisplayText(47, 0, (U8 *)disBuf, FONTSIZE_16x16, 0);
     LCD_UpdateWorkAre();
 
-    //ÑÓÊ±1SÏÔÊ¾±£´æ³É¹¦½çÃæ
+    // ï¿½ï¿½Ê±1Sï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½É¹ï¿½ï¿½ï¿½ï¿½ï¿½
     DelaySysMs(500);
 }
 
 void DisplayInputOffect(U32 selItem)
 {
-    U8 i,j;
-    String buf[10]={0};
+    U8 i, j;
+    String buf[10] = {0};
 
     selItem = g_menuInfo.inputVal / 10;
-    if(g_menuInfo.isSubMenu == 0)
+    if (g_menuInfo.isSubMenu == 0)
     {
-        sprintf(disBuf,"%d.%04d",selItem/10000,selItem%10000);
+        sprintf(disBuf, "%d.%04d", selItem / 10000, selItem % 10000);
     }
     else
     {
-        if(g_menuInfo.inputVal)
+        if (g_menuInfo.inputVal)
         {
-            sprintf(disBuf,"%d.%04d",selItem/10000,selItem%10000);
+            sprintf(disBuf, "%d.%04d", selItem / 10000, selItem % 10000);
         }
         else
         {
-            memset(buf,'-',7);
+            memset(buf, '-', 7);
             buf[2] = '.';
-    
+
             j = 0;
-            for(i=0;i<g_inputbuf.len;i++)
+            for (i = 0; i < g_inputbuf.len; i++)
             {
-                if(i == 2)
+                if (i == 2)
                 {
-                   j++;
+                    j++;
                 }
                 buf[j++] = g_inputbuf.buf[i];
             }
             buf[7] = 0;
-            strncpy(disBuf,buf,16);
+            strncpy(disBuf, buf, 16);
         }
     }
 }
 void DisplayInputChFreq(U32 selItem)
 {
-    U8 i,j;
-    String buf[10]={0};
+    U8 i, j;
+    String buf[10] = {0};
 
     selItem = g_menuInfo.inputVal;
-    if(g_menuInfo.isSubMenu == 0)
+    if (g_menuInfo.isSubMenu == 0)
     {
-        sprintf(disBuf,"%d.%05d",selItem/100000,selItem%100000);
+        sprintf(disBuf, "%d.%05d", selItem / 100000, selItem % 100000);
     }
     else
     {
-        if(g_menuInfo.inputVal)
+        if (g_menuInfo.inputVal)
         {
-            sprintf(disBuf,"%d.%05d",selItem/100000,selItem%100000);
+            sprintf(disBuf, "%d.%05d", selItem / 100000, selItem % 100000);
         }
         else
         {
-            memset(buf,'-',7);
+            memset(buf, '-', 7);
             buf[3] = '.';
-    
+
             j = 0;
-            for(i=0;i<g_inputbuf.len;i++)
+            for (i = 0; i < g_inputbuf.len; i++)
             {
-                if(i == 3)
+                if (i == 3)
                 {
-                   j++;
+                    j++;
                 }
                 buf[j++] = g_inputbuf.buf[i];
             }
             buf[7] = 0;
-            strncpy(disBuf,buf,16);
+            strncpy(disBuf, buf, 16);
         }
     }
 }
 void DisplayInputVfoScan(U32 selItem)
 {
-    U8 i,j;
-    String buf[10]={0};
+    U8 i, j;
+    String buf[10] = {0};
 
     selItem = g_menuInfo.inputVal;
-    if(g_menuInfo.isSubMenu == 0)
+    if (g_menuInfo.isSubMenu == 0)
     {
-        sprintf(disBuf,"%03d-%03d",selItem/1000,selItem%1000);
+        sprintf(disBuf, "%03d-%03d", selItem / 1000, selItem % 1000);
     }
     else
     {
-        if(g_menuInfo.inputVal)
+        if (g_menuInfo.inputVal)
         {
-            sprintf(disBuf,"%03d-%03d",selItem/1000,selItem%1000);
+            sprintf(disBuf, "%03d-%03d", selItem / 1000, selItem % 1000);
         }
         else
         {
-            memset(buf,'-',7);
-    
+            memset(buf, '-', 7);
+
             j = 0;
-            for(i=0;i<g_inputbuf.len;i++)
+            for (i = 0; i < g_inputbuf.len; i++)
             {
-                if(i == 3)
+                if (i == 3)
                 {
-                   j++;
+                    j++;
                 }
                 buf[j++] = g_inputbuf.buf[i];
             }
             buf[7] = 0;
-            strncpy(disBuf,buf,16);
+            strncpy(disBuf, buf, 16);
         }
     }
 }
 
 static U8 CheckCtcssInList(U16 ctcssDat)
 {
-   U8 i;
+    U8 i;
 
-   if(ctcssDat == 0)
-   {
-       return 0;
-   }
-   
-   //ÅÐ¶ÏÑÇÒôÆµÊÇ·ñÔÚË÷ÒýÄÚ
-   for(i=0;i<51;i++)
-   {
-       if(CTCS_TAB[i] == ctcssDat)
-       {
-           return (i);
-       }
-   }
+    if (ctcssDat == 0)
+    {
+        return 0;
+    }
 
-   return 0xFF;
+    // ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½Æµï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    for (i = 0; i < 51; i++)
+    {
+        if (CTCS_TAB[i] == ctcssDat)
+        {
+            return (i);
+        }
+    }
+
+    return 0xFF;
 }
 
 void GetCtcssDisBuf(U16 Index)
-{    
-    if(Index == 0)
+{
+    if (Index == 0)
     {
-        if(g_radioInform.language == LANG_CN)
+        if (g_radioInform.language == LANG_CN)
         {
-            sprintf(disBuf,"¹Ø±Õ");
+            sprintf(disBuf, "ï¿½Ø±ï¿½");
         }
         else
         {
-            sprintf(disBuf,"OFF");
+            sprintf(disBuf, "OFF");
         }
     }
-    else if(Index == 0xFF)
+    else if (Index == 0xFF)
     {
-        sprintf(disBuf,"%d.%dHz",g_menuInfo.inputVal/10,g_menuInfo.inputVal%10);
+        sprintf(disBuf, "%d.%dHz", g_menuInfo.inputVal / 10, g_menuInfo.inputVal % 10);
     }
     else
     {
-        sprintf(disBuf,"%d.%dHz",CTCS_TAB[Index]/10,CTCS_TAB[Index]%10);
+        sprintf(disBuf, "%d.%dHz", CTCS_TAB[Index] / 10, CTCS_TAB[Index] % 10);
     }
 }
-
 
 static void ShowCtcssList(void)
 {
     U8 selecteId;
 
-    if(g_menuInfo.isSubMenu == 0)
-    {//ÔÚµÚÒ»¼¶Ñ¡Ôñ²Ëµ¥Ñ¡Ïî
+    if (g_menuInfo.isSubMenu == 0)
+    { // ï¿½Úµï¿½Ò»ï¿½ï¿½Ñ¡ï¿½ï¿½Ëµï¿½Ñ¡ï¿½ï¿½
 
-       if(g_menuInfo.inputVal == 0)
-       {
-           selecteId = 0;
-       }
-       else
-       {
-           selecteId = CheckCtcssInList(g_menuInfo.inputVal);
-       }
-       GetCtcssDisBuf(selecteId);
+        if (g_menuInfo.inputVal == 0)
+        {
+            selecteId = 0;
+        }
+        else
+        {
+            selecteId = CheckCtcssInList(g_menuInfo.inputVal);
+        }
+        GetCtcssDisBuf(selecteId);
     }
     else
     {
         selecteId = CheckCtcssInList(g_menuInfo.inputVal);
-        //selecteId = g_menuInfo.selectedItem;
+        // selecteId = g_menuInfo.selectedItem;
         GetCtcssDisBuf(selecteId);
     }
 }
 
 extern void UpdateMenuDisplay(void)
 {
-    String lcdDisBuf[17]={0},headbuf[17]= {0};
+    String lcdDisBuf[17] = {0}, headbuf[17] = {0};
 
-    if(g_menuInfo.menuType == 1)
+    if (g_menuInfo.menuType == 1)
     {
-        if(g_radioInform.language == LANG_CN)
+        if (g_radioInform.language == LANG_CN)
         {
-            strcpy(headbuf,MenuFmList[g_menuInfo.menuIndex].nameCn);
+            strcpy(headbuf, MenuFmList[g_menuInfo.menuIndex].nameCn);
         }
         else
         {
-            strcpy(headbuf,MenuFmList[g_menuInfo.menuIndex].nameEn);
+            strcpy(headbuf, MenuFmList[g_menuInfo.menuIndex].nameEn);
         }
     }
     else
     {
-        if(g_radioInform.language == LANG_CN)
+        if (g_radioInform.language == LANG_CN)
         {
-            strcpy(headbuf,MenuList[g_menuInfo.menuIndex].nameCn);
+            strcpy(headbuf, MenuList[g_menuInfo.menuIndex].nameCn);
         }
         else
         {
-            strcpy(headbuf,MenuList[g_menuInfo.menuIndex].nameEn);
+            strcpy(headbuf, MenuList[g_menuInfo.menuIndex].nameEn);
         }
     }
-    TranStrToMiddle(lcdDisBuf,headbuf,12);
-    LCD_DisplayText(20, 16, (U8 *)lcdDisBuf, FONTSIZE_16x16,LCD_DIS_NORMAL);
+    TranStrToMiddle(lcdDisBuf, headbuf, 12);
+    LCD_DisplayText(20, 16, (U8 *)lcdDisBuf, FONTSIZE_16x16, LCD_DIS_NORMAL);
 
-    sprintf(lcdDisBuf,"%02d",g_menuInfo.menuIndex);
-    LCD_DisplayNumber(18,2,(U8 *)lcdDisBuf,0);
+    sprintf(lcdDisBuf, "%02d", g_menuInfo.menuIndex);
+    LCD_DisplayNumber(18, 2, (U8 *)lcdDisBuf, 0);
 
-    TranStrToMiddle(lcdDisBuf,disBuf,16);
+    TranStrToMiddle(lcdDisBuf, disBuf, 16);
     LCD_DisplayText(47, 0, (U8 *)lcdDisBuf, FONTSIZE_16x16, 0);
 
-    if(g_menuInfo.isSubMenu)
+    if (g_menuInfo.isSubMenu)
     {
-        LCD_DisplayPicture(50,0,ICON_MENU_SEL_SIZEX,ICON_MENU_SEL_SIZEY,iconMenuSel,LCD_DIS_NORMAL);
+        LCD_DisplayPicture(50, 0, ICON_MENU_SEL_SIZEX, ICON_MENU_SEL_SIZEY, iconMenuSel, LCD_DIS_NORMAL);
     }
-		
-	if(g_menuInfo.inputMode == MENU_ONE_CTCSS || g_menuInfo.inputMode == MENU_ONE_DECODE)
-	{
-	     if(g_menuInfo.inputMode == MENU_ONE_DECODE)
-	     {
-	         sprintf(lcdDisBuf,"%03d",g_menuInfo.selectedItem);
-	     }
-	     else
-	     {
-    		 sprintf(lcdDisBuf," %02d",g_menuInfo.selectedItem);
-         }
-         LCD_DisplayNumber(47,109,(U8 *)lcdDisBuf,0);
-	}
 
-	DisplayStateBar();
+    if (g_menuInfo.inputMode == MENU_ONE_CTCSS || g_menuInfo.inputMode == MENU_ONE_DECODE)
+    {
+        if (g_menuInfo.inputMode == MENU_ONE_DECODE)
+        {
+            sprintf(lcdDisBuf, "%03d", g_menuInfo.selectedItem);
+        }
+        else
+        {
+            sprintf(lcdDisBuf, " %02d", g_menuInfo.selectedItem);
+        }
+        LCD_DisplayNumber(47, 109, (U8 *)lcdDisBuf, 0);
+    }
+
+    DisplayStateBar();
     LCD_UpdateWorkAre();
 }
 
@@ -1090,146 +1056,144 @@ extern void DisplayInputType(void)
     String *str;
     String buf[6];
 
-    if(inputTypeBack != g_inputbuf.inputType)
+    if (inputTypeBack != g_inputbuf.inputType)
     {
         inputTypeBack = g_inputbuf.inputType;
-        switch(g_inputbuf.inputType)
+        switch (g_inputbuf.inputType)
         {
-            case IN_EN_L:
-                str = EnS;
-                break;
-            case IN_EN_U:
-                str = EnL;
-                break;
-            case IN_PINYIN:
-                str = Pinyin;
-                break;
-            case IN_NUMBER:
-                default:
-                str = Num;
-                break;
+        case IN_EN_L:
+            str = EnS;
+            break;
+        case IN_EN_U:
+            str = EnL;
+            break;
+        case IN_PINYIN:
+            str = Pinyin;
+            break;
+        case IN_NUMBER:
+        default:
+            str = Num;
+            break;
         }
-        sprintf(buf,"%s",str);
-        SC5260_ClearArea(10,107,20,9,1);
-        //ÏÔÊ¾ÊäÈëÀàÐÍ
-        LCD_DisplayNumber(11,108,(U8  *)buf,1);
+        sprintf(buf, "%s", str);
+        SC5260_ClearArea(10, 107, 20, 9, 1);
+        // ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        LCD_DisplayNumber(11, 108, (U8 *)buf, 1);
         LCD_UpdateWorkAre();
     }
 }
 
-const U8  InputPosY[] = {13,32};
+const U8 InputPosY[] = {13, 32};
 
 void DisplaySelectHz(void)
 {
     U8 i;
     String displayBuf[19];
-    
-    for(i=0;i<2;i++)
+
+    for (i = 0; i < 2; i++)
     {
-        if(lcdDispBuf[i][0] == 0x08)
-        {//µÚÒ»×ªÒå×Ö·ûÊ±²»ÏÔÊ¾£¬»áµ¼ÖÂ×Ü³¤¶È+1
-            sprintf(displayBuf,"%-*.*s",17,17,lcdDispBuf[i]);
-            displayBuf[16+1] = 0;
+        if (lcdDispBuf[i][0] == 0x08)
+        { // ï¿½ï¿½Ò»×ªï¿½ï¿½ï¿½Ö·ï¿½Ê±ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½áµ¼ï¿½ï¿½ï¿½Ü³ï¿½ï¿½ï¿½+1
+            sprintf(displayBuf, "%-*.*s", 17, 17, lcdDispBuf[i]);
+            displayBuf[16 + 1] = 0;
         }
         else
         {
-            sprintf(displayBuf,"%-*.*s",16,16,lcdDispBuf[i]);
+            sprintf(displayBuf, "%-*.*s", 16, 16, lcdDispBuf[i]);
             displayBuf[16] = 0;
         }
         SC5260_ClearArea(30, 2, 124, 1, 1);
-        LCD_DisplayText(InputPosY[i],4,(U8  *)displayBuf,FONTSIZE_16x16,0);
+        LCD_DisplayText(InputPosY[i], 4, (U8 *)displayBuf, FONTSIZE_16x16, 0);
     }
 }
 
 extern void MenuShowInputChar(void)
 {
-    DrowInputWindow(); 
+    DrowInputWindow();
 
     DisplayInputType();
 
-    //ÏÔÊ¾ÊäÈëµÄ×Ö·û´®
-    sprintf((String *)disBuf,"%*.*s",16,16,g_inputbuf.buf);
-    //ÏÔÊ¾ÄÚÈÝÔÚÓÒÏÂ½Ç
-    LCD_DisplayText(47,0,(U8  *)disBuf,FONTSIZE_16x16,0);
+    // ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½
+    sprintf((String *)disBuf, "%*.*s", 16, 16, g_inputbuf.buf);
+    // ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â½ï¿½
+    LCD_DisplayText(47, 0, (U8 *)disBuf, FONTSIZE_16x16, 0);
     uartSendChar(disBuf[0]);
 
-    /*»æÖÆºº×ÖÊäÈë¿ò*/
-    if(pyBuf.pos != 0)
+    /*ï¿½ï¿½ï¿½Æºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
+    if (pyBuf.pos != 0)
     {
         DisplaySelectHz();
     }
-    
+
     inputTypeBack = 0xFF;
     DisplayInputType();
 }
 
 extern void Menu_Display(void)
 {
-    U8 i,posx;
-    
+    U8 i, posx;
+
     DisplayBattaryFlag(0);
 
-   if(!(g_menuInfo.inputMode == MENU_ONE_CHAR && g_menuInfo.isSubMenu ))
-   {
-        //»æÖÆÖÐ¼ä¼ä¸ôÌõ
+    if (!(g_menuInfo.inputMode == MENU_ONE_CHAR && g_menuInfo.isSubMenu))
+    {
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Ð¼ï¿½ï¿½ï¿½ï¿½ï¿½
         SC5260_ClearArea(41, 5, 121, 2, 1);
         posx = 5;
-        for(i=0;i<13;i++)
+        for (i = 0; i < 13; i++)
         {
             SC5260_ClearArea(40, posx, 1, 1, 1);
             posx += 10;
         }
     }
-    switch(g_menuInfo.inputMode)
+    switch (g_menuInfo.inputMode)
     {
-        case MENU_ONE_CHAR:
-            if(g_menuInfo.isSubMenu)
-            {//ÏÔÊ¾ÐÅµÀÃû³Æ±à¼­½çÃæ
-                LCD_ClearWorkArea();
-                MenuShowInputChar();
-                return;
-            }
-            else
-            {
-                Menu_GetSubItemString(g_menuInfo.menuIndex);
-            }
-           break;
-        case MENU_ONE_FREQ:              //ÆµÂÊÊäÈë
-            if(g_menuInfo.isSubMenu == 0)
-            {
-                g_menuInfo.inputVal = g_menuInfo.selectedItem;
-            }
-            DisplayInputOffect(g_menuInfo.inputVal);
-            
-            break;
-        case MENU_CH_FREQ:              //ÆµÂÊÊäÈë
-            if(g_menuInfo.isSubMenu == 0)
-            {
-                g_menuInfo.inputVal = g_menuInfo.selectedItem;
-            }
-            DisplayInputChFreq(g_menuInfo.inputVal);
-            
-            break;    
-        case MENU_ONE_VFOSCAN:          //ÆµÂÊÉ¨Ãè·¶Î§
-            if(g_menuInfo.isSubMenu == 0)
-            {
-                g_menuInfo.inputVal = g_menuInfo.selectedItem;
-            }
-            DisplayInputVfoScan(g_menuInfo.inputVal);
-            break;
-            
-        case MENU_ONE_CTCSS:             //Ä£ÄâÑÇÒôÆµÑ¡ÔñºÍÊäÈë
-            ShowCtcssList();
-            break;
-        case MENU_ONE_DIGIT:
-            sprintf(disBuf,"%d",g_menuInfo.selectedItem);
-            break;
-        case MENU_ONE_SELECT:
-        default:
+    case MENU_ONE_CHAR:
+        if (g_menuInfo.isSubMenu)
+        { // ï¿½ï¿½Ê¾ï¿½Åµï¿½ï¿½ï¿½ï¿½Æ±à¼­ï¿½ï¿½ï¿½ï¿½
+            LCD_ClearWorkArea();
+            MenuShowInputChar();
+            return;
+        }
+        else
+        {
             Menu_GetSubItemString(g_menuInfo.menuIndex);
-            break;
+        }
+        break;
+    case MENU_ONE_FREQ: // Æµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        if (g_menuInfo.isSubMenu == 0)
+        {
+            g_menuInfo.inputVal = g_menuInfo.selectedItem;
+        }
+        DisplayInputOffect(g_menuInfo.inputVal);
+
+        break;
+    case MENU_CH_FREQ: // Æµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        if (g_menuInfo.isSubMenu == 0)
+        {
+            g_menuInfo.inputVal = g_menuInfo.selectedItem;
+        }
+        DisplayInputChFreq(g_menuInfo.inputVal);
+
+        break;
+    case MENU_ONE_VFOSCAN: // Æµï¿½ï¿½É¨ï¿½è·¶Î§
+        if (g_menuInfo.isSubMenu == 0)
+        {
+            g_menuInfo.inputVal = g_menuInfo.selectedItem;
+        }
+        DisplayInputVfoScan(g_menuInfo.inputVal);
+        break;
+
+    case MENU_ONE_CTCSS: // Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÆµÑ¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        ShowCtcssList();
+        break;
+    case MENU_ONE_DIGIT:
+        sprintf(disBuf, "%d", g_menuInfo.selectedItem);
+        break;
+    case MENU_ONE_SELECT:
+    default:
+        Menu_GetSubItemString(g_menuInfo.menuIndex);
+        break;
     }
     UpdateMenuDisplay();
 }
-
-

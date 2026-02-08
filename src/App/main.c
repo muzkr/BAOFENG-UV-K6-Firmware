@@ -8,11 +8,11 @@ void _putchar(char c)
 
 static void BeepPowerOn(void)
 {
-    if(g_radioInform.OpFlag1.Bit.b2 == 1)
+    if (g_radioInform.OpFlag1.Bit.b2 == 1)
     {
         BeepOut(BEEP_FMSW2);
     }
-    else if(g_radioInform.OpFlag1.Bit.b2 == 2)
+    else if (g_radioInform.OpFlag1.Bit.b2 == 2)
     {
         Audio_PlayVoiceLock(vo_Welcome);
     }
@@ -23,8 +23,8 @@ static void BeepPowerOn(void)
 }
 
 int main(void)
-{   
-    Board_Init();    
+{
+    Board_Init();
     RadioConfig_Init();
     UI_DisplayPowerOn();
     Rfic_Init();
@@ -34,9 +34,9 @@ int main(void)
 
     App_CheckPowerOnPassword();
 
-    //CheckHiddenParaSet(); 
+    // CheckHiddenParaSet();
 
-    if(GetKeyCode() == KEYID_8)
+    if (GetKeyCode() == KEYID_8)
     {
         DisplaySoftVersion();
     }
@@ -45,7 +45,7 @@ int main(void)
     ResetTimeKeyLockAndPowerSave();
     ResetInputBuf();
 
-    //初始化写频模式
+    // 初始化写频模式
     ProgromInit();
     LCD_BackLightSetOn();
 
@@ -55,34 +55,33 @@ int main(void)
     g_scanInfo.state = SCAN_IDLE;
     g_sysRunPara.sysRunMode = MODE_MAIN;
     g_keyScan.keyEvent = KEYID_NONE;
-    
-    while(1)
+
+    while (1)
     {
-        //10ms运行一次
-        if(g_10msFlag)
+        // 10ms运行一次
+        if (g_10msFlag)
         {
             App_10msTask();
         }
-        
-        if(g_50msFlag)
+
+        if (g_50msFlag)
         {
             App_50msTask();
         }
-        
-        //100ms运行一次
-        if(g_100msFlag)
+
+        // 100ms运行一次
+        if (g_100msFlag)
         {
             App_100msTask();
         }
 
-        //500ms运行一次
-        if(g_500msFlag)
+        // 500ms运行一次
+        if (g_500msFlag)
         {
             App_500msTask();
         }
-        
+
         AppRunTask();
         AlarmTask();
     }
 }
-

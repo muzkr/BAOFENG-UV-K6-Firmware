@@ -1,13 +1,13 @@
 #include "includes.h"
 
-void DelayUs(U16 n)// 1US
+void DelayUs(U16 n) // 1US
 {
     volatile U16 t = n * (SystemCoreClock / 1000000 / 6);
-    while(t--){
-	
+    while (t--)
+    {
     }
 
-    /** 
+    /**
      *  6 inst per loop. For CPU freq f MHz: 6 * N * (1/f) = 1
      *   => N = f / 6
      */
@@ -31,9 +31,9 @@ void DelayUs(U16 n)// 1US
 }
 void DelayMs(U16 n)
 {
-   U16 i=0;
-   for (i=0;i<n;i++)
-	{
-		DelayUs( 1000 );
-	}
+    U16 i = 0;
+    for (i = 0; i < n; i++)
+    {
+        DelayUs(1000);
+    }
 }

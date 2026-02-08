@@ -1,5 +1,5 @@
 #ifndef __DISPLAYFM_H
-    #define __DISPLAYFM_H
+#define __DISPLAYFM_H
 
 extern void FmDisplayInputChNum(void);
 extern void FmDisplayInputFreq(void);

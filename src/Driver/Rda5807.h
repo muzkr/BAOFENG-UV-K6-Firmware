@@ -1,5 +1,5 @@
 #ifndef __RDA5807_H
-    #define __RDA5807_H
+#define __RDA5807_H
 
 extern void RDA5807_PowerOn(void);
 extern void RDA5807_PowerOff(void);

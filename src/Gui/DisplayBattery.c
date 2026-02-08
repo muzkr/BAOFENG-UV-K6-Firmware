@@ -2,5 +2,4 @@
 
 extern void DisplayBatteryVol(U8 reFlash)
 {
-
 }

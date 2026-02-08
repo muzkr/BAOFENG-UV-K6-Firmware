@@ -1,5 +1,5 @@
 #ifndef _includes_h
-    #define _includes_h
+#define _includes_h
 
 #include <ctype.h>
 // #include <stdio.h>
@@ -7,7 +7,7 @@
 #include <string.h>
 #include <stdlib.h>
 //---------------------------
-#include "kd32f3xx.h" 
+#include "kd32f3xx.h"
 #include "PublType.h"
 #include "Globe.h"
 #include "Delay.h"

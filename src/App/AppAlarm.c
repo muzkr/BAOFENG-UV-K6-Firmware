@@ -5,15 +5,15 @@ STR_ALARM alarmDat;
 /*********************************************************************************************************************/
 extern void CheckAlarmDelay(void)
 {
-    if(alarmDat.freqSwTime)
+    if (alarmDat.freqSwTime)
     {
         alarmDat.freqSwTime--;
     }
-    if(alarmDat.alarmTime)
+    if (alarmDat.alarmTime)
     {
         alarmDat.alarmTime--;
     }
-    if(alarmDat.ledFlashTime)
+    if (alarmDat.ledFlashTime)
     {
         alarmDat.ledFlashTime--;
     }
@@ -21,11 +21,11 @@ extern void CheckAlarmDelay(void)
 
 void AlarmOut(ENUM_ONOFF flag)
 {
-    if(flag == ON)
+    if (flag == ON)
     {
-        alarmDat.alarmFreq = 100;  
+        alarmDat.alarmFreq = 100;
         Rfic_SetToneFreq(alarmDat.alarmFreq);
-        if( g_radioInform.alarmMode == ALARM_TONE && g_rfState == RF_TX)
+        if (g_radioInform.alarmMode == ALARM_TONE && g_rfState == RF_TX)
         {
             Rfic_TxSingleTone_On(1);
         }
@@ -33,26 +33,25 @@ void AlarmOut(ENUM_ONOFF flag)
         {
             Rfic_TxSingleTone_On(0);
         }
-   
     }
     else
     {
-        alarmDat.alarmFreq = 0; 
-        //关闭报警音
+        alarmDat.alarmFreq = 0;
+        // 关闭报警音
         Rfic_TxSingleTone_Off();
-    }    
+    }
 }
 
 Boolean SetAlarmCode(void)
 {
-    if(alarmDat.alarmStates == ON)
+    if (alarmDat.alarmStates == ON)
     {
-        if(g_radioInform.alarmMode == ALARM_CODE)        
+        if (g_radioInform.alarmMode == ALARM_CODE)
         {
             DtmfSendCodeOn(DTMF_ALARMCODE);
-            g_rfTxState  = ALARM_TXID;
+            g_rfTxState = ALARM_TXID;
         }
-        else 
+        else
         {
             AlarmOut(ON);
         }
@@ -63,60 +62,60 @@ Boolean SetAlarmCode(void)
 
 extern void AlarmTask(void)
 {
-    //开启报警模式
-    if(alarmDat.alarmStates == ON)
-    {      
-        if(alarmDat.freqSwTime == 0)
+    // 开启报警模式
+    if (alarmDat.alarmStates == ON)
+    {
+        if (alarmDat.freqSwTime == 0)
         {
             alarmDat.freqSwTime = 12;
 
-            if(alarmDat.toneFlag)
+            if (alarmDat.toneFlag)
             {
                 alarmDat.alarmFreq = alarmDat.alarmFreq + 12;
 
-                if(alarmDat.alarmFreq > 250)
+                if (alarmDat.alarmFreq > 250)
                 {
                     alarmDat.toneFlag = 0;
-                    //显示报警信息
+                    // 显示报警信息
                 }
             }
             else
             {
                 alarmDat.alarmFreq = alarmDat.alarmFreq - 12;
-                if(alarmDat.alarmFreq < 70)
+                if (alarmDat.alarmFreq < 70)
                 {
                     alarmDat.toneFlag = 1;
-                    //显示报警信息
+                    // 显示报警信息
                 }
             }
 
-            if(!(g_rfState == RF_TX && g_radioInform.alarmMode == ALARM_CODE))
-            {//不发送报警音
-                if(alarmDat.ledFlashTime == 0)
+            if (!(g_rfState == RF_TX && g_radioInform.alarmMode == ALARM_CODE))
+            { // 不发送报警音
+                if (alarmDat.ledFlashTime == 0)
                 {
                     alarmDat.ledFlashTime = 100;
                     LedTxSwitch(LED_FLASH);
                     LightSwitch(LED_FLASH);
                 }
                 Rfic_SetToneFreq(alarmDat.alarmFreq);
-                
-                //允许本地发出报警音
-                if((g_radioInform.alarmMode == 0) || g_radioInform.alarmLocal)
+
+                // 允许本地发出报警音
+                if ((g_radioInform.alarmMode == 0) || g_radioInform.alarmLocal)
                 {
                     SpeakerSwitch(ON);
                 }
             }
         }
 
-        //发送报警音和发送报警码模式
-        if(g_radioInform.alarmMode)
+        // 发送报警音和发送报警码模式
+        if (g_radioInform.alarmMode)
         {
-            if(alarmDat.alarmTime == 0)
+            if (alarmDat.alarmTime == 0)
             {
-                if(g_rfState == RF_RX)
+                if (g_rfState == RF_RX)
                 {
                     Radio_EnterTxMode();
-                    if(g_radioInform.alarmMode == ALARM_CODE)
+                    if (g_radioInform.alarmMode == ALARM_CODE)
                     {
                         AlarmOut(OFF);
                     }
@@ -126,9 +125,10 @@ extern void AlarmTask(void)
                 {
                     AlarmOut(OFF);
                     RF_TxRoger();
-                    Rfic_SetPA(0);;
+                    Rfic_SetPA(0);
+                    ;
                     Rfic_RxTxOnOffSetup(RFIC_IDLE);
-                    RF_PowerSet(g_ChannelVfoInfo.BandFlag,PWR_OFF);
+                    RF_PowerSet(g_ChannelVfoInfo.BandFlag, PWR_OFF);
                     LedRxSwitch(LED_ON);
                     AlarmOut(ON);
                 }
@@ -138,36 +138,35 @@ extern void AlarmTask(void)
     }
 }
 
-
 extern void AlarmFuncSwitch(ENUM_ONOFF flag)
 {
     DualStandbyWorkOFF();
-        
-    if(flag == ON)
+
+    if (flag == ON)
     {
-    	/*显示AM标志*/
-        if(g_ChannelVfoInfo.chVfoInfo[g_ChannelVfoInfo.switchAB].freqRx.frequency >= 10800000 && g_ChannelVfoInfo.chVfoInfo[g_ChannelVfoInfo.switchAB].freqRx.frequency < 13600000 )
+        /*显示AM标志*/
+        if (g_ChannelVfoInfo.chVfoInfo[g_ChannelVfoInfo.switchAB].freqRx.frequency >= 10800000 && g_ChannelVfoInfo.chVfoInfo[g_ChannelVfoInfo.switchAB].freqRx.frequency < 13600000)
         {
-           if(g_radioInform.alarmMode != ALARM_LOCAL)
-           {
-               BeepOut(BEEP_ERROR);
-               return;
-           }
+            if (g_radioInform.alarmMode != ALARM_LOCAL)
+            {
+                BeepOut(BEEP_ERROR);
+                return;
+            }
         }
-    
+
         ExitAllFunction(1);
-        
-        //关闭发射超时
+
+        // 关闭发射超时
         g_sysRunPara.rfTxFlag.totTime = 500;
-        
-        alarmDat.freqSwTime   = 12;
+
+        alarmDat.freqSwTime = 12;
         alarmDat.ledFlashTime = 100;
-        alarmDat.alarmTime    = 3000;
-        Rfic_TxSingleTone_Off();//关闭报警音输出   预防发送报警码等待的时候本机出现杂音
-        
-        if(g_radioInform.alarmMode)
+        alarmDat.alarmTime = 3000;
+        Rfic_TxSingleTone_Off(); // 关闭报警音输出   预防发送报警码等待的时候本机出现杂音
+
+        if (g_radioInform.alarmMode)
         {
-            if(g_radioInform.alarmLocal == OFF)
+            if (g_radioInform.alarmLocal == OFF)
             {
                 SpeakerSwitch(OFF);
             }
@@ -180,7 +179,7 @@ extern void AlarmFuncSwitch(ENUM_ONOFF flag)
             AlarmOut(ON);
         }
 
-        if(g_radioInform.alarmMode != ALARM_CODE)
+        if (g_radioInform.alarmMode != ALARM_CODE)
         {
             LedRxSwitch(LED_ON);
         }
@@ -194,21 +193,20 @@ extern void AlarmFuncSwitch(ENUM_ONOFF flag)
         alarmDat.freqSwTime = 0;
         alarmDat.ledFlashTime = 0;
         alarmDat.alarmTime = 0;
-    
+
         LedRxSwitch(LED_OFF);
         LedTxSwitch(LED_OFF);
         LightSwitch(LED_OFF);
 
         AlarmOut(OFF);
 
-        if(g_radioInform.alarmMode)
+        if (g_radioInform.alarmMode)
         {
             RF_TxEnd();
             DisplayRadioHome();
         }
 
-        alarmDat.alarmStates = OFF;        
-        SpeakerSwitch(OFF); 
+        alarmDat.alarmStates = OFF;
+        SpeakerSwitch(OFF);
     }
 }
-

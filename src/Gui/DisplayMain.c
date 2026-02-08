@@ -1,38 +1,36 @@
 #include "includes.h"
 
-const U8 *SignalLevelStr[] = 
-{
-    iconSingalEmpty,iconSingal1,iconSingal2,iconSingal3,iconSingalFull
-};
+const U8 *SignalLevelStr[] =
+    {
+        iconSingalEmpty, iconSingal1, iconSingal2, iconSingal3, iconSingalFull};
 
 extern void DisplayProgrom(void)
 {
     LCD_ClearFullBuf();
-    LCD_DisplayPicture(8,48,ICON_PROG_SIZEX,ICON_PROG_SIZEY,iconProgrom,LCD_DIS_NORMAL);
-    LCD_DisplayText(42,24, "Program...", FONTSIZE_16x16,LCD_DIS_NORMAL);
+    LCD_DisplayPicture(8, 48, ICON_PROG_SIZEX, ICON_PROG_SIZEY, iconProgrom, LCD_DIS_NORMAL);
+    LCD_DisplayText(42, 24, "Program...", FONTSIZE_16x16, LCD_DIS_NORMAL);
     LCD_UpdateFullScreen();
 
-    //¿ªÆô°´¼ü±³¹âµÆ
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     LCD_BackLightSetOn();
 }
 
 extern void DisplayUpdateLockFlag(U8 UpdateF)
 {
-    if(g_radioInform.keyLock)
-    {       
-        LCD_DisplayPicture(0,88,ICON_LOCK_SIZEX,ICON_LOCK_SIZEY,iconLock,LCD_DIS_NORMAL);
+    if (g_radioInform.keyLock)
+    {
+        LCD_DisplayPicture(0, 88, ICON_LOCK_SIZEX, ICON_LOCK_SIZEY, iconLock, LCD_DIS_NORMAL);
     }
     else
     {
-        LCD_ClearArea(0,88,ICON_LOCK_SIZEX,ICON_LOCK_SIZEY);
+        LCD_ClearArea(0, 88, ICON_LOCK_SIZEX, ICON_LOCK_SIZEY);
     }
 
-    if(UpdateF)
+    if (UpdateF)
     {
         LCD_UpdateStateBar();
     }
 }
-
 
 extern void DisplayStateBar(void)
 {
@@ -42,101 +40,102 @@ extern void DisplayStateBar(void)
 
     reverse = g_ChannelVfoInfo.chVfoInfo[g_ChannelVfoInfo.switchAB].reverseFlag;
 
-    //ÏÔÊ¾Éù¿Ø·¢ÉäÍ¼±ê
-    if(g_radioInform.voxSwitch)
+    // ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½Ø·ï¿½ï¿½ï¿½Í¼ï¿½ï¿½
+    if (g_radioInform.voxSwitch)
     {
-        LCD_DisplayPicture(0,34,ICON_VOX_SIZEX,ICON_VOX_SIZEY,iconVox,LCD_DIS_NORMAL);
+        LCD_DisplayPicture(0, 34, ICON_VOX_SIZEX, ICON_VOX_SIZEY, iconVox, LCD_DIS_NORMAL);
     }
 
-    //ÏÔÊ¾Ë«ÆµÊØºòÍ¼±ê
-    if(g_radioInform.dualRxFlag == 1)
+    // ï¿½ï¿½Ê¾Ë«Æµï¿½Øºï¿½Í¼ï¿½ï¿½
+    if (g_radioInform.dualRxFlag == 1)
     {
-        LCD_DisplayPicture(0,67,ICON_DUAL_SIZEX,ICON_DUAL_SIZEY,iconDual,LCD_DIS_NORMAL);
+        LCD_DisplayPicture(0, 67, ICON_DUAL_SIZEX, ICON_DUAL_SIZEY, iconDual, LCD_DIS_NORMAL);
     }
 
-    //¸üÐÂÏÔÊ¾¼üÅÌËø¶¨Í¼±ê
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½
     DisplayUpdateLockFlag(0);
 
-    //ÏÔÊ¾²àÒô¿ª¹ØÍ¼±ê
-    if(g_radioInform.dtmfTone)
+    // ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½
+    if (g_radioInform.dtmfTone)
     {
-        LCD_DisplayPicture(0,17,ICON_DTMF_SIZEX,ICON_DTMF_SIZEY,iconDTMF,LCD_DIS_NORMAL);
+        LCD_DisplayPicture(0, 17, ICON_DTMF_SIZEX, ICON_DTMF_SIZEY, iconDTMF, LCD_DIS_NORMAL);
     }
 
-    /*µ¹Æµ¹¦ÄÜ±êÖ¾*/
-    if(reverse == 2)
+    /*ï¿½ï¿½Æµï¿½ï¿½ï¿½Ü±ï¿½Ö¾*/
+    if (reverse == 2)
     {
-        LCD_DisplayPicture(0,1,ICON_UNNET_SIZEX,ICON_UNNET_SIZEY,iconUnNet,LCD_DIS_NORMAL);
+        LCD_DisplayPicture(0, 1, ICON_UNNET_SIZEX, ICON_UNNET_SIZEY, iconUnNet, LCD_DIS_NORMAL);
     }
-    else if(reverse == 1)
+    else if (reverse == 1)
     {
-        LCD_DisplayPicture(0,1,ICON_REVERSE_SIZEX,ICON_REVERSE_SIZEY,iconReverse,LCD_DIS_NORMAL);
+        LCD_DisplayPicture(0, 1, ICON_REVERSE_SIZEX, ICON_REVERSE_SIZEY, iconReverse, LCD_DIS_NORMAL);
     }
     else
     {
-    }    
+    }
 
     DisplayBattaryFlag(0);
 
     LCD_UpdateStateBar();
 }
 
-extern void TranStrToMiddle(String  *targeBuf,String *sourceBuf,U8 len)
+extern void TranStrToMiddle(String *targeBuf, String *sourceBuf, U8 len)
 {
     if (strlen(sourceBuf) >= len)
     {
-        memcpy(targeBuf,sourceBuf,len);
-    }else
+        memcpy(targeBuf, sourceBuf, len);
+    }
+    else
     {
-        memset(targeBuf,' ',len);
-        memcpy(&targeBuf[(len-strlen(sourceBuf))/2],sourceBuf,strlen(sourceBuf));
+        memset(targeBuf, ' ', len);
+        memcpy(&targeBuf[(len - strlen(sourceBuf)) / 2], sourceBuf, strlen(sourceBuf));
     }
 }
 
-Boolean FillChannelName2Buf(U8 *src,String *dest)
+Boolean FillChannelName2Buf(U8 *src, String *dest)
 {
     U8 i;
     String buf[13] = {0};
 
-    if(src[0] == 0xFF || src[0] == 0x00)
-    {//
-       return FALSE;
+    if (src[0] == 0xFF || src[0] == 0x00)
+    { //
+        return FALSE;
     }
 
-    for(i=0;i<12;i++)
+    for (i = 0; i < 12; i++)
     {
-        if(src[i] == 0xFF || src[i] == 0x00)
+        if (src[i] == 0xFF || src[i] == 0x00)
         {
             break;
         }
         buf[i] = src[i];
     }
-    TranStrToMiddle(dest,buf,12);
-	dest[12] = '\0';
+    TranStrToMiddle(dest, buf, 12);
+    dest[12] = '\0';
 
     return TRUE;
 }
 
-extern void DisplayChannelNum(U16 currNum,U8 disAB)
+extern void DisplayChannelNum(U16 currNum, U8 disAB)
 {
-    U8 buf[5] = {0},posY;
+    U8 buf[5] = {0}, posY;
 
-    if(0XFFFF == currNum)
+    if (0XFFFF == currNum)
     {
-        sprintf((String *)buf,"VFO");
+        sprintf((String *)buf, "VFO");
     }
     else
     {
-        sprintf((String *)buf,"M%3d",currNum+1);   
+        sprintf((String *)buf, "M%3d", currNum + 1);
     }
 
-    if(g_radioInform.dualRxFlag == 0)
+    if (g_radioInform.dualRxFlag == 0)
     {
         posY = 47;
     }
     else
     {
-        if(disAB == 0)
+        if (disAB == 0)
         {
             posY = 21;
         }
@@ -145,33 +144,33 @@ extern void DisplayChannelNum(U16 currNum,U8 disAB)
             posY = 49;
         }
     }
-    LCD_ClearArea( posY, 24, 5, 7);
-    LCD_DisplayBoldNum6X7(posY,1,buf);
+    LCD_ClearArea(posY, 24, 5, 7);
+    LCD_DisplayBoldNum6X7(posY, 1, buf);
 }
 
-extern void DisplayCurFreq(U8 posx,U8 posy,U32 freq)
+extern void DisplayCurFreq(U8 posx, U8 posy, U32 freq)
 {
     String freqBuf[12] = {0};
-    U8 fontBuf[3] ={0};
+    U8 fontBuf[3] = {0};
 
-    sprintf(freqBuf,"%03d.%05d",freq/100000,freq%100000);
+    sprintf(freqBuf, "%03d.%05d", freq / 100000, freq % 100000);
 
-    memcpy(fontBuf,&freqBuf[7],2);
+    memcpy(fontBuf, &freqBuf[7], 2);
     freqBuf[7] = 0;
     fontBuf[2] = 0;
-    
-    LCD_DisplayBoldNum12X13(posy,posx,(U8 *)freqBuf);
-    LCD_DisplayBoldNum6X7(posy + 6,posx+85,fontBuf);
+
+    LCD_DisplayBoldNum12X13(posy, posx, (U8 *)freqBuf);
+    LCD_DisplayBoldNum6X7(posy + 6, posx + 85, fontBuf);
 }
 
-extern void DisplayCurFreq6X7(U8 posx,U8 posy,U32 freq)
+extern void DisplayCurFreq6X7(U8 posx, U8 posy, U32 freq)
 {
     String freqBuf[12] = {0};
 
-    sprintf(freqBuf,"%03d.%05d",freq/100000,freq%100000);
+    sprintf(freqBuf, "%03d.%05d", freq / 100000, freq % 100000);
     freqBuf[9] = 0;
-    
-    LCD_DisplayBoldNum6X7(posy,posx,(U8 *)freqBuf);
+
+    LCD_DisplayBoldNum6X7(posy, posx, (U8 *)freqBuf);
 }
 
 extern void DisplayUpdateChFlag(U8 disAB)
@@ -179,65 +178,65 @@ extern void DisplayUpdateChFlag(U8 disAB)
     U8 ctsType;
     U8 posY = 0;
 
-    if(g_radioInform.dualRxFlag == 0)
+    if (g_radioInform.dualRxFlag == 0)
     {
         posY = 31;
     }
     else
     {
-        if(disAB == 0)
-        {//ÏÔÊ¾ÔÚ²Ù×÷½çÃæ
+        if (disAB == 0)
+        { // ï¿½ï¿½Ê¾ï¿½Ú²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             posY = 29;
         }
         else
-        {//B¶ÎÔÚÖ÷½çÃæÊ±ÏÔÊ¾Í¼±êÎ»ÖÃ
+        { // Bï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Ê¾Í¼ï¿½ï¿½Î»ï¿½ï¿½
             posY = 57;
         }
     }
 
-    if(g_ChannelVfoInfo.chVfoInfo[disAB].txPower)
+    if (g_ChannelVfoInfo.chVfoInfo[disAB].txPower)
     {
-        LCD_DisplayPicture(posY,46,ICON_DTXPWR_SIZEX,ICON_DTXPWR_SIZEY,iconPowerL,0);
+        LCD_DisplayPicture(posY, 46, ICON_DTXPWR_SIZEX, ICON_DTXPWR_SIZEY, iconPowerL, 0);
     }
     else
     {
-        LCD_DisplayPicture(posY,46,ICON_DTXPWR_SIZEX,ICON_DTXPWR_SIZEY,iconPowerH,0);
+        LCD_DisplayPicture(posY, 46, ICON_DTXPWR_SIZEX, ICON_DTXPWR_SIZEY, iconPowerH, 0);
     }
-    
-    /*ÏÔÊ¾¿íÕ­´ø±êÖ¾*/
-    if(g_ChannelVfoInfo.chVfoInfo[disAB].wideNarrow)
+
+    /*ï¿½ï¿½Ê¾ï¿½ï¿½Õ­ï¿½ï¿½ï¿½ï¿½Ö¾*/
+    if (g_ChannelVfoInfo.chVfoInfo[disAB].wideNarrow)
     {
-        LCD_DisplayPicture(posY,65,ICON_NARROW_SIZEX,ICON_NARROW_SIZEY,iconNarrow,LCD_DIS_NORMAL);
+        LCD_DisplayPicture(posY, 65, ICON_NARROW_SIZEX, ICON_NARROW_SIZEY, iconNarrow, LCD_DIS_NORMAL);
     }
     else
     {
-        LCD_ClearArea(posY,65,ICON_NARROW_SIZEX,ICON_NARROW_SIZEY);
+        LCD_ClearArea(posY, 65, ICON_NARROW_SIZEX, ICON_NARROW_SIZEY);
     }
-				
-    /*ÏÔÊ¾AM±êÖ¾*/
-    if(g_ChannelVfoInfo.chVfoInfo[disAB].rx->frequency >= 10800000 && g_ChannelVfoInfo.chVfoInfo[disAB].rx->frequency < 13600000 )
+
+    /*ï¿½ï¿½Ê¾AMï¿½ï¿½Ö¾*/
+    if (g_ChannelVfoInfo.chVfoInfo[disAB].rx->frequency >= 10800000 && g_ChannelVfoInfo.chVfoInfo[disAB].rx->frequency < 13600000)
     {
-        LCD_ClearArea(posY,85,ICON_QT_SIZEX,ICON_QT_SIZEY);
-        LCD_DisplayPicture(posY,85,ICON_AM_SIZEX,ICON_AM_SIZEY,iconAM,LCD_DIS_NORMAL);
-        
-        //AMÄ£Ê½ÏÂ ÑÇÒôÆµ ÌøÆµ µ¹Æµ¾ùÎÞÐ§
-        LCD_ClearArea(posY,55,ICON_ADDSUB_SIZEX,ICON_ADDSUB_SIZEY);
+        LCD_ClearArea(posY, 85, ICON_QT_SIZEX, ICON_QT_SIZEY);
+        LCD_DisplayPicture(posY, 85, ICON_AM_SIZEX, ICON_AM_SIZEY, iconAM, LCD_DIS_NORMAL);
+
+        // AMÄ£Ê½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æµ ï¿½ï¿½Æµ ï¿½ï¿½Æµï¿½ï¿½ï¿½ï¿½Ð§
+        LCD_ClearArea(posY, 55, ICON_ADDSUB_SIZEX, ICON_ADDSUB_SIZEY);
         return;
     }
     else
     {
-        if(g_ChannelVfoInfo.chVfoInfo[disAB].spMute == 1)
+        if (g_ChannelVfoInfo.chVfoInfo[disAB].spMute == 1)
         {
-            LCD_DisplayPicture(posY,85,ICON_QT_SIZEX,ICON_QT_SIZEY,iconQT_DTMF,LCD_DIS_NORMAL);
+            LCD_DisplayPicture(posY, 85, ICON_QT_SIZEX, ICON_QT_SIZEY, iconQT_DTMF, LCD_DIS_NORMAL);
         }
         else
         {
-            LCD_ClearArea(posY,85,ICON_QT_SIZEX,ICON_QT_SIZEY);
+            LCD_ClearArea(posY, 85, ICON_QT_SIZEX, ICON_QT_SIZEY);
         }
     }
 
-    /*ÏÔÊ¾ÑÇÒôÆµÀàÐÍ*/
-    if(g_rfState == RF_RX)
+    /*ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½Æµï¿½ï¿½ï¿½ï¿½*/
+    if (g_rfState == RF_RX)
     {
         ctsType = g_ChannelVfoInfo.chVfoInfo[disAB].rx->dcsCtsType;
     }
@@ -245,75 +244,75 @@ extern void DisplayUpdateChFlag(U8 disAB)
     {
         ctsType = g_ChannelVfoInfo.chVfoInfo[disAB].tx->dcsCtsType;
     }
-				
-	if(ctsType == SUBAUDIO_NONE)
-	{
-        LCD_ClearArea(posY,26,ICON_DCS_SIZEX,ICON_DCS_SIZEY);
-	}
-	else if(ctsType == SUBAUDIO_CTS)
-	{
-        LCD_DisplayPicture(posY,26,ICON_DCS_SIZEX,ICON_DCS_SIZEY,iconCtcss,LCD_DIS_NORMAL);
-	}
-	else 
-	{
-        LCD_DisplayPicture(posY,26,ICON_DCS_SIZEX,ICON_DCS_SIZEY,iconDcs,LCD_DIS_NORMAL);
-	}
 
-	/*ÏÔÊ¾Æµ²îÆµÂÊ*/
-	if(g_ChannelVfoInfo.chVfoInfo[disAB].freqDir == 1)
-	{
-		LCD_DisplayPicture(posY,55,ICON_ADDSUB_SIZEX,ICON_ADDSUB_SIZEY,iconAdd,LCD_DIS_NORMAL);
-	}
-	else if(g_ChannelVfoInfo.chVfoInfo[disAB].freqDir == 2)
-	{
-		LCD_DisplayPicture(posY,55,ICON_ADDSUB_SIZEX,ICON_ADDSUB_SIZEY,iconSub,LCD_DIS_NORMAL);
-	}
-	else
-	{
-		LCD_ClearArea(posY,55,ICON_ADDSUB_SIZEX,ICON_ADDSUB_SIZEY);
-	}
+    if (ctsType == SUBAUDIO_NONE)
+    {
+        LCD_ClearArea(posY, 26, ICON_DCS_SIZEX, ICON_DCS_SIZEY);
+    }
+    else if (ctsType == SUBAUDIO_CTS)
+    {
+        LCD_DisplayPicture(posY, 26, ICON_DCS_SIZEX, ICON_DCS_SIZEY, iconCtcss, LCD_DIS_NORMAL);
+    }
+    else
+    {
+        LCD_DisplayPicture(posY, 26, ICON_DCS_SIZEX, ICON_DCS_SIZEY, iconDcs, LCD_DIS_NORMAL);
+    }
 
-	/*ÏÔÊ¾ÌøÆµ±êÖ¾*/
-	if(g_ChannelVfoInfo.chVfoInfo[disAB].fhssFlag)
-	{
-		LCD_DisplayPicture(posY,75,ICON_FHSS_SIZEX,ICON_FHSS_SIZEY,iconFhss,LCD_DIS_NORMAL);
-	}
-	else
-	{
-		LCD_ClearArea(posY,75,ICON_FHSS_SIZEX,ICON_FHSS_SIZEY);
-	}
-				
-	if(g_ChannelVfoInfo.chVfoInfo[disAB].scarmble)
-	{
-		LCD_DisplayPicture(posY,109,ICON_SCR_SIZEX,ICON_SCR_SIZEY,iconScr,LCD_DIS_NORMAL);
-	}
-	else
-	{
-		LCD_ClearArea(posY,109,ICON_SCR_SIZEX,ICON_SCR_SIZEY);
-	}
+    /*ï¿½ï¿½Ê¾Æµï¿½ï¿½Æµï¿½ï¿½*/
+    if (g_ChannelVfoInfo.chVfoInfo[disAB].freqDir == 1)
+    {
+        LCD_DisplayPicture(posY, 55, ICON_ADDSUB_SIZEX, ICON_ADDSUB_SIZEY, iconAdd, LCD_DIS_NORMAL);
+    }
+    else if (g_ChannelVfoInfo.chVfoInfo[disAB].freqDir == 2)
+    {
+        LCD_DisplayPicture(posY, 55, ICON_ADDSUB_SIZEX, ICON_ADDSUB_SIZEY, iconSub, LCD_DIS_NORMAL);
+    }
+    else
+    {
+        LCD_ClearArea(posY, 55, ICON_ADDSUB_SIZEX, ICON_ADDSUB_SIZEY);
+    }
+
+    /*ï¿½ï¿½Ê¾ï¿½ï¿½Æµï¿½ï¿½Ö¾*/
+    if (g_ChannelVfoInfo.chVfoInfo[disAB].fhssFlag)
+    {
+        LCD_DisplayPicture(posY, 75, ICON_FHSS_SIZEX, ICON_FHSS_SIZEY, iconFhss, LCD_DIS_NORMAL);
+    }
+    else
+    {
+        LCD_ClearArea(posY, 75, ICON_FHSS_SIZEX, ICON_FHSS_SIZEY);
+    }
+
+    if (g_ChannelVfoInfo.chVfoInfo[disAB].scarmble)
+    {
+        LCD_DisplayPicture(posY, 109, ICON_SCR_SIZEX, ICON_SCR_SIZEY, iconScr, LCD_DIS_NORMAL);
+    }
+    else
+    {
+        LCD_ClearArea(posY, 109, ICON_SCR_SIZEX, ICON_SCR_SIZEY);
+    }
 }
 
-extern void DisplayChannelMsg(U8 disMode,U8 disAB, U8 txOrRx)
+extern void DisplayChannelMsg(U8 disMode, U8 disAB, U8 txOrRx)
 {
     String nameBuf[16] = {0};
-    U8 ypox,clrY;
+    U8 ypox, clrY;
     U16 chNum;
-    
-    if(disAB == 0)
-    {	
-        if(g_radioInform.dualRxFlag == 0)
+
+    if (disAB == 0)
+    {
+        if (g_radioInform.dualRxFlag == 0)
         {
             ypox = 39;
             disMode = CH_DISFREQ;
             clrY = 39;
         }
-        else     
+        else
         {
-            if(disMode == CH_DISNAME_FREQ)
-			{
-			    ypox = 8;
-			}
-            else if(disMode == CH_DISNAME)
+            if (disMode == CH_DISNAME_FREQ)
+            {
+                ypox = 8;
+            }
+            else if (disMode == CH_DISNAME)
             {
                 ypox = 11;
             }
@@ -323,11 +322,11 @@ extern void DisplayChannelMsg(U8 disMode,U8 disAB, U8 txOrRx)
             }
             clrY = 12;
         }
-        chNum = g_ChannelVfoInfo.channelNum[0];   
+        chNum = g_ChannelVfoInfo.channelNum[0];
     }
     else
     {
-        if(g_radioInform.dualRxFlag == 0)
+        if (g_radioInform.dualRxFlag == 0)
         {
             ypox = 39;
             disMode = CH_DISFREQ;
@@ -335,11 +334,11 @@ extern void DisplayChannelMsg(U8 disMode,U8 disAB, U8 txOrRx)
         }
         else
         {
-            if(disMode == CH_DISNAME_FREQ)
-			{
-			    ypox = 36;
-			}
-            else if(disMode == CH_DISNAME)
+            if (disMode == CH_DISNAME_FREQ)
+            {
+                ypox = 36;
+            }
+            else if (disMode == CH_DISNAME)
             {
                 ypox = 39;
             }
@@ -349,114 +348,113 @@ extern void DisplayChannelMsg(U8 disMode,U8 disAB, U8 txOrRx)
             }
             clrY = 40;
         }
-        chNum = g_ChannelVfoInfo.channelNum[1];  
+        chNum = g_ChannelVfoInfo.channelNum[1];
     }
 
-    if(g_sysRunPara.sysRunMode == MODE_SCAN)
+    if (g_sysRunPara.sysRunMode == MODE_SCAN)
     {
         chNum = g_ChannelVfoInfo.currentChannelNum;
     }
 
-    LCD_ClearArea(clrY-4, 30, 98,21);
+    LCD_ClearArea(clrY - 4, 30, 98, 21);
 
-    if(disMode == CH_DISNAME_FREQ)
+    if (disMode == CH_DISNAME_FREQ)
     {
-        if(FillChannelName2Buf(g_ChannelVfoInfo.chVfoInfo[disAB].channelName,nameBuf) == TRUE)
+        if (FillChannelName2Buf(g_ChannelVfoInfo.chVfoInfo[disAB].channelName, nameBuf) == TRUE)
         {
-            LCD_DisplayText(ypox,30,(U8 *)nameBuf,FONTSIZE_12x12,LCD_DIS_NORMAL);
+            LCD_DisplayText(ypox, 30, (U8 *)nameBuf, FONTSIZE_12x12, LCD_DIS_NORMAL);
         }
         else
         {
-            LCD_DisplayText(ypox,30,(U8 *)((g_radioInform.language == LANG_CN)?"   Î´ÃüÃû   ":"   No Name  "),FONTSIZE_12x12,LCD_DIS_NORMAL);
+            LCD_DisplayText(ypox, 30, (U8 *)((g_radioInform.language == LANG_CN) ? "   Î´ï¿½ï¿½ï¿½ï¿½   " : "   No Name  "), FONTSIZE_12x12, LCD_DIS_NORMAL);
         }
-				
-        if(txOrRx == DIS_TX)
+
+        if (txOrRx == DIS_TX)
         {
-            DisplayCurFreq6X7(40,ypox+13,g_ChannelVfoInfo.chVfoInfo[disAB].tx->frequency);
+            DisplayCurFreq6X7(40, ypox + 13, g_ChannelVfoInfo.chVfoInfo[disAB].tx->frequency);
         }
         else
         {
-            DisplayCurFreq6X7(40,ypox+13,g_ChannelVfoInfo.chVfoInfo[disAB].rx->frequency);
+            DisplayCurFreq6X7(40, ypox + 13, g_ChannelVfoInfo.chVfoInfo[disAB].rx->frequency);
         }
     }
-    else if(disMode == CH_DISNAME && FillChannelName2Buf(g_ChannelVfoInfo.chVfoInfo[disAB].channelName,nameBuf) == TRUE)
-    {//ÏÔÊ¾ÐÅµÀÃû³Æ
-        LCD_DisplayText(ypox,30,(U8 *)nameBuf,FONTSIZE_16x16,LCD_DIS_NORMAL);
+    else if (disMode == CH_DISNAME && FillChannelName2Buf(g_ChannelVfoInfo.chVfoInfo[disAB].channelName, nameBuf) == TRUE)
+    { // ï¿½ï¿½Ê¾ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½
+        LCD_DisplayText(ypox, 30, (U8 *)nameBuf, FONTSIZE_16x16, LCD_DIS_NORMAL);
     }
-    else if(disMode == CH_DISCHNUM)
+    else if (disMode == CH_DISCHNUM)
     {
-        //Çå³ýÏÔÊ¾ÇøÓòµÄÊý¾Ý
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         memset(nameBuf, ' ', 12);
-		nameBuf[12] = '\0';
-        LCD_DisplayText(ypox-2,30,(U8 *)nameBuf,FONTSIZE_16x16,LCD_DIS_NORMAL);
+        nameBuf[12] = '\0';
+        LCD_DisplayText(ypox - 2, 30, (U8 *)nameBuf, FONTSIZE_16x16, LCD_DIS_NORMAL);
 
-        sprintf((String *)(nameBuf)," CH-%03d",chNum+1);			
-	    LCD_DisplayBoldNum12X13(ypox,30,(U8 *)nameBuf);
+        sprintf((String *)(nameBuf), " CH-%03d", chNum + 1);
+        LCD_DisplayBoldNum12X13(ypox, 30, (U8 *)nameBuf);
     }
     else
-    {//ÏÔÊ¾ÐÅµÀÆµÂÊ
-		if(txOrRx == DIS_TX)
+    { // ï¿½ï¿½Ê¾ï¿½Åµï¿½Æµï¿½ï¿½
+        if (txOrRx == DIS_TX)
         {
-            DisplayCurFreq(30,ypox,g_ChannelVfoInfo.chVfoInfo[disAB].tx->frequency);
+            DisplayCurFreq(30, ypox, g_ChannelVfoInfo.chVfoInfo[disAB].tx->frequency);
         }
         else
         {
-            DisplayCurFreq(30,ypox,g_ChannelVfoInfo.chVfoInfo[disAB].rx->frequency);
+            DisplayCurFreq(30, ypox, g_ChannelVfoInfo.chVfoInfo[disAB].rx->frequency);
         }
     }
-    //ÏÔÊ¾ÐÅµÀ±êÖ¾
+    // ï¿½ï¿½Ê¾ï¿½Åµï¿½ï¿½ï¿½Ö¾
     DisplayUpdateChFlag(disAB);
 }
 
 extern void DisplayChannelName(U8 disAB)
 {
     String nameBuf[16] = {0};
-    
-    if(g_ChannelVfoInfo.chVfoInfo[disAB].chVfoMode == VFO_MODE)
+
+    if (g_ChannelVfoInfo.chVfoInfo[disAB].chVfoMode == VFO_MODE)
     {
-        if(disAB)
+        if (disAB)
         {
-            sprintf(nameBuf,"   VFO B   ");
+            sprintf(nameBuf, "   VFO B   ");
         }
         else
         {
-            sprintf(nameBuf,"   VFO A   ");
+            sprintf(nameBuf, "   VFO A   ");
         }
     }
     else
     {
-        if(FillChannelName2Buf(g_ChannelVfoInfo.chVfoInfo[disAB].channelName,nameBuf) == FALSE)
+        if (FillChannelName2Buf(g_ChannelVfoInfo.chVfoInfo[disAB].channelName, nameBuf) == FALSE)
         {
-            memset(nameBuf,' ',12);
+            memset(nameBuf, ' ', 12);
         }
     }
 
-    LCD_DisplayText(14,16,(U8 *)nameBuf,FONTSIZE_16x16,LCD_DIS_NORMAL);
+    LCD_DisplayText(14, 16, (U8 *)nameBuf, FONTSIZE_16x16, LCD_DIS_NORMAL);
 }
-
 
 extern void DisplayRadioHome(void)
 {
     U8 chDisMode;
-    
-    if(g_radioInform.dualRxFlag == 0)
+
+    if (g_radioInform.dualRxFlag == 0)
     {
-        if(g_ChannelVfoInfo.chVfoInfo[g_ChannelVfoInfo.switchAB].chVfoMode == VFO_MODE)
-        { 
-            if(g_ChannelVfoInfo.switchAB == 0)
+        if (g_ChannelVfoInfo.chVfoInfo[g_ChannelVfoInfo.switchAB].chVfoMode == VFO_MODE)
+        {
+            if (g_ChannelVfoInfo.switchAB == 0)
             {
-                DisplayChannelMsg(CH_DISFREQ,0,DIS_RX);
-                DisplayChannelNum(0xFFFF,0);
+                DisplayChannelMsg(CH_DISFREQ, 0, DIS_RX);
+                DisplayChannelNum(0xFFFF, 0);
             }
             else
             {
-                DisplayChannelMsg(CH_DISFREQ,1,DIS_RX);
-                DisplayChannelNum(0xFFFF,1);
-            }  
+                DisplayChannelMsg(CH_DISFREQ, 1, DIS_RX);
+                DisplayChannelNum(0xFFFF, 1);
+            }
         }
         else
         {
-            if(g_ChannelVfoInfo.switchAB == 0)
+            if (g_ChannelVfoInfo.switchAB == 0)
             {
                 chDisMode = g_radioInform.channleDisA;
             }
@@ -464,49 +462,49 @@ extern void DisplayRadioHome(void)
             {
                 chDisMode = g_radioInform.channleDisB;
             }
-            DisplayChannelMsg(chDisMode,g_ChannelVfoInfo.switchAB,DIS_RX);
-            DisplayChannelNum(g_ChannelVfoInfo.channelNum[g_ChannelVfoInfo.switchAB],g_ChannelVfoInfo.switchAB);
+            DisplayChannelMsg(chDisMode, g_ChannelVfoInfo.switchAB, DIS_RX);
+            DisplayChannelNum(g_ChannelVfoInfo.channelNum[g_ChannelVfoInfo.switchAB], g_ChannelVfoInfo.switchAB);
         }
-        
+
         DisplayChannelName(g_ChannelVfoInfo.switchAB);
-        LCD_DisplayPicture(39,1,ICON_ARROWB_SIZEX,ICON_ARROWB_SIZEY,iconArrowB,LCD_DIS_NORMAL);
+        LCD_DisplayPicture(39, 1, ICON_ARROWB_SIZEX, ICON_ARROWB_SIZEY, iconArrowB, LCD_DIS_NORMAL);
     }
     else
     {
-        if(g_ChannelVfoInfo.chVfoInfo[0].chVfoMode == CHAN_MODE)
+        if (g_ChannelVfoInfo.chVfoInfo[0].chVfoMode == CHAN_MODE)
         {
-            DisplayChannelMsg(g_radioInform.channleDisA,0,DIS_RX);
-            DisplayChannelNum(g_ChannelVfoInfo.channelNum[0],0);
+            DisplayChannelMsg(g_radioInform.channleDisA, 0, DIS_RX);
+            DisplayChannelNum(g_ChannelVfoInfo.channelNum[0], 0);
         }
         else
         {
-            DisplayChannelMsg(CH_DISFREQ,0,DIS_RX);
-            DisplayChannelNum(0xFFFF,0); 
+            DisplayChannelMsg(CH_DISFREQ, 0, DIS_RX);
+            DisplayChannelNum(0xFFFF, 0);
         }
-    
-        if(g_ChannelVfoInfo.chVfoInfo[1].chVfoMode == CHAN_MODE)
-        {
-            DisplayChannelMsg(g_radioInform.channleDisB,1,DIS_RX);
-            DisplayChannelNum(g_ChannelVfoInfo.channelNum[1],1);
-        }
-        else
-        {
-            DisplayChannelMsg(CH_DISFREQ,1,DIS_RX);
-            DisplayChannelNum(0xFFFF,1);
-        } 
 
-        if(g_ChannelVfoInfo.switchAB == 0)
+        if (g_ChannelVfoInfo.chVfoInfo[1].chVfoMode == CHAN_MODE)
         {
-            LCD_DisplayPicture(13,1,ICON_ARROWA_SIZEX,ICON_ARROWA_SIZEY,iconArrowA,LCD_DIS_NORMAL);
-            LCD_ClearArea(41,1,ICON_ARROWB_SIZEX,ICON_ARROWB_SIZEY);
+            DisplayChannelMsg(g_radioInform.channleDisB, 1, DIS_RX);
+            DisplayChannelNum(g_ChannelVfoInfo.channelNum[1], 1);
         }
         else
         {
-            LCD_DisplayPicture(41,1,ICON_ARROWB_SIZEX,ICON_ARROWB_SIZEY,iconArrowB,LCD_DIS_NORMAL);
-            LCD_ClearArea(13,1,ICON_ARROWA_SIZEX,ICON_ARROWA_SIZEY);
+            DisplayChannelMsg(CH_DISFREQ, 1, DIS_RX);
+            DisplayChannelNum(0xFFFF, 1);
+        }
+
+        if (g_ChannelVfoInfo.switchAB == 0)
+        {
+            LCD_DisplayPicture(13, 1, ICON_ARROWA_SIZEX, ICON_ARROWA_SIZEY, iconArrowA, LCD_DIS_NORMAL);
+            LCD_ClearArea(41, 1, ICON_ARROWB_SIZEX, ICON_ARROWB_SIZEY);
+        }
+        else
+        {
+            LCD_DisplayPicture(41, 1, ICON_ARROWB_SIZEX, ICON_ARROWB_SIZEY, iconArrowB, LCD_DIS_NORMAL);
+            LCD_ClearArea(13, 1, ICON_ARROWA_SIZEX, ICON_ARROWA_SIZEY);
         }
     }
-    
+
     LCD_UpdateWorkAre();
 }
 
@@ -514,16 +512,16 @@ extern void DisplayHomePage(void)
 {
     LCD_ClearFullBuf();
 
-    //ÏÔÊ¾×´Ì¬À¸
+    // ï¿½ï¿½Ê¾×´Ì¬ï¿½ï¿½
     DisplayStateBar();
 
-    //ÏÔÊ¾Ö÷½çÃæ
+    // ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     DisplayRadioHome();
 }
 
 extern void DisplayInputChNum(void)
 {
-    U8 buf[11],i,flag,posY;
+    U8 buf[11], i, flag, posY;
 
     buf[0] = 'M';
     buf[1] = '-';
@@ -531,9 +529,9 @@ extern void DisplayInputChNum(void)
     buf[3] = '-';
 
     flag = 0;
-    for(i=0;i<g_inputbuf.len;i++)
+    for (i = 0; i < g_inputbuf.len; i++)
     {
-        if(g_inputbuf.buf[i] == '0' && flag == 0)
+        if (g_inputbuf.buf[i] == '0' && flag == 0)
         {
             buf[i + 1] = ' ';
         }
@@ -545,13 +543,13 @@ extern void DisplayInputChNum(void)
     }
     buf[4] = 0;
 
-    if(g_radioInform.dualRxFlag == 0)
+    if (g_radioInform.dualRxFlag == 0)
     {
         posY = 47;
     }
     else
     {
-        if(g_ChannelVfoInfo.switchAB)
+        if (g_ChannelVfoInfo.switchAB)
         {
             posY = 49;
         }
@@ -560,74 +558,73 @@ extern void DisplayInputChNum(void)
             posY = 21;
         }
     }
-    LCD_DisplayBoldNum6X7(posY,1,buf);
-    
+    LCD_DisplayBoldNum6X7(posY, 1, buf);
+
     LCD_UpdateWorkAre();
 }
 
 extern void DisplayInputVfoFreq(void)
 {
-    U8 i,j,posY;
+    U8 i, j, posY;
     U8 buf[10];
     U8 fontBuf[3];
-	 
-    memset(&buf[0],'-',9);
+
+    memset(&buf[0], '-', 9);
     buf[3] = '.';
     j = 0;
-    for(i=0;i<g_inputbuf.len;i++)
+    for (i = 0; i < g_inputbuf.len; i++)
     {
-        if(i == 3)
+        if (i == 3)
         {
-           j++;
+            j++;
         }
         buf[j++] = g_inputbuf.buf[i];
     }
     buf[9] = 0;
-    
 
-    memcpy(fontBuf,&buf[7],2);
-    buf[7] = 0;	
+    memcpy(fontBuf, &buf[7], 2);
+    buf[7] = 0;
     fontBuf[2] = 0;
 
-    if(g_radioInform.dualRxFlag == 0)
+    if (g_radioInform.dualRxFlag == 0)
     {
         posY = 39;
     }
     else
     {
-        if(g_ChannelVfoInfo.switchAB)
+        if (g_ChannelVfoInfo.switchAB)
         {
-    	    posY = 43;
+            posY = 43;
         }
         else
         {
-    		posY = 15;
+            posY = 15;
         }
     }
 
-    LCD_DisplayBoldNum12X13(posY,30,(U8 *)buf);
-    LCD_DisplayBoldNum6X7(posY + 6,115,fontBuf);
+    LCD_DisplayBoldNum12X13(posY, 30, (U8 *)buf);
+    LCD_DisplayBoldNum6X7(posY + 6, 115, fontBuf);
 
     LCD_UpdateWorkAre();
 }
 
 extern void DisplayTxSingalFlag(U8 level)
 {
-    U8 iconY,flagY;
-    if(level == 0xff)
+    U8 iconY, flagY;
+    if (level == 0xff)
     {
         return;
     }
-    if(g_radioInform.dualRxFlag == 0)
-    {//µ¥ÏÔÄ£Ê½
+    if (g_radioInform.dualRxFlag == 0)
+    { // ï¿½ï¿½ï¿½ï¿½Ä£Ê½
         iconY = 55;
         flagY = 39;
     }
     else
     {
-        if(g_ChannelVfoInfo.switchAB)
+        if (g_ChannelVfoInfo.switchAB)
         {
-    		iconY = 57;
+            iconY = 57;
             flagY = 41;
         }
         else
@@ -636,19 +633,19 @@ extern void DisplayTxSingalFlag(U8 level)
             flagY = 13;
         }
     }
-    LCD_DisplayPicture(iconY,1,ICON_SINGAL_SIZEX,ICON_SINGAL_SIZEY,SignalLevelStr[level],LCD_DIS_NORMAL);
-    LCD_DisplayPicture(flagY,13,ICON_SINGALTX_SIZEX,ICON_SINGALTX_SIZEY,iconSingalTx,LCD_DIS_NORMAL);
+    LCD_DisplayPicture(iconY, 1, ICON_SINGAL_SIZEX, ICON_SINGAL_SIZEY, SignalLevelStr[level], LCD_DIS_NORMAL);
+    LCD_DisplayPicture(flagY, 13, ICON_SINGALTX_SIZEX, ICON_SINGALTX_SIZEY, iconSingalTx, LCD_DIS_NORMAL);
 }
 
 extern void DisplayRxMode(void)
 {
-    DisplaySingalFlag(4,0);
+    DisplaySingalFlag(4, 0);
     DisplayRadioHome();
 }
 
 extern void DisplayTxMode(void)
 {
-    if(g_CurrentVfo->txPower)
+    if (g_CurrentVfo->txPower)
     {
         DisplayTxSingalFlag(2);
     }
@@ -657,28 +654,28 @@ extern void DisplayTxMode(void)
         DisplayTxSingalFlag(4);
     }
 
-    if(g_CurrentVfo->chVfoMode == CHAN_MODE)
+    if (g_CurrentVfo->chVfoMode == CHAN_MODE)
     {
-        if(g_ChannelVfoInfo.switchAB)
+        if (g_ChannelVfoInfo.switchAB)
         {
-            DisplayChannelMsg(g_radioInform.channleDisB,1,DIS_TX); 
+            DisplayChannelMsg(g_radioInform.channleDisB, 1, DIS_TX);
         }
         else
         {
-            DisplayChannelMsg(g_radioInform.channleDisA,0,DIS_TX); 
+            DisplayChannelMsg(g_radioInform.channleDisA, 0, DIS_TX);
         }
     }
     else
     {
-        if(g_ChannelVfoInfo.switchAB)
+        if (g_ChannelVfoInfo.switchAB)
         {
-            DisplayChannelMsg(CH_DISFREQ,1,DIS_TX); 
+            DisplayChannelMsg(CH_DISFREQ, 1, DIS_TX);
         }
         else
         {
-            DisplayChannelMsg(CH_DISFREQ,0,DIS_TX); 
+            DisplayChannelMsg(CH_DISFREQ, 0, DIS_TX);
         }
-    } 
+    }
 
     LCD_UpdateWorkAre();
 }
@@ -687,15 +684,15 @@ U8 GetRxArea(void)
 {
     U8 swab;
 
-    if(dualStandby.dualRxFlag == ON)
+    if (dualStandby.dualRxFlag == ON)
     {
-        if(g_ChannelVfoInfo.switchAB)
+        if (g_ChannelVfoInfo.switchAB)
         {
-            swab =  0;
+            swab = 0;
         }
         else
         {
-            swab =  1;
+            swab = 1;
         }
     }
     else
@@ -706,24 +703,24 @@ U8 GetRxArea(void)
     return swab;
 }
 
-extern void DisplaySingalFlag(U8 level,U8 UpdateF)
+extern void DisplaySingalFlag(U8 level, U8 UpdateF)
 {
-    U8 iconY,flagY;
-    if(g_sysRunPara.sysRunMode != MODE_MAIN && g_sysRunPara.sysRunMode != MODE_MONI)
+    U8 iconY, flagY;
+    if (g_sysRunPara.sysRunMode != MODE_MAIN && g_sysRunPara.sysRunMode != MODE_MONI)
     {
         return;
     }
-    
-    if(g_radioInform.dualRxFlag == 0)
-    {//µ¥ÏÔÄ£Ê½
+
+    if (g_radioInform.dualRxFlag == 0)
+    { // ï¿½ï¿½ï¿½ï¿½Ä£Ê½
         iconY = 55;
         flagY = 39;
     }
     else
     {
-        if(GetRxArea())
+        if (GetRxArea())
         {
-    		iconY = 57;
+            iconY = 57;
             flagY = 41;
         }
         else
@@ -732,64 +729,63 @@ extern void DisplaySingalFlag(U8 level,U8 UpdateF)
             flagY = 13;
         }
     }
-    if(level == 0xff)
+    if (level == 0xff)
     {
-        if(g_radioInform.dualRxFlag == 0)
-        {//µ¥ÏÔÄ£Ê½
-            LCD_ClearArea(iconY,1,ICON_SINGAL_SIZEX,ICON_SINGAL_SIZEY);
-            LCD_ClearArea(flagY,13,ICON_SINGALTX_SIZEX,ICON_SINGALTX_SIZEY);
+        if (g_radioInform.dualRxFlag == 0)
+        { // ï¿½ï¿½ï¿½ï¿½Ä£Ê½
+            LCD_ClearArea(iconY, 1, ICON_SINGAL_SIZEX, ICON_SINGAL_SIZEY);
+            LCD_ClearArea(flagY, 13, ICON_SINGALTX_SIZEX, ICON_SINGALTX_SIZEY);
         }
         else
         {
-            if(dtmfInfo.flagDtmfMatch)
-            {   
-                if(dtmfInfo.flagDtmfMatch == 1)
+            if (dtmfInfo.flagDtmfMatch)
+            {
+                if (dtmfInfo.flagDtmfMatch == 1)
                 {
-                    LCD_ClearArea(29,1,ICON_SINGAL_SIZEX,ICON_SINGAL_SIZEY);
-                    LCD_ClearArea(13,13,ICON_SINGALTX_SIZEX,ICON_SINGALTX_SIZEY);
+                    LCD_ClearArea(29, 1, ICON_SINGAL_SIZEX, ICON_SINGAL_SIZEY);
+                    LCD_ClearArea(13, 13, ICON_SINGALTX_SIZEX, ICON_SINGALTX_SIZEY);
                 }
                 else
                 {
-                    LCD_ClearArea(57,1,ICON_SINGAL_SIZEX,ICON_SINGAL_SIZEY);
-                    LCD_ClearArea(41,13,ICON_SINGALTX_SIZEX,ICON_SINGALTX_SIZEY);
+                    LCD_ClearArea(57, 1, ICON_SINGAL_SIZEX, ICON_SINGAL_SIZEY);
+                    LCD_ClearArea(41, 13, ICON_SINGALTX_SIZEX, ICON_SINGALTX_SIZEY);
                 }
                 return;
             }
             else
             {
-                LCD_ClearArea(29,1,ICON_SINGAL_SIZEX,ICON_SINGAL_SIZEY);
-                LCD_ClearArea(13,13,ICON_SINGALTX_SIZEX,ICON_SINGALTX_SIZEY);
-                LCD_ClearArea(57,1,ICON_SINGAL_SIZEX,ICON_SINGAL_SIZEY);
-                LCD_ClearArea(41,13,ICON_SINGALTX_SIZEX,ICON_SINGALTX_SIZEY);
+                LCD_ClearArea(29, 1, ICON_SINGAL_SIZEX, ICON_SINGAL_SIZEY);
+                LCD_ClearArea(13, 13, ICON_SINGALTX_SIZEX, ICON_SINGALTX_SIZEY);
+                LCD_ClearArea(57, 1, ICON_SINGAL_SIZEX, ICON_SINGAL_SIZEY);
+                LCD_ClearArea(41, 13, ICON_SINGALTX_SIZEX, ICON_SINGALTX_SIZEY);
             }
         }
     }
     else
     {
-        LCD_DisplayPicture(iconY,1,ICON_SINGAL_SIZEX,ICON_SINGAL_SIZEY,SignalLevelStr[level],LCD_DIS_NORMAL);
-        LCD_DisplayPicture(flagY,13,ICON_SINGALTX_SIZEX,ICON_SINGALTX_SIZEY,iconSingalRx,LCD_DIS_NORMAL);
+        LCD_DisplayPicture(iconY, 1, ICON_SINGAL_SIZEX, ICON_SINGAL_SIZEY, SignalLevelStr[level], LCD_DIS_NORMAL);
+        LCD_DisplayPicture(flagY, 13, ICON_SINGALTX_SIZEX, ICON_SINGALTX_SIZEY, iconSingalRx, LCD_DIS_NORMAL);
     }
 
-    if(UpdateF)
+    if (UpdateF)
     {
         LCD_UpdateWorkAre();
     }
 }
 
-
-// Ìî³äºô½Ð·½Ãû³Æ
+// ï¿½ï¿½ï¿½ï¿½ï¿½Ð·ï¿½ï¿½ï¿½ï¿½ï¿½
 U8 FillAniName(String *pDisName, String *pId)
 {
-    U8 i,j;
+    U8 i, j;
     U8 count = 0;
 
-    for(i = 0; i < 20; i++)
+    for (i = 0; i < 20; i++)
     {
-        if(memcmp(dtmfInfo.contact[i].id, pId, 3) == 0)
+        if (memcmp(dtmfInfo.contact[i].id, pId, 3) == 0)
         {
-            for(j = 0; j < 10; j++)
+            for (j = 0; j < 10; j++)
             {
-                if(dtmfInfo.contact[i].name[j] != 0xFF)
+                if (dtmfInfo.contact[i].name[j] != 0xFF)
                 {
                     count++;
                 }
@@ -804,39 +800,39 @@ U8 FillAniName(String *pDisName, String *pId)
 }
 extern void DisplayAniMsg(U8 *pCallerId, U8 *pCalledId)
 {
-    String dtmfSymbol[] = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','*','#'};
-    U8 xpos,ypox;
+    String dtmfSymbol[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', '*', '#'};
+    U8 xpos, ypox;
     U8 i;
     U8 swAB;
     String nameBuf[16];
 
-    if(g_sysRunPara.sysRunMode != MODE_MAIN)
+    if (g_sysRunPara.sysRunMode != MODE_MAIN)
     {
         return;
     }
 
-    if(g_radioInform.dualRxFlag == 0)
+    if (g_radioInform.dualRxFlag == 0)
     {
-        LCD_ClearArea(11, 0, 128,28);
-            
+        LCD_ClearArea(11, 0, 128, 28);
+
         xpos = 9;
         ypox = 10;
     }
     else
     {
         swAB = GetRxArea();
-    
-        if(swAB == 1)
+
+        if (swAB == 1)
         {
-            LCD_ClearArea(11, 0, 128,32);
-    
+            LCD_ClearArea(11, 0, 128, 32);
+
             xpos = 9;
             ypox = 10;
         }
         else
         {
-            LCD_ClearArea(39, 0, 128,32);
-    
+            LCD_ClearArea(39, 0, 128, 32);
+
             xpos = 9;
             ypox = 38;
         }
@@ -847,52 +843,52 @@ extern void DisplayAniMsg(U8 *pCallerId, U8 *pCalledId)
     nameBuf[2] = 'L';
     nameBuf[3] = 'L';
     nameBuf[4] = ':';
-    if( FillAniName(nameBuf + 5, (String *)pCallerId) == 0)
+    if (FillAniName(nameBuf + 5, (String *)pCallerId) == 0)
     {
-        for(i = 0; i < 3; i++)
+        for (i = 0; i < 3; i++)
         {
             nameBuf[5 + i] = dtmfSymbol[pCallerId[i]];
         }
         nameBuf[8] = '\0';
     }
-    
-    LCD_DisplayText(ypox,xpos,(U8 *)nameBuf,FONTSIZE_16x16,LCD_DIS_NORMAL);
+
+    LCD_DisplayText(ypox, xpos, (U8 *)nameBuf, FONTSIZE_16x16, LCD_DIS_NORMAL);
 
     nameBuf[0] = '>';
     nameBuf[1] = '>';
     nameBuf[2] = '>';
-    for(i = 0; i < 3; i++)
+    for (i = 0; i < 3; i++)
     {
         nameBuf[3 + i] = dtmfSymbol[pCalledId[i]];
     }
     nameBuf[6] = '\0';
-    LCD_DisplayText(ypox+13,xpos,(U8 *)nameBuf,FONTSIZE_16x16,LCD_DIS_NORMAL);
-    
+    LCD_DisplayText(ypox + 13, xpos, (U8 *)nameBuf, FONTSIZE_16x16, LCD_DIS_NORMAL);
+
     LCD_UpdateWorkAre();
 }
 
 /*********************************************************************
-* º¯ Êý Ãû: ClearAniDisplay
-* ¹¦ÄÜÃèÊö: Çå³ýÉí·ÝÂëÏÔÊ¾ÐÅÏ¢
-* È«¾Ö±äÁ¿: 
-* ÊäÈë²ÎÊý£º
-* Êä³ö²ÎÊý:
-* ·µ¡¡¡¡»Ø:
-* Ëµ    Ã÷£º
-***********************************************************************/
+ * ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½: ClearAniDisplay
+ * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½Ï¢
+ * È«ï¿½Ö±ï¿½ï¿½ï¿½:
+ * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:
+ * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:
+ * Ëµ    ï¿½ï¿½ï¿½ï¿½
+ ***********************************************************************/
 extern void ClearAniDisplay(void)
 {
-    if( dtmfInfo.flagDtmfMatch )
+    if (dtmfInfo.flagDtmfMatch)
     {
-        if(dtmfInfo.flagDtmfMatch == 2 || (g_radioInform.dualRxFlag == 0))
+        if (dtmfInfo.flagDtmfMatch == 2 || (g_radioInform.dualRxFlag == 0))
         {
-            //Çå³ýA¶ÎÏÔÊ¾ÇøÓò
-            LCD_ClearArea(11, 0, 128,32);
+            // ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½
+            LCD_ClearArea(11, 0, 128, 32);
         }
         else
         {
-            //Çå³ýB¶ÎÏÔÊ¾ÇøÓò
-            LCD_ClearArea(39, 0, 128,32);
+            // ï¿½ï¿½ï¿½Bï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½
+            LCD_ClearArea(39, 0, 128, 32);
         }
         dtmfInfo.flagDtmfMatch = 0;
     }
@@ -900,41 +896,37 @@ extern void ClearAniDisplay(void)
 
 extern void DisplayResetRxFlag(void)
 {
-
 }
 
-const U8 *modelTypeStr[] = 
-{
-    "BF",
-    "FCC",
-    "IC",
-    "CE",
-    "IND",
-    "CN"   
-};
+const U8 *modelTypeStr[] =
+    {
+        "BF",
+        "FCC",
+        "IC",
+        "CE",
+        "IND",
+        "CN"};
 
 extern void DisplaySoftVersion(void)
 {
     U8 disbuf[11];
     U8 len;
 
-    LCD_ClearFullBuf();    
-    len = sprintf((String *)&disbuf,"%sNRF",strModelType);  
-    LCD_DisplayText(4,60-(len<<2),disbuf,FONTSIZE_16x16,LCD_DIS_NORMAL);  
-  
-    //ÏÔÊ¾°æ±¾ºÅ
-    sprintf((String *)&disbuf,"VER:%s","V0.22" );
-    LCD_DisplayText(24,28,disbuf,FONTSIZE_16x16,LCD_DIS_NORMAL);  
+    LCD_ClearFullBuf();
+    len = sprintf((String *)&disbuf, "%sNRF", strModelType);
+    LCD_DisplayText(4, 60 - (len << 2), disbuf, FONTSIZE_16x16, LCD_DIS_NORMAL);
 
-    //ÏÔÊ¾¹ú¼ÒÂë
-    sprintf((String *)&disbuf,"%s",modelTypeStr[g_sysRunPara.moduleType]);
-    LCD_DisplayText(44,51,disbuf,FONTSIZE_16x16,LCD_DIS_NORMAL);  
+    // ï¿½ï¿½Ê¾ï¿½æ±¾ï¿½ï¿½
+    sprintf((String *)&disbuf, "VER:%s", "V0.22");
+    LCD_DisplayText(24, 28, disbuf, FONTSIZE_16x16, LCD_DIS_NORMAL);
+
+    // ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    sprintf((String *)&disbuf, "%s", modelTypeStr[g_sysRunPara.moduleType]);
+    LCD_DisplayText(44, 51, disbuf, FONTSIZE_16x16, LCD_DIS_NORMAL);
 
     LCD_UpdateFullScreen();
     LcdBackLightSwitch(LED_ON);
 
-    //ÑÓÊ±2SÓÃÓÚÏÔÊ¾°æ±¾ºÅ
+    // ï¿½ï¿½Ê±2Sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½æ±¾ï¿½ï¿½
     DelaySysMs(2000);
 }
-
-

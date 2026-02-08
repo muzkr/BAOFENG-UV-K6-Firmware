@@ -2,31 +2,30 @@
 
 extern Boolean PTT_GetKeyVal(void)
 {
-    if(GPIOA->IDR & GPIO_Pin_10)
+    if (GPIOA->IDR & GPIO_Pin_10)
     {
         return 1;
     }
     else
     {
-       return 0;
+        return 0;
     }
 }
-
 
 extern void PTT_ScanTask(void)
 {
     static U8 pttCnt;
-    
-    if(g_rfState == RF_TX && g_rfTxState != TX_STOP && alarmDat.alarmStates != ON)
+
+    if (g_rfState == RF_TX && g_rfTxState != TX_STOP && alarmDat.alarmStates != ON)
     {
         return;
     }
     else
     {
-        if(PTT_GetKeyVal() == 0)
+        if (PTT_GetKeyVal() == 0)
         {
             pttCnt++;
-            if(pttCnt < 3)
+            if (pttCnt < 3)
             {
                 return;
             }
@@ -40,12 +39,12 @@ extern void PTT_ScanTask(void)
         LCD_BackLightSetOn();
         ResetTimeKeyLockAndPowerSave();
 
-        if(alarmDat.alarmStates)
+        if (alarmDat.alarmStates)
         {
             AlarmFuncSwitch(OFF);
         }
 
-        if(Audio_CheckBusy())
+        if (Audio_CheckBusy())
         {
             Audio_PlayStop();
             return;
@@ -54,4 +53,3 @@ extern void PTT_ScanTask(void)
         Radio_EnterTxMode();
     }
 }
-

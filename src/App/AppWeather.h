@@ -1,5 +1,5 @@
 #ifndef __APPWEATHER_H
-    #define __APPWEATHER_H
+#define __APPWEATHER_H
 
 extern STR_FREQINFO Weatherfreq;
 extern const U32 TAB_WEATHER[];

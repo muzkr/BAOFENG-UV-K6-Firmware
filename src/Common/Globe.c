@@ -1,11 +1,10 @@
 #include "includes.h"
 
-//定义对讲机参数全局变量
+// 定义对讲机参数全局变量
 STR_RADIOINFORM g_radioInform;
 STR_FMINFOS g_FMInform;
-STR_SYSTEM  g_sysRunPara;
+STR_SYSTEM g_sysRunPara;
 STR_INPUTBOX g_inputbuf;
-
 
 STR_CHANNEL_VFO g_ChannelVfoInfo;
 STR_CH_VFO_INFO *g_CurrentVfo;
@@ -22,5 +21,3 @@ U8 g_rfRxState;
 U8 g_rfTxState;
 
 U8 inputTypeBack;
-
-
