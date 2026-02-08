@@ -3,42 +3,9 @@
 
 This repository contains the firmware source code for the Baofeng UV-K6x series of radios. The code is written in C and is intended to be compiled with the GCC compiler. The code is released under the BFPL-1.0 license.
 
-## Development Environment
-
-### 1. Install Visual Studio Code
-First, you need to install Visual Studio Code (VS Code). You can download and install it from the [Visual Studio Code official website](https://code.visualstudio.com/).
-
-### 2. Install PlatformIO IDE Extension
-The code is intended to be compiled with the PlatformIO IDE extension for VS Code. To install the PlatformIO IDE extension, follow these steps:
-1. Open VS Code.
-2. Click on the Extensions icon in the left sidebar.
-3. Search for "PlatformIO IDE" in the Extensions Marketplace.
-4. Click the "Install" button to install the PlatformIO IDE extension.
-
-### 3. Radio specific Platform Installation:
-Click "PlatformIO Core CLI" from VSCode PlatformIO Panel -> Quick Access -> Miscellaneous.
-Enter below install commands:
-```
-pio pkg install -g -p https://github.com/cnt7/BAOFENG-UV-K6-Firmware
-```
-
-When you are using Linux, you need to install the udev rules for OpenOCD
-Copy the 60-openocd.rules file under tool-openocd-kd32 package to /etc/udev/rules.d/ directory.
-```
-sudo cp ~/.platformio/packages/tool-openocd-kd32/contrib/60-openocd.rules  /etc/udev/rules.d/
-```
-Refresh the udev rules.
-```
-sudo udevadm control --reload-rules && sudo udevadm trigger
-```
-
 ## Building
 
-To build the code, follow these steps:
-1. Open the project in Visual Studio Code.
-2. Click on the PlatformIO icon in the left sidebar.
-3. Click on the "Build" button to build the code.
-4. The code will be compiled, and the output binary file will put into ./out/ folder.
+Build the code with CMake and a recent version of gcc.
 
 ## Uploading
 
@@ -63,3 +30,8 @@ Copyright © 2024 Baofeng. All rights reserved.
 ## Contributors
 - BD4VOW ;  Starry Night Quintet- CNT7 DarkSoma OHMYTIME  X 
     - provided gcc, openocd and PlatformIO support.
+
+The following repositories are highly valuable for BF K6 development:
+
+- https://github.com/amoxu/platform-openradiox provides SVD definitions for KD32
+- https://github.com/cnt7/tool-openocd-kd32.git offers an OpenOCD distribution that works well with KD32
