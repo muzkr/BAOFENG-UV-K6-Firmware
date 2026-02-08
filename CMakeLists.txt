@@ -21,13 +21,7 @@ message("Build type: " ${CMAKE_BUILD_TYPE})
 
 enable_language(C CXX ASM)
 
-execute_process(  
-    COMMAND git rev-parse --short HEAD  
-    OUTPUT_VARIABLE GIT_HASH  
-    OUTPUT_STRIP_TRAILING_WHITESPACE  
-)
-
-set(EXE_NAME ${CMAKE_PROJECT_NAME}-${GIT_HASH})
+set(EXE_NAME ${CMAKE_PROJECT_NAME}-${VERSION_NUMBER})
 message("Binary name: " ${EXE_NAME})
 
 add_executable(${EXE_NAME})
@@ -38,7 +32,7 @@ add_subdirectory(src)
 target_link_libraries(${EXE_NAME} app)
 target_compile_definitions(${EXE_NAME} PRIVATE $<$<CONFIG:Debug>:DEBUG>)
 
-target_compile_definitions(${EXE_NAME} PRIVATE GIT_HASH="${GIT_HASH}")
+target_compile_definitions(${EXE_NAME} PRIVATE VERSION_NUMBER="${VERSION_NUMBER}")
 
 # Remove wrong libob.a library dependency when using cpp files
 list(REMOVE_ITEM CMAKE_C_IMPLICIT_LINK_LIBRARIES ob)
