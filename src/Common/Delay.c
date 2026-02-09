@@ -29,6 +29,7 @@ void DelayUs(U16 n) // 1US
  80025be:	4770      	bx	lr
      */
 }
+
 void DelayMs(U16 n)
 {
     U16 i = 0;

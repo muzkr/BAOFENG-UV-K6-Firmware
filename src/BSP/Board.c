@@ -1,11 +1,11 @@
 #include "includes.h"
 #include "kd32f328_it.h"
-
-__IO STR_INTFUN UserVectors[10] __attribute__((section(".intfun")));
+#include "vec_table.h"
 
 // 定时1ms
 void SysTick_Init(void)
 {
+    SysTick->CTRL = 0;
     if (SysTick_Config(SystemCoreClock / 1000))
     {
         /* Capture error */
@@ -18,6 +18,9 @@ void Gpio_Init(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
 
+    RCC_AHBPeriphResetCmd(RCC_AHBPeriph_GPIOA, ENABLE);
+    RCC_AHBPeriphResetCmd(RCC_AHBPeriph_GPIOA, DISABLE);
+
     /* Enable GPIO clock */
     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA | RCC_AHBPeriph_GPIOB | RCC_AHBPeriph_GPIOC | RCC_AHBPeriph_GPIOF, ENABLE);
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1 | RCC_APB2Periph_SPI1, ENABLE);
@@ -27,7 +30,7 @@ void Gpio_Init(void)
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_8 | GPIO_Pin_11 | GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14;
 
     // Enabled SWD
-    // GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_8 | GPIO_Pin_11 | GPIO_Pin_12 ;
+    // GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_8 | GPIO_Pin_11 | GPIO_Pin_12;
 
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
     GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
@@ -305,7 +308,7 @@ void UserADC_Init(void)
     UserADC_GetValOfBatt();
 }
 
-void USART1_Handler(void)
+void USART1_IRQHandler(void)
 {
     if (USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)
     {
@@ -325,10 +328,7 @@ void DMA1_Channel4_5_IRQHandler(void)
 
 extern void Board_Init(void)
 {
-    UserVectors[0].intHandle = SysTick_Handler;
-    UserVectors[1].intHandle = USART1_IRQHandler;
-    UserVectors[2].intHandle = USART2_IRQHandler;
-    UserVectors[3].intHandle = DMA1_Channel4_5_IRQHandler;
+    vec_table_init();
 
     SysTick_Init();
     NVIC_Configuration();

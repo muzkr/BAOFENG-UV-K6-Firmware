@@ -46,11 +46,12 @@ typedef enum
     ON
 } ENUM_ONOFF;
 
-typedef enum
+#include <stdbool.h>
+enum
 {
     FALSE = 0,
     TRUE = !FALSE
-} bool;
+};
 
 enum
 {
@@ -411,10 +412,10 @@ typedef struct
     UNION_VM chOrVfoMode; // 独立设置时高4位B段模式 低4位A段模式
     U8 keyLock;           // LOCK   键盘锁    0: 关      1: 开
     UNION_FLAG2 OpFlag1;  // bit0~1:  开机显示:0:无: 1:预设图标(公司logo)  2:预设字符2行 3:电池电压
-                         // bit2~3:  开机提示音: 0:无 1:音调  2:语音
-    U8 rtone;        // 1750Hz中继Tone
-    U8 weatheSwitch; // 天气预报功能开关 预留
-    U8 weatherAlert; // 天气警报功能 预留
+                          // bit2~3:  开机提示音: 0:无 1:音调  2:语音
+    U8 rtone;             // 1750Hz中继Tone
+    U8 weatheSwitch;      // 天气预报功能开关 预留
+    U8 weatherAlert;      // 天气警报功能 预留
 
     U8 voxDelay;     // 声控延时时间 0.5S -- 2.0S 步进0.1S
     U8 menuExitTime; // 菜单自动退出时间

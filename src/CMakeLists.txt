@@ -76,6 +76,7 @@ target_sources(app INTERFACE
     BSP/Board.c
     BSP/BoardFun.c
     BSP/kd32f328_it.c
+    BSP/vec_table.c
 
     # App
     App/AppAlarm.c
