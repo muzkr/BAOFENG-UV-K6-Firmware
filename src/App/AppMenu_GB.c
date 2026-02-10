@@ -325,7 +325,7 @@ extern void Menu_GetSubItemPara(U8 menuIndex)
     case S_INFO:
     default:
         g_menuInfo.inputMode = MENU_ONE_NULL;
-        g_menuInfo.subMaxItem = 2;
+        g_menuInfo.subMaxItem = 1;
         g_menuInfo.selectedItem = 0;
         break;
     }

@@ -1,7 +1,7 @@
 #ifndef __DISPLAYMENU_H
 #define __DISPLAYMENU_H
 
-#define MENU_MAX_CNT 55
+#define MENU_MAX_CNT 56
 
 typedef struct
 {
@@ -68,7 +68,7 @@ enum
     S_FMINT,
     S_RESET,
     S_WATCH,
-    S_INFO
+    S_INFO,
 };
 extern String disBuf[17];
 /********************************************************************************************************************/

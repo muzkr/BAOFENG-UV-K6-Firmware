@@ -3,15 +3,15 @@
 
 enum
 {
-    MENU_ONE_SELECT = 0,
+    MENU_ONE_SELECT = 0, // Options
     MENU_ONE_DIGIT,
     MENU_ONE_CTCSS,
     MENU_ONE_FREQ,
     MENU_ONE_CODE,
     MENU_ONE_SCANCTC,
     MENU_ONE_SCANDCS,
-    MENU_ONE_CHAR,
-    MENU_ONE_NULL,
+    MENU_ONE_CHAR, // Editable text
+    MENU_ONE_NULL, // Text for display (not editable)
     MENU_ONE_NAME,
     MENU_ONE_DECODE,
     MENU_ONE_QRCODE,
@@ -23,7 +23,7 @@ enum
 typedef struct
 {
     U8 menuType;
-    U8 menuMaxItem;
+    U8 menuMaxItem; // Number of top level items
     U8 isSubMenu;
     U8 menuIndex;
     U16 subMaxItem; // Number of sub items
