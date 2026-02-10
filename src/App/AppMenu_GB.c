@@ -222,7 +222,7 @@ extern void Menu_GetSubItemPara(U8 menuIndex)
         g_menuInfo.selectedItem = g_CurrentVfo->busyLock;
         break;
     case S_PONTYPE:
-        g_menuInfo.subMaxItem = 2;
+        g_menuInfo.subMaxItem = 3;
         g_menuInfo.selectedItem = g_radioInform.OpFlag1.Bit.b0;
         break;
     case S_PONTONE:
@@ -1289,8 +1289,8 @@ extern void Menu_SaveSelectItem(U8 menuIndex)
         {
             g_inputbuf.len = 16;
         }
-        memset(powerOnMsg, 0x00, 16);
         memcpy(powerOnMsg, g_inputbuf.buf, g_inputbuf.len);
+        powerOnMsg[g_inputbuf.len] = 0;
         LCD_UpdateWorkAre();
         break;
     case S_PWR:

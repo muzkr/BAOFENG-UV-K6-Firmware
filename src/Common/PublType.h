@@ -411,7 +411,7 @@ typedef struct
     U8 fmEnale;           // FM调频收音机允许使用  1:允许 0:不允许
     UNION_VM chOrVfoMode; // 独立设置时高4位B段模式 低4位A段模式
     U8 keyLock;           // LOCK   键盘锁    0: 关      1: 开
-    UNION_FLAG2 OpFlag1;  // bit0~1:  开机显示:0:无: 1:预设图标(公司logo)  2:预设字符2行 3:电池电压
+    UNION_FLAG2 OpFlag1;  // bit0~1:  开机显示:0: 预设图标(公司logo)  1:预设字符2行 2:电池电压
                           // bit2~3:  开机提示音: 0:无 1:音调  2:语音
     U8 rtone;             // 1750Hz中继Tone
     U8 weatheSwitch;      // 天气预报功能开关 预留

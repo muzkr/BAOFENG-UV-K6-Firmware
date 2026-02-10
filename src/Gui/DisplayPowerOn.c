@@ -1,34 +1,40 @@
 #include "includes.h"
+#include "printf.h"
 
 extern void UI_DisplayPowerOn(void)
 {
-    U8 i;
-    U8 picDisBuf[1024 + 1] = {0};
 
     SC5620_SetContpastRatio(g_radioInform.brightness);
 
-    if (g_radioInform.OpFlag1.Bit.b0 == 0)
+    // printf("power on type: %d\n", g_radioInform.OpFlag1.Bit.b0);
+
+    if (g_radioInform.OpFlag1.Bit.b0 == 1)
     {
-        SpiFlash_ReadBytes(FLASH_PON_MSG_ADDR, picDisBuf, 1024);
-        SC5260_DisplayArea(0, 0, 128, 64, picDisBuf, LCD_DIS_NORMAL);
-    }
-    else if (g_radioInform.OpFlag1.Bit.b0 == 1)
-    {
-        memset(picDisBuf, ' ', 16);
-        for (i = 0; i < 16; i++)
+        uint32_t len = 0;
+        for (; len < 16; len++)
         {
-            if (powerOnMsg[i] == 0xFF || powerOnMsg[i] == 0x00)
+            if (powerOnMsg[len] == 0xFF || powerOnMsg[len] == 0x00)
             {
                 break;
             }
-            picDisBuf[i] = powerOnMsg[i];
         }
-        LCD_DisplayText(24, (64 - i * 4), (U8 *)picDisBuf, FONTSIZE_16x16, LCD_DIS_NORMAL);
+
+        // printf("power on message len: %d\n", len);
+
+        LCD_DisplayText(3 * 8, (128 - len * 8) / 2, powerOnMsg, FONTSIZE_16x16, LCD_DIS_NORMAL);
     }
-    else
+    else if (g_radioInform.OpFlag1.Bit.b0 == 2)
     {
         DisplayBatteryVol(0);
     }
+    else
+    {
+        U8 picDisBuf[1024];
+        SpiFlash_ReadBytes(FLASH_PON_MSG_ADDR, picDisBuf, 1024);
+        SC5260_DisplayArea(0, 0, 128, 64, picDisBuf, LCD_DIS_NORMAL);
+    }
+
+    LCD_UpdateFullScreen();
 
     LcdBackLightSwitch(LED_ON);
     // 延时500ms

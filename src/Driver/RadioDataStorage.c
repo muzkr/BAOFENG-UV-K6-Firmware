@@ -88,23 +88,18 @@ extern void Flash_DeleteChannelData(U16 channelNum)
  ***********************************************************************/
 U16 Flash_GetLogicAddrShift(U32 addr, U8 useByte)
 {
-    U8 i, j;
-    U8 addrMask;
     U8 addrMap[32];
-    U16 addrOffset = 0xFF; // 地址偏移
 
     SpiFlash_ReadBytes(addr, addrMap, useByte);
 
-    for (i = 0; i < useByte; i++)
+    for (uint32_t i = 0; i < useByte; i++)
     {
-        addrMask = 0x01;
-        for (j = 0; j < 8; j++)
+        uint32_t addrMask = 0x01;
+        for (uint32_t j = 0; j < 8; j++)
         {
             if (addrMap[i] & addrMask)
             {
-                addrOffset = i * 8 + j;
-
-                return addrOffset;
+                return i * 8 + j;
             }
             else
             {
@@ -112,7 +107,8 @@ U16 Flash_GetLogicAddrShift(U32 addr, U8 useByte)
             }
         }
     }
-    return addrOffset;
+
+    return 0xFF;
 }
 
 // 保存对讲机 对讲机功能信息/收音机信道信息
@@ -168,27 +164,27 @@ extern void Flash_SaveRadioImfosData(void)
 // 读取对讲机 频率模式数据/对讲机功能信息/收音机信息
 extern void Flash_ReadRadioImfosData(void)
 {
-    U8 addrOffset;
-    U32 logicAddr;
-    U16 checkSum;
-    U8 buf[96] = {0x00}; // 对讲机功能信息1+对讲机功能信息2+收音机功能信息 = 94Byte + 2Byte(CheckSum)
-                         //  (4K - 16Byte) / 96 = 42  衰减次数: 42
-    // 读取存储位置信息
-    addrOffset = Flash_GetLogicAddrShift(RADIO_IMFOS_ADDR, 6);
+    // 对讲机功能信息1+对讲机功能信息2+收音机功能信息 = 94Byte + 2Byte(CheckSum)
+    //  (4K - 16Byte) / 96 = 42  衰减次数: 42
 
+    // 读取存储位置信息
+    const uint16_t addrOffset = Flash_GetLogicAddrShift(RADIO_IMFOS_ADDR, 6);
     if (addrOffset < 42)
     {
-        logicAddr = addrOffset * 96 + RADIO_IMFOS_ADDR + 16;
+        uint32_t logicAddr = RADIO_IMFOS_ADDR + 16 + addrOffset * 96;
+        U8 buf[96];
         SpiFlash_ReadBytes(logicAddr, buf, 96);
 
-        memcpy((U8 *)&checkSum, &buf[94], 2);
+        U16 checkSum;
+        memcpy(&checkSum, &buf[94], 2);
         if (checkSum == CRC_ValidationCalc(buf, 94))
         { // 校验通过
-            memcpy((U8 *)&g_radioInform.sqlLevel, buf, sizeof(STR_RADIOINFORM));
+            memcpy(&g_radioInform, buf, sizeof(STR_RADIOINFORM));
             memcpy(powerOnMsg, buf + 64, 16);
             return;
         }
     }
+
     // 数据错误，校验未通过/从备份区提取数据
     SpiFlash_EraseSector(RADIO_IMFOS_ADDR);
     ResetRadioFunData();
@@ -321,30 +317,26 @@ extern void Flash_SaveSystemRunData(void)
 
 // 读取对讲机信道号,天气预报信道号,收音机当前频率
 // 预留14Byte + 2Byte(CheckSum)
-//(4K - 32Byte) / 16 = 254  衰减次数: 254
-//  前16字节用于衰减算法  实际使用61bit
+// (4K - 32Byte) / 16 = 254  衰减次数: 254
+// 前32字节用于衰减算法  实际使用61bit
 extern void Flash_ReadSystemRunData(void)
 {
-    U16 addrOffset;
-    U32 logicAddr;
-    U16 checkSum;
-    U8 buf[16] = {0x00};
-
-    addrOffset = Flash_GetLogicAddrShift(SYSTEMRAN_ADDR, 32);
-
+    uint16_t addrOffset = Flash_GetLogicAddrShift(SYSTEMRAN_ADDR, 32);
     if (addrOffset < 254)
     {
-        logicAddr = (addrOffset * 16) + SYSTEMRAN_ADDR + 32;
+        uint32_t logicAddr = SYSTEMRAN_ADDR + 32 + (addrOffset * 16);
+        U8 buf[16];
         SpiFlash_ReadBytes(logicAddr, buf, 16);
 
-        memcpy((U8 *)&checkSum, &buf[14], 2);
+        U16 checkSum;
+        memcpy(&checkSum, &buf[14], 2);
         if (checkSum == CRC_ValidationCalc(buf, 14))
         { // 数据校验正确
-            memcpy((U8 *)&g_ChannelVfoInfo.channelNum, buf, 2);
-
+            memcpy(g_ChannelVfoInfo.channelNum, buf, 2);
             return;
         }
     }
+
     // 数据错误，从初始化数据恢复
     g_ChannelVfoInfo.channelNum[0] = 0;
     g_ChannelVfoInfo.channelNum[1] = 0;

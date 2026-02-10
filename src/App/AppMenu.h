@@ -26,7 +26,7 @@ typedef struct
     U8 menuMaxItem;
     U8 isSubMenu;
     U8 menuIndex;
-    U16 subMaxItem;
+    U16 subMaxItem; // Number of sub items
     U32 selectedItem;
     U16 subIndex;
     U8 inputMode;

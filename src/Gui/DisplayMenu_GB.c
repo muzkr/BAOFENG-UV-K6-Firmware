@@ -251,16 +251,16 @@ const String *ToneEnStr[] =
         " 2100hz", // 3
 };
 
-const String *PwrOnCnStr[] =
-    {
-        "预设图标",
-        "预设信息",
-        "电池电压"};
-const String *PwrOnEnStr[] =
-    {
-        "LOGO",
-        "MESSAGE",
-        "VOLTAGE"};
+const String *PwrOnCnStr[] = {
+    "预设图标",
+    "预设信息",
+    "电池电压",
+};
+const String *PwrOnEnStr[] = {
+    "LOGO",
+    "MESSAGE",
+    "VOLTAGE",
+};
 
 const String *SideKeyCnStr[] =
     {
