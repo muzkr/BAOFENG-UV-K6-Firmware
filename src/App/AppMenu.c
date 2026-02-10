@@ -1831,7 +1831,7 @@ extern void KeyProcess_Menu(U8 keyEvent)
     case KEYID_STAR:
         EnterRemoteScanQTMode();
         break;
-    case KEYID_WELL:
+    case KEYID_NUM:
         if (g_menuInfo.inputMode == MENU_ONE_DECODE)
         { // ������������ģʽ�л�������ʹ��
             DcsSwitchPolarity();

@@ -293,7 +293,7 @@ extern void KeyProcess_Main(U8 keyEvent)
     case KEYID_STAR:
         Radio_ReverseSwitch();
         break;
-    case KEYID_WELL:
+    case KEYID_NUM:
         EnterDtmfEditMode();
         break;
     case KEYID_SCAN:

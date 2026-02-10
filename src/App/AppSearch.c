@@ -521,7 +521,7 @@ extern void KeyProcess_Search(U8 keyEvent)
         break;
 
     case KEYID_AB:
-    case KEYID_WELL:
+    case KEYID_NUM:
         SearchFreqModeBandSwitch();
         SearchFreqModeDisplayStepMsg(STEP_SEEK_FREQ);
         break;

@@ -203,7 +203,7 @@ extern void KeyProcess_DtmfInput(U8 keyEvent)
     case KEYID_STAR:
         InputDtmfCode('*');
         break;
-    case KEYID_WELL:
+    case KEYID_NUM:
         InputDtmfCode('#');
         break;
 

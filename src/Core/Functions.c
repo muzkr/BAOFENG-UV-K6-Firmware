@@ -275,7 +275,7 @@ extern void Radio_TxKeyTone(U8 event, U8 para)
         case KEYID_STAR:
             DtmfSendKeypadCode(14);
             break;
-        case KEYID_WELL:
+        case KEYID_NUM:
             DtmfSendKeypadCode(15);
             break;
         case KEYID_SIDEKEY2:

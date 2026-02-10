@@ -7,96 +7,60 @@ static U8 SubmitKey = 0;
 
 #define KeyReadDelay() DelayUs(5)
 
-// Cols: Side keys, L0, L1, L2, L3, L4
-const U16 keyscanTab1[] = {0x0E11, 0x0E10, 0x0E01, 0x0A11, 0x0611, 0x0C11}; // 扫描列表_输出高电平
-const U16 keyscanTab2[] = {0x0000, 0x0001, 0x0010, 0x0400, 0x0800, 0x0200}; // 扫描列表_输出低电平
-
-#define MASK_MATRIX_LINE 0x6003
-#define MASK_MATRIX_LINE_1 0x4003 // K0 low
-#define MASK_MATRIX_LINE_2 0x2003 // K1 low
-#define MASK_MATRIX_LINE_3 0x6001 // K3 low
-#define MASK_MATRIX_LINE_4 0x6002 // K2 low
+// Choose "Lx" in this order: Side keys, L0, L1, L2, L3, L4
+static const U16 keyscanTab1[] = {0x0E11, 0x0E10, 0x0E01, 0x0A11, 0x0611, 0x0C11}; // 扫描列表_输出高电平
+static const U16 keyscanTab2[] = {0x0000, 0x0001, 0x0010, 0x0400, 0x0800, 0x0200}; // 扫描列表_输出低电平
 
 // 矩阵键值
-const KeyID_Enum KEYBOARD_TABLE[][4] =
-    {
-        // Lines: K0, K1, K3, K2
-        {KEYID_NONE, KEYID_SIDEKEY1, KEYID_NONE, KEYID_SIDEKEY2}, // Side keys
-        {
-            KEYID_7,
-            KEYID_8,
-            KEYID_WELL,
-            KEYID_9,
-        }, // L0
-        {
-            KEYID_4,
-            KEYID_5,
-            KEYID_0,
-            KEYID_6,
-        }, // L1
-        {
-            KEYID_1,
-            KEYID_2,
-            KEYID_STAR,
-            KEYID_3,
-        }, // L2
-        {
-            KEYID_MENU,
-            KEYID_UP,
-            KEYID_EXIT,
-            KEYID_DOWN,
-        }, // L3
-        {
-            KEYID_VM,
-            KEYID_AB,
-            KEYID_NONE,
-            KEYID_BAND,
-        }, // L4
+static const KeyID_Enum KEYBOARD_TABLE[][4] = {
+    // K0, K1, K2, K3
+    {KEYID_NONE, KEYID_SIDEKEY1, KEYID_SIDEKEY2, KEYID_NONE}, // Side keys
+    {KEYID_7, KEYID_8, KEYID_9, KEYID_NUM},                   // L0
+    {KEYID_4, KEYID_5, KEYID_6, KEYID_0},                     // L1
+    {KEYID_1, KEYID_2, KEYID_3, KEYID_STAR},                  // L2
+    {KEYID_MENU, KEYID_UP, KEYID_DOWN, KEYID_EXIT},           // L3
+    {KEYID_VM, KEYID_AB, KEYID_BAND, KEYID_NONE},             // L4
 };
 
 /**
- * Returns a bitmap:
- * - Bit 14: K1
- * - Bit 13: K0
- * - Bit 1: K3
- * - Bit 0: K2
- *
+ *  Read "Kx" pins input
  */
 static U16 KEY_ReadGpioInput()
 {
-    U8 readBit;
-    U16 readData = 0x00;
+    uint16_t KK = 0;
 
-    readData = GPIO_ReadInputData(GPIOC) & 0x6000;
-    readBit = GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_14);
-    readData |= readBit;
+    // K0, K1
+    uint16_t n1 = GPIO_ReadInputData(GPIOC) & (GPIO_Pin_14 | GPIO_Pin_13);
+    KK |= (n1 >> 13);
 
-    readBit = GPIO_ReadInputDataBit(GPIOF, GPIO_Pin_6);
-    readData |= (readBit << 1);
+    // K2
+    n1 = GPIO_ReadInputData(GPIOB) & GPIO_Pin_14;
+    KK |= (n1 >> (14 - 2));
 
-    return readData;
+    // K3
+    n1 = GPIO_ReadInputData(GPIOF) & GPIO_Pin_6;
+    KK |= (n1 >> (6 - 3));
+
+    return KK;
 }
 
 KeyID_Enum GetKeyCode(void)
 {
-    U8 i;
-
-    for (i = 0; i < 6; i++)
+    for (uint32_t L = 0; L < 6; L++)
     {
-        GPIO_SetBits(GPIOB, keyscanTab1[i]);
-        GPIO_ResetBits(GPIOB, keyscanTab2[i]);
+        GPIO_SetBits(GPIOB, keyscanTab1[L]);
+        GPIO_ResetBits(GPIOB, keyscanTab2[L]);
 
         KeyReadDelay();
-        switch (KEY_ReadGpioInput() & MASK_MATRIX_LINE)
+
+        const uint16_t KK = KEY_ReadGpioInput();
+
+        for (uint32_t K = 0; K < 4; K++)
         {
-        case MASK_MATRIX_LINE_1:
-            return KEYBOARD_TABLE[i][0];
-        case MASK_MATRIX_LINE_2:
-            return KEYBOARD_TABLE[i][1];
-        case MASK_MATRIX_LINE_3:
-            return KEYBOARD_TABLE[i][2];
-        case MASK_MATRIX_LINE_4:
-            return KEYBOARD_TABLE[i][3];
+            if (0 == (1 & (KK >> K)))
+            {
+                return KEYBOARD_TABLE[L][K];
+            }
         }
     }
 
@@ -165,7 +129,7 @@ extern Boolean KEY_GetKeyEvent(void)
 
         if (KeyPressCount == 100)
         { // 支持长按键
-            if (PressedKey == KEYID_UP || PressedKey == KEYID_DOWN || PressedKey == KEYID_VM || PressedKey == KEYID_BAND || PressedKey == KEYID_STAR || PressedKey == KEYID_WELL || PressedKey == KEYID_0 || PressedKey == KEYID_8 || PressedKey == KEYID_EXIT || PressedKey == KEYID_SIDEKEY1 || PressedKey == KEYID_SIDEKEY2)
+            if (PressedKey == KEYID_UP || PressedKey == KEYID_DOWN || PressedKey == KEYID_VM || PressedKey == KEYID_BAND || PressedKey == KEYID_STAR || PressedKey == KEYID_NUM || PressedKey == KEYID_0 || PressedKey == KEYID_8 || PressedKey == KEYID_EXIT || PressedKey == KEYID_SIDEKEY1 || PressedKey == KEYID_SIDEKEY2)
             {
                 g_keyScan.keyEvent = PressedKey;
                 g_keyScan.keyPara = KEYSTATE_LONG;
@@ -254,7 +218,7 @@ extern U8 Key_GetRealEvent(void)
         case KEYID_STAR:
             keyEvent = KEYID_LOCK;
             break;
-        case KEYID_WELL:
+        case KEYID_NUM:
             keyEvent = KEYID_SCAN;
             break;
         case KEYID_0:
