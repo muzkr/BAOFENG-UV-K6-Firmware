@@ -1,3 +1,8 @@
+
+/**
+ * !! Encoding of this file must be GB2312/GBK/GB18030 (Simplified Chinese)
+ */
+
 #include "includes.h"
 
 #define EnS "abc"
@@ -9,68 +14,68 @@ String disBuf[17];
 
 const STR_MENU_ITEM MenuList[] =
     {
-        {vo_Null, "CHL Name", "ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½"},
-        {vo_Null, "RX Frequency", "ï¿½ï¿½ï¿½ï¿½Æµï¿½ï¿½"},
-        {vo_Null, "TX Frequency", "ï¿½ï¿½ï¿½ï¿½Æµï¿½ï¿½"},
-        {vo_CTCSS, "R-CTCSS", "ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"},
-        {vo_DCS, "R-DCS", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"},
-        {vo_CTCSS, "T-CTCSS", "ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"},
-        {vo_DCS, "T-DCS", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"},
-        {vo_Chlbandwidth, "BandWidth", "ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½"},
-        {vo_power, "TXP", "ï¿½ï¿½ï¿½ä¹¦ï¿½ï¿½"},
-        {vo_Null, "Silence Mode", "ï¿½ï¿½ï¿½ï¿½Ä£Ê½"},
-        {vo_Null, "TX Forbid", "ï¿½ï¿½ï¿½ï¿½ï¿½Ö¹"},
-        {vo_Freqdir, "Shift DIR", "Æµï¿½î·½ï¿½ï¿½"},
-        {vo_Offsetfreq, "OFFSET", "Æµï¿½ï¿½Æµï¿½ï¿½"},
-        {vo_Memorychl, "MEMCH", "ï¿½Åµï¿½ï¿½æ´¢"},
-        {vo_Deletechl, "DELCH", "ï¿½Åµï¿½É¾ï¿½ï¿½"},
-        {vo_Null, "VFO FreqRang", "VFOÉ¨ï¿½è·¶Î§"},
-        {vo_Null, "Scan Mode", "É¨ï¿½ï¿½Ä£Ê½"},
-        {vo_Null, "DTMFST", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"},
-        {vo_Null, "PTT ID", "DTMFï¿½ï¿½ï¿½ï¿½"},
-        {vo_Null, "PTT-LT", "ï¿½ï¿½ï¿½ë¸½ï¿½ï¿½ï¿½Ó³ï¿½"},
-        {vo_Squelch, "Squelch", "ï¿½ï¿½ï¿½ï¿½È¼ï¿½"},
-        {vo_savemode, "RX Save", "Ê¡ï¿½ï¿½Ä£Ê½"},
-        {vo_VOX, "VOX Switch", "ï¿½ï¿½ï¿½Ø¿ï¿½ï¿½ï¿½"},
-        {vo_Null, "VOX Level", "ï¿½ï¿½ï¿½ØµÈ¼ï¿½"},
-        {vo_Null, "VOX Delay", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±"},
-        {vo_Txovertime, "TX OVer Time", "ï¿½ï¿½ï¿½ä³¬Ê±"},
-        {vo_Voicepromrt, "Language", "ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½"},
-        {vo_Null, "VOICE", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½"},
-        {vo_Null, "Menu HangTime", "ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½"},
-        {vo_Beepprompt, "BEEP PROMPT", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"},
-        {vo_Null, "Roger Beep", "Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½"},
-        {vo_Null, "POWER ON TYPE", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½"},
-        {vo_Null, "Power On Tone", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½"},
-        {vo_Null, "Power on MSG", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢"},
-        {vo_Null, "POWER ON PWD", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"},
-        {vo_Dualstandby, "Dual Watch", "Ë«Æµï¿½Øºï¿½"},
-        {vo_Null, "MDF-A", "Aï¿½ï¿½ï¿½ï¿½Ê¾Ä£Ê½"},
-        {vo_Null, "MDF-B", "Bï¿½ï¿½ï¿½ï¿½Ê¾Ä£Ê½"},
-        {vo_Null, "RP-STE", "ï¿½Ð¼ï¿½Î²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"},
-        {vo_Null, "RPT-RL", "ï¿½Ð¼ï¿½Î²ï¿½ï¿½ï¿½ï¿½Ê±"},
-        {vo_Null, "ALERT", "ï¿½Ð¼Ì¼ï¿½ï¿½ï¿½ï¿½ï¿½Æµ"},
-        {vo_Step, "Freq Step", "ï¿½ï¿½ï¿½ï¿½Æµï¿½ï¿½"},
-        {vo_Busylockout, "Busy Lockout", "ï¿½ï¿½Ã¦ï¿½ï¿½ï¿½ï¿½"},
-        {vo_Null, "Side Tone", "Î²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"},
-        {vo_Null, "Alarm Mode", "ï¿½ï¿½ï¿½ï¿½Ä£Ê½"},
-        {vo_Null, "PF1", "ï¿½ï¿½ï¿½1ï¿½Ì°ï¿½"},
-        {vo_Null, "PF1 LONG PRESS", "ï¿½ï¿½ï¿½1ï¿½ï¿½ï¿½ï¿½"},
-        {vo_Null, "PF2", "ï¿½ï¿½ï¿½2ï¿½Ì°ï¿½"},
-        {vo_Null, "ABR", "ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"},
-        {vo_Null, "Brightness", "LCDï¿½Ô±È¶ï¿½"},
-        {vo_Null, "LCD Reflex", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä»"},
-        {vo_Null, "AUTOLOCK", "ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"},
-        {vo_Null, "Radio Interrupt", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"},
-        {vo_initialization, "Reset", "ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"},
-        {vo_Null, "STOP WATCH", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"},
-        {vo_Null, "VERSION", "ï¿½æ±¾ï¿½ï¿½Ï¢"},
+        {vo_Null, "CHL Name", "ÐÅµÀÃû³Æ"},
+        {vo_Null, "RX Frequency", "½ÓÊÕÆµÂÊ"},
+        {vo_Null, "TX Frequency", "·¢ÉäÆµÂÊ"},
+        {vo_CTCSS, "R-CTCSS", "½ÓÊÕÄ£ÄâÑÇÒô"},
+        {vo_DCS, "R-DCS", "½ÓÊÕÊý×ÖÑÇÒô"},
+        {vo_CTCSS, "T-CTCSS", "·¢ÉäÄ£ÄâÑÇÒô"},
+        {vo_DCS, "T-DCS", "·¢ÉäÊý×ÖÑÇÒô"},
+        {vo_Chlbandwidth, "BandWidth", "ÐÅµÀ´ø¿í"},
+        {vo_power, "TXP", "·¢Éä¹¦ÂÊ"},
+        {vo_Null, "Silence Mode", "¾²ÔëÄ£Ê½"},
+        {vo_Null, "TX Forbid", "·¢Éä½ûÖ¹"},
+        {vo_Freqdir, "Shift DIR", "Æµ²î·½Ïò"},
+        {vo_Offsetfreq, "OFFSET", "Æµ²îÆµÂÊ"},
+        {vo_Memorychl, "MEMCH", "ÐÅµÀ´æ´¢"},
+        {vo_Deletechl, "DELCH", "ÐÅµÀÉ¾³ý"},
+        {vo_Null, "VFO FreqRang", "VFOÉ¨Ãè·¶Î§"},
+        {vo_Null, "Scan Mode", "É¨ÃèÄ£Ê½"},
+        {vo_Null, "DTMFST", "²àÒô¿ª¹Ø"},
+        {vo_Null, "PTT ID", "DTMF·¢Âë"},
+        {vo_Null, "PTT-LT", "·¢Âë¸½¼ÓÑÓ³Ù"},
+        {vo_Squelch, "Squelch", "¾²ÔëµÈ¼¶"},
+        {vo_savemode, "RX Save", "Ê¡µçÄ£Ê½"},
+        {vo_VOX, "VOX Switch", "Éù¿Ø¿ª¹Ø"},
+        {vo_Null, "VOX Level", "Éù¿ØµÈ¼¶"},
+        {vo_Null, "VOX Delay", "Éù¿ØÑÓÊ±"},
+        {vo_Txovertime, "TX OVer Time", "·¢Éä³¬Ê±"},
+        {vo_Voicepromrt, "Language", "²Ëµ¥ÓïÑÔ"},
+        {vo_Null, "VOICE", "ÓïÒôÌáÊ¾¿ª¹Ø"},
+        {vo_Null, "Menu HangTime", "²Ëµ¥¹ÒÆðÊ±¼ä"},
+        {vo_Beepprompt, "BEEP PROMPT", "°´¼üÒô¿ª¹Ø"},
+        {vo_Null, "Roger Beep", "Í¨»°½áÊøÌáÊ¾Òô"},
+        {vo_Null, "POWER ON TYPE", "¿ª»ú»­ÃæÑ¡Ôñ"},
+        {vo_Null, "Power On Tone", "¿ª»úÌáÊ¾Òô"},
+        {vo_Null, "Power on MSG", "¿ª»úÐÅÏ¢"},
+        {vo_Null, "POWER ON PWD", "¿ª»úÃÜÂë"},
+        {vo_Dualstandby, "Dual Watch", "Ë«ÆµÊØºò"},
+        {vo_Null, "MDF-A", "A¶ÎÏÔÊ¾Ä£Ê½"},
+        {vo_Null, "MDF-B", "B¶ÎÏÔÊ¾Ä£Ê½"},
+        {vo_Null, "RP-STE", "ÖÐ¼ÌÎ²ÒôÏû³ý"},
+        {vo_Null, "RPT-RL", "ÖÐ¼ÌÎ²ÉùÑÓÊ±"},
+        {vo_Null, "ALERT", "ÖÐ¼Ì¼¤»îÒôÆµ"},
+        {vo_Step, "Freq Step", "²½½øÆµÂÊ"},
+        {vo_Busylockout, "Busy Lockout", "·±Ã¦Ëø¶¨"},
+        {vo_Null, "Side Tone", "Î²ÒôÏû³ý"},
+        {vo_Null, "Alarm Mode", "±¨¾¯Ä£Ê½"},
+        {vo_Null, "PF1", "²à¼ü1¶Ì°´"},
+        {vo_Null, "PF1 LONG PRESS", "²à¼ü1³¤°´"},
+        {vo_Null, "PF2", "²à¼ü2¶Ì°´"},
+        {vo_Null, "ABR", "×Ô¶¯±³¹âµÆ"},
+        {vo_Null, "Brightness", "LCD¶Ô±È¶È"},
+        {vo_Null, "LCD Reflex", "·´ÉäÆÁÄ»"},
+        {vo_Null, "AUTOLOCK", "×Ô¶¯¼üÅÌËø"},
+        {vo_Null, "Radio Interrupt", "ÊÕÒô´ò¶Ï"},
+        {vo_initialization, "Reset", "»Ö¸´³ö³§ÉèÖÃ"},
+        {vo_Null, "STOP WATCH", "Ãë±í¹¦ÄÜ"},
+        {vo_Null, "VERSION", "°æ±¾ÐÅÏ¢"},
 };
 
 const STR_MENU_ITEM MenuFmList[] =
     {
-        {vo_Null, "FM MEMCH", "FMï¿½Åµï¿½ï¿½æ´¢"},
-        {vo_Null, "FM BAND", "FMï¿½ï¿½ï¿½ï¿½Æµï¿½ï¿½"},
+        {vo_Null, "FM MEMCH", "FMÐÅµÀ´æ´¢"},
+        {vo_Null, "FM BAND", "FM¹¤×÷Æµ¶Î"},
 };
 
 const String *VoxCnStr[] =
@@ -88,7 +93,7 @@ const String *VoxCnStr[] =
 
 const String *BatSaveCnStr[] =
     {
-        "ï¿½Ø±ï¿½",
+        "¹Ø±Õ",
         "1:1",
         "1:2",
         "1:4",
@@ -103,8 +108,8 @@ const String *BatSaveEnStr[] =
 
 const String *OnOffCnStr[] =
     {
-        "ï¿½Ø±ï¿½",
-        "ï¿½ï¿½ï¿½ï¿½"};
+        "¹Ø±Õ",
+        "¿ªÆô"};
 const String *OnOffEnStr[] =
     {
         "OFF",
@@ -112,16 +117,16 @@ const String *OnOffEnStr[] =
 
 const String *OnSelCnStr[] =
     {
-        "ï¿½ï¿½ï¿½ï¿½"};
+        "¿ªÆô"};
 const String *OnSelEnStr[] =
     {
         "ON"};
 
 const String *AlmodCnStr[] =
     {
-        "ï¿½Ö³ï¿½ï¿½ï¿½ï¿½ï¿½",
-        "ï¿½ï¿½ï¿½Í±ï¿½ï¿½ï¿½ï¿½ï¿½",
-        "ï¿½ï¿½ï¿½Í±ï¿½ï¿½ï¿½ï¿½ï¿½"};
+        "ÏÖ³¡±¨¾¯",
+        "·¢ËÍ±¨¾¯Òô",
+        "·¢ËÍ±¨¾¯Âë"};
 const String *AlmodEnStr[] =
     {
         "ON SITE",
@@ -130,9 +135,9 @@ const String *AlmodEnStr[] =
 
 const String *ScanmodCnStr[] =
     {
-        "Ê±ï¿½ï¿½",
-        "ï¿½Ø²ï¿½",
-        "ï¿½ï¿½ï¿½ï¿½"};
+        "Ê±¼ä",
+        "ÔØ²¨",
+        "ËÑË÷"};
 const String *ScanmodEnStr[] =
     {
         "TO",
@@ -141,10 +146,10 @@ const String *ScanmodEnStr[] =
 
 const String *PttIdSelCnStr[] =
     {
-        "ï¿½Ø±ï¿½",
-        "ï¿½ï¿½ï¿½ï¿½PTTï¿½ï¿½ï¿½ï¿½",
-        "ï¿½É¿ï¿½PTTï¿½ï¿½ï¿½ï¿½",
-        "Í¬Ê±ï¿½ï¿½ï¿½ï¿½"};
+        "¹Ø±Õ",
+        "°´ÏÂPTT·¢Âë",
+        "ËÉ¿ªPTT·¢Âë",
+        "Í¬Ê±·¢Âë"};
 const String *PttIdSelEnStr[] =
     {
         "OFF",
@@ -154,8 +159,8 @@ const String *PttIdSelEnStr[] =
 
 const String *BandCnStr[] =
     {
-        "Õ­ï¿½ï¿½",
-        "ï¿½ï¿½ï¿½ï¿½",
+        "Õ­´ø",
+        "¿í´ø",
 };
 const String *BandEnStr[] =
     {
@@ -165,8 +170,8 @@ const String *BandEnStr[] =
 
 const String *TxPowerCnStr[] =
     {
-        "ï¿½ß¹ï¿½ï¿½ï¿½",
-        "ï¿½Í¹ï¿½ï¿½ï¿½"};
+        "¸ß¹¦ÂÊ",
+        "µÍ¹¦ÂÊ"};
 const String *TxPowerEnStr[] =
     {
         "HIGH",
@@ -186,7 +191,7 @@ const String *VfoStepStr[] =
 
 const String *VfoDirCnStr[] =
     {
-        "ï¿½Ø±ï¿½",
+        "¹Ø±Õ",
         "+",
         "-"};
 
@@ -198,10 +203,10 @@ const String *VfoDirEnStr[] =
 
 const String *ChDisCnStr[] =
     {
-        "ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½",
-        "ï¿½Åµï¿½Æµï¿½ï¿½",
-        "ï¿½Åµï¿½ï¿½ï¿½",
-        "ï¿½ï¿½ï¿½ï¿½+Æµï¿½ï¿½"};
+        "ÐÅµÀÃû³Æ",
+        "ÐÅµÀÆµÂÊ",
+        "ÐÅµÀºÅ",
+        "Ãû³Æ+ÆµÂÊ"};
 
 const String *ChDisEnStr[] =
     {
@@ -213,14 +218,14 @@ const String *ChDisEnStr[] =
 const String *LanStr[] =
     {
         "ENGLISH",
-        "ï¿½ï¿½ï¿½ï¿½"};
+        "ÖÐÎÄ"};
 
 const String *DtmfSetSelCnStr[] =
     {
-        "ï¿½Ø±ï¿½",
-        "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½",
-        "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½",
-        "ï¿½ï¿½ï¿½ï¿½+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"};
+        "¹Ø±Õ",
+        "°´¼ü²àÒô",
+        "Éí·ÝÂë",
+        "°´¼ü+Éí·ÝÂë"};
 const String *DtmfSetSelEnStr[] =
     {
         "OFF",
@@ -230,8 +235,8 @@ const String *DtmfSetSelEnStr[] =
 
 const String *DevResetCnStr[] =
     {
-        "Æµï¿½ï¿½Ä£Ê½",
-        "È«ï¿½ï¿½"};
+        "ÆµÂÊÄ£Ê½",
+        "È«²¿"};
 
 const String *DevResetEnStr[] =
     {
@@ -248,9 +253,9 @@ const String *ToneEnStr[] =
 
 const String *PwrOnCnStr[] =
     {
-        "Ô¤ï¿½ï¿½Í¼ï¿½ï¿½",
-        "Ô¤ï¿½ï¿½ï¿½ï¿½Ï¢",
-        "ï¿½ï¿½Øµï¿½Ñ¹"};
+        "Ô¤ÉèÍ¼±ê",
+        "Ô¤ÉèÐÅÏ¢",
+        "µç³ØµçÑ¹"};
 const String *PwrOnEnStr[] =
     {
         "LOGO",
@@ -259,13 +264,13 @@ const String *PwrOnEnStr[] =
 
 const String *SideKeyCnStr[] =
     {
-        "ï¿½ï¿½",
-        "ï¿½Öµï¿½Í²ï¿½ï¿½ï¿½ï¿½",
-        "ï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½",
-        "É¨ï¿½è¿ªï¿½ï¿½",
-        "ï¿½ï¿½ï¿½Ø¿ï¿½ï¿½ï¿½",
-        "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½",
-        "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½",
+        "ÎÞ",
+        "ÊÖµçÍ²¿ª¹Ø",
+        "¹¦ÂÊÑ¡Ôñ",
+        "É¨Ãè¿ª¹Ø",
+        "Éù¿Ø¿ª¹Ø",
+        "¾¯±¨¿ª¹Ø",
+        "ÊÕÒô»ú¿ª¹Ø",
 };
 const String *SideKeyEnStr[] =
     {
@@ -280,7 +285,7 @@ const String *SideKeyEnStr[] =
 
 const String *RxEndTailSelCnStr[] =
     {
-        "ï¿½Ø±ï¿½",
+        "¹Ø±Õ",
         "MDC1200"};
 
 const String *RxEndTailSelEnStr[] =
@@ -290,8 +295,8 @@ const String *RxEndTailSelEnStr[] =
 
 const String *TxEndToneCnStr[] =
     {
-        "ï¿½Ø±ï¿½",
-        "ï¿½ï¿½ï¿½ï¿½ï¿½",
+        "¹Ø±Õ",
+        "àÖà½Òô",
         "TONE1200"};
 
 const String *TxEndToneEnStr[] =
@@ -302,8 +307,8 @@ const String *TxEndToneEnStr[] =
 
 const String *ReflexCnStr[] =
     {
-        "ï¿½ï¿½ï¿½ï¿½",
-        "ï¿½ï¿½ï¿½ï¿½"};
+        "Õý³£",
+        "·´Éä"};
 
 const String *ReflexEnStr[] =
     {
@@ -318,14 +323,14 @@ const String *PwrOnToneSelEnStr[] =
 
 const String *PwrOnToneSelCnStr[] =
     {
-        "ï¿½ï¿½",
-        "ï¿½ï¿½ï¿½ï¿½",
-        "ï¿½ï¿½ï¿½ï¿½"};
+        "ÎÞ",
+        "Òôµ÷",
+        "ÓïÒô"};
 
 const String *SpMuteSelCnStr[] =
     {
-        "ï¿½ï¿½ï¿½ï¿½",
-        "ï¿½ï¿½ï¿½ï¿½+ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½ï¿½",
+        "ÑÇÒô",
+        "ÑÇÒô+¿ÉÑ¡ÐÅÁî",
 };
 
 const String *SpMuteSelEnStr[] =
@@ -336,9 +341,9 @@ const String *SpMuteSelEnStr[] =
 
 const String *DualSelCnStr[] =
     {
-        "ï¿½Ø±ï¿½",
-        "Ë«ï¿½ï¿½Ë«ï¿½ï¿½",
-        "Ë«ï¿½Îµï¿½ï¿½ï¿½",
+        "¹Ø±Õ",
+        "Ë«¶ÎË«ÊØ",
+        "Ë«¶Îµ¥ÊØ",
 };
 
 const String *DualSelEnStr[] =
@@ -408,7 +413,7 @@ extern void Menu_GetSubItemString(U8 menuIndex)
             {
                 if (g_radioInform.language == LANG_CN)
                 {
-                    sprintf(disBuf, "%s", "ï¿½Ø±ï¿½");
+                    sprintf(disBuf, "%s", "¹Ø±Õ");
                 }
                 else
                 {
@@ -418,11 +423,11 @@ extern void Menu_GetSubItemString(U8 menuIndex)
             else
             {
                 if (g_menuInfo.selectedItem > 105)
-                { // ï¿½ï¿½ï¿½ï¿½
+                { // ·´Âë
                     sprintf(disBuf, "D%03oI", DCS_TAB[g_menuInfo.selectedItem - 106]);
                 }
                 else
-                { // ï¿½ï¿½ï¿½ï¿½
+                { // ÕýÂë
                     sprintf(disBuf, "D%03oN", DCS_TAB[g_menuInfo.selectedItem - 1]);
                 }
             }
@@ -539,7 +544,7 @@ extern void Menu_GetSubItemString(U8 menuIndex)
             {
                 if (g_radioInform.language == LANG_CN)
                 {
-                    sprintf(disBuf, "%s", "ï¿½Ø±ï¿½");
+                    sprintf(disBuf, "%s", "¹Ø±Õ");
                 }
                 else
                 {
@@ -636,7 +641,7 @@ extern void Menu_GetSubItemString(U8 menuIndex)
             {
                 if (g_radioInform.language == LANG_CN)
                 {
-                    sprintf(disBuf, "%s", "ï¿½Ø±ï¿½");
+                    sprintf(disBuf, "%s", "¹Ø±Õ");
                 }
                 else
                 {
@@ -681,7 +686,7 @@ extern void Menu_GetSubItemString(U8 menuIndex)
             {
                 if (g_radioInform.language == LANG_CN)
                 {
-                    sprintf(disBuf, "%s", "ï¿½Ø±ï¿½");
+                    sprintf(disBuf, "%s", "¹Ø±Õ");
                 }
                 else
                 {
@@ -722,7 +727,7 @@ extern void Menu_GetSubItemString(U8 menuIndex)
             {
                 if (g_radioInform.language == LANG_CN)
                 {
-                    sprintf(disBuf, "%s", "ï¿½Ø±ï¿½");
+                    sprintf(disBuf, "%s", "¹Ø±Õ");
                 }
                 else
                 {
@@ -776,7 +781,7 @@ extern void Menu_GetSubItemString(U8 menuIndex)
             {
                 if (g_radioInform.language == LANG_CN)
                 {
-                    sprintf(disBuf, "ï¿½ï¿½ï¿½ï¿½ï¿½æ±¾:%s", "V0.01");
+                    sprintf(disBuf, "Èí¼þ°æ±¾:%s", "V0.01");
                 }
                 else
                 {
@@ -787,7 +792,7 @@ extern void Menu_GetSubItemString(U8 menuIndex)
             {
                 if (g_radioInform.language == LANG_CN)
                 {
-                    sprintf(disBuf, "Ó²ï¿½ï¿½ï¿½æ±¾:%s", "V0.01");
+                    sprintf(disBuf, "Ó²¼þ°æ±¾:%s", "V0.01");
                 }
                 else
                 {
@@ -807,7 +812,7 @@ extern void Menu_DisplayFreqError(void)
 
     if (g_radioInform.language == LANG_CN)
     {
-        TranStrToMiddle(disBuf, (String *)"Æµï¿½Ê³ï¿½ï¿½ï¿½ï¿½ï¿½Î§!", 16);
+        TranStrToMiddle(disBuf, (String *)"ÆµÂÊ³¬³ö·¶Î§!", 16);
     }
     else
     {
@@ -816,7 +821,7 @@ extern void Menu_DisplayFreqError(void)
     LCD_DisplayText(47, 0, (U8 *)disBuf, FONTSIZE_16x16, 0);
     LCD_UpdateWorkAre();
 
-    // ï¿½ï¿½Ê±1Sï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½É¹ï¿½ï¿½ï¿½ï¿½ï¿½
+    // ÑÓÊ±1SÏÔÊ¾±£´æ³É¹¦½çÃæ
     DelaySysMs(500);
 }
 
@@ -934,7 +939,7 @@ static U8 CheckCtcssInList(U16 ctcssDat)
         return 0;
     }
 
-    // ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½Æµï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    // ÅÐ¶ÏÑÇÒôÆµÊÇ·ñÔÚË÷ÒýÄÚ
     for (i = 0; i < 51; i++)
     {
         if (CTCS_TAB[i] == ctcssDat)
@@ -952,7 +957,7 @@ void GetCtcssDisBuf(U16 Index)
     {
         if (g_radioInform.language == LANG_CN)
         {
-            sprintf(disBuf, "ï¿½Ø±ï¿½");
+            sprintf(disBuf, "¹Ø±Õ");
         }
         else
         {
@@ -974,7 +979,7 @@ static void ShowCtcssList(void)
     U8 selecteId;
 
     if (g_menuInfo.isSubMenu == 0)
-    { // ï¿½Úµï¿½Ò»ï¿½ï¿½Ñ¡ï¿½ï¿½Ëµï¿½Ñ¡ï¿½ï¿½
+    { // ÔÚµÚÒ»¼¶Ñ¡Ôñ²Ëµ¥Ñ¡Ïî
 
         if (g_menuInfo.inputVal == 0)
         {
@@ -1077,7 +1082,7 @@ extern void DisplayInputType(void)
         }
         sprintf(buf, "%s", str);
         SC5260_ClearArea(10, 107, 20, 9, 1);
-        // ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        // ÏÔÊ¾ÊäÈëÀàÐÍ
         LCD_DisplayNumber(11, 108, (U8 *)buf, 1);
         LCD_UpdateWorkAre();
     }
@@ -1093,7 +1098,7 @@ void DisplaySelectHz(void)
     for (i = 0; i < 2; i++)
     {
         if (lcdDispBuf[i][0] == 0x08)
-        { // ï¿½ï¿½Ò»×ªï¿½ï¿½ï¿½Ö·ï¿½Ê±ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½áµ¼ï¿½ï¿½ï¿½Ü³ï¿½ï¿½ï¿½+1
+        { // µÚÒ»×ªÒå×Ö·ûÊ±²»ÏÔÊ¾£¬»áµ¼ÖÂ×Ü³¤¶È+1
             sprintf(displayBuf, "%-*.*s", 17, 17, lcdDispBuf[i]);
             displayBuf[16 + 1] = 0;
         }
@@ -1113,13 +1118,13 @@ extern void MenuShowInputChar(void)
 
     DisplayInputType();
 
-    // ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½
+    // ÏÔÊ¾ÊäÈëµÄ×Ö·û´®
     sprintf((String *)disBuf, "%*.*s", 16, 16, g_inputbuf.buf);
-    // ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â½ï¿½
+    // ÏÔÊ¾ÄÚÈÝÔÚÓÒÏÂ½Ç
     LCD_DisplayText(47, 0, (U8 *)disBuf, FONTSIZE_16x16, 0);
     uartSendChar(disBuf[0]);
 
-    /*ï¿½ï¿½ï¿½Æºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
+    /*»æÖÆºº×ÖÊäÈë¿ò*/
     if (pyBuf.pos != 0)
     {
         DisplaySelectHz();
@@ -1137,7 +1142,7 @@ extern void Menu_Display(void)
 
     if (!(g_menuInfo.inputMode == MENU_ONE_CHAR && g_menuInfo.isSubMenu))
     {
-        // ï¿½ï¿½ï¿½ï¿½ï¿½Ð¼ï¿½ï¿½ï¿½ï¿½ï¿½
+        // »æÖÆÖÐ¼ä¼ä¸ôÌõ
         SC5260_ClearArea(41, 5, 121, 2, 1);
         posx = 5;
         for (i = 0; i < 13; i++)
@@ -1150,7 +1155,7 @@ extern void Menu_Display(void)
     {
     case MENU_ONE_CHAR:
         if (g_menuInfo.isSubMenu)
-        { // ï¿½ï¿½Ê¾ï¿½Åµï¿½ï¿½ï¿½ï¿½Æ±à¼­ï¿½ï¿½ï¿½ï¿½
+        { // ÏÔÊ¾ÐÅµÀÃû³Æ±à¼­½çÃæ
             LCD_ClearWorkArea();
             MenuShowInputChar();
             return;
@@ -1160,7 +1165,7 @@ extern void Menu_Display(void)
             Menu_GetSubItemString(g_menuInfo.menuIndex);
         }
         break;
-    case MENU_ONE_FREQ: // Æµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    case MENU_ONE_FREQ: // ÆµÂÊÊäÈë
         if (g_menuInfo.isSubMenu == 0)
         {
             g_menuInfo.inputVal = g_menuInfo.selectedItem;
@@ -1168,7 +1173,7 @@ extern void Menu_Display(void)
         DisplayInputOffect(g_menuInfo.inputVal);
 
         break;
-    case MENU_CH_FREQ: // Æµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    case MENU_CH_FREQ: // ÆµÂÊÊäÈë
         if (g_menuInfo.isSubMenu == 0)
         {
             g_menuInfo.inputVal = g_menuInfo.selectedItem;
@@ -1176,7 +1181,7 @@ extern void Menu_Display(void)
         DisplayInputChFreq(g_menuInfo.inputVal);
 
         break;
-    case MENU_ONE_VFOSCAN: // Æµï¿½ï¿½É¨ï¿½è·¶Î§
+    case MENU_ONE_VFOSCAN: // ÆµÂÊÉ¨Ãè·¶Î§
         if (g_menuInfo.isSubMenu == 0)
         {
             g_menuInfo.inputVal = g_menuInfo.selectedItem;
@@ -1184,7 +1189,7 @@ extern void Menu_Display(void)
         DisplayInputVfoScan(g_menuInfo.inputVal);
         break;
 
-    case MENU_ONE_CTCSS: // Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÆµÑ¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    case MENU_ONE_CTCSS: // Ä£ÄâÑÇÒôÆµÑ¡ÔñºÍÊäÈë
         ShowCtcssList();
         break;
     case MENU_ONE_DIGIT:

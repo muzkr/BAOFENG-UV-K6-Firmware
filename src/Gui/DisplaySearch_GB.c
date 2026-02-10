@@ -1,3 +1,8 @@
+
+/**
+ * !! Encoding of this file must be GB2312/GBK/GB18030 (Simplified Chinese)
+ */
+
 #include "includes.h"
 
 extern void SearchFreqModeDisplayDCSData(U8 ctsDcsType, U32 dat, U8 isStandard)
@@ -85,8 +90,8 @@ extern void SearchFreqDisplayHome(void)
     {
         posx = 46;
     }
-    // 显示扫频标志
-    LCD_DisplayText(17, posx, (U8 *)((g_radioInform.language == LANG_CN) ? "扫频" : "SEARCH"), FONTSIZE_12x12, LCD_DIS_NORMAL);
-    // 显示频率
+    // ��ʾɨƵ��־
+    LCD_DisplayText(17, posx, (U8 *)((g_radioInform.language == LANG_CN) ? "ɨƵ" : "SEARCH"), FONTSIZE_12x12, LCD_DIS_NORMAL);
+    // ��ʾƵ��
     SearchFreqModeDisplayStepMsg(STEP_SEEK_FREQ);
 }

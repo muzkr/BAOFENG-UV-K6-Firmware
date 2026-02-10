@@ -1,3 +1,8 @@
+
+/**
+ * !! Encoding of this file must be GB2312/GBK/GB18030 (Simplified Chinese)
+ */
+
 #include "includes.h"
 
 extern void DisplayPassword(void)
@@ -16,7 +21,7 @@ extern void DisplayPassword(void)
 extern void DisplayPasswordHome(void)
 {
     LCD_ClearFullBuf();
-    LCD_DisplayText(20, 8, (U8 *)((g_radioInform.language == LANG_CN) ? "è¯·è¾“å…¥å¼€æœºå¯†ç " : "Input Password"), FONTSIZE_16x16, LCD_DIS_NORMAL);
+    LCD_DisplayText(20, 8, (U8 *)((g_radioInform.language == LANG_CN) ? "ÇëÊäÈë¿ª»úÃÜÂë" : "Input Password"), FONTSIZE_16x16, LCD_DIS_NORMAL);
     DisplayPassword();
     LCD_UpdateFullScreen();
 }
@@ -24,7 +29,7 @@ extern void DisplayPasswordHome(void)
 extern void DisplayPasswordError(void)
 {
     LCD_ClearFullBuf();
-    LCD_DisplayText(23, 12, (U8 *)((g_radioInform.language == LANG_CN) ? "   å¯†ç é”™è¯¯   " : "Password Error"), FONTSIZE_16x16, LCD_DIS_NORMAL);
+    LCD_DisplayText(23, 12, (U8 *)((g_radioInform.language == LANG_CN) ? "   ÃÜÂë´íÎó   " : "Password Error"), FONTSIZE_16x16, LCD_DIS_NORMAL);
     LCD_UpdateFullScreen();
     DelayMs(2000);
     ResetInputBuf();
@@ -64,7 +69,7 @@ U8 CheckInputPassWord(void)
 void App_CheckPowerOnPassword(void)
 {
     if (g_radioInform.pwrPwdFlag == 0 || g_radioInform.pwrPwdFlag == 0xFF)
-    { // æœªå¼€å¯å¼€æœºå¯†ç åŠŸèƒ½
+    { // Î´¿ªÆô¿ª»úÃÜÂë¹¦ÄÜ
         return;
     }
 
@@ -75,7 +80,7 @@ void App_CheckPowerOnPassword(void)
     while (1)
     {
         if (g_50msFlag)
-        { // å»¶æ—¶å‡½æ•°
+        { // ÑÓÊ±º¯Êı
             g_50msFlag = 0;
             KEY_GetKeyEvent();
             CheckPowerOff();
@@ -109,7 +114,7 @@ void App_CheckPowerOnPassword(void)
                 break;
             case KEYID_MENU:
                 if (CheckInputPassWord() == OK)
-                { // åˆ¤æ–­å¼€æœºå¯†ç é€šè¿‡
+                { // ÅĞ¶Ï¿ª»úÃÜÂëÍ¨¹ı
                     return;
                 }
                 break;

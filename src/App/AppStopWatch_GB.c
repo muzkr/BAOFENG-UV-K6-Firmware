@@ -1,3 +1,8 @@
+
+/**
+ * !! Encoding of this file must be GB2312/GBK/GB18030 (Simplified Chinese)
+ */
+
 #include "includes.h"
 
 STU_STOPWATCH g_stopWatch;
@@ -27,7 +32,7 @@ extern void ExitStopWatchMode(void)
 
     g_sysRunPara.sysRunMode = MODE_MAIN;
 
-    // ÂàáÊç¢‰∏∫ÊòæÁ§∫‰∏ªÁïåÈù¢
+    // «–ªªŒ™œ‘ æ÷˜ΩÁ√Ê
     DisplayHomePage();
 }
 
@@ -77,7 +82,7 @@ extern void StopWatchDisplayHome(void)
 
     LCD_ClearWorkArea();
 
-    sprintf(disBuf, "%s", (U8 *)((g_radioInform.language == LANG_CN) ? "   Áßí Ë°®    " : " STOP WATCH "));
+    sprintf(disBuf, "%s", (U8 *)((g_radioInform.language == LANG_CN) ? "   √Î ±Ì    " : " STOP WATCH "));
     LCD_DisplayText(17, 20, (U8 *)disBuf, FONTSIZE_16x16, LCD_DIS_NORMAL);
 
     StopWatchDisplayTime();

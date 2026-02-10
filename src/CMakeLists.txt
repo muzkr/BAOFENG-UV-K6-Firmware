@@ -53,15 +53,15 @@ target_sources(app INTERFACE
 
     # Gui
     Gui/DisplayBattery.c
-    Gui/DisplayCheckPassword.c
+    Gui/DisplayCheckPassword_GB.c
     Gui/DisplayDtmf.c
     Gui/DisplayFm.c
     Gui/DisplayInputbox.c
-    Gui/DisplayMain.c
-    Gui/DisplayMenu.c
+    Gui/DisplayMain_GB.c
+    Gui/DisplayMenu_GB.c
     Gui/DisplayPowerOn.c
     Gui/DisplayScanQT.c
-    Gui/DisplaySearch.c
+    Gui/DisplaySearch_GB.c
     Gui/DisplayWeather.c
     Gui/LcdFillDot.c
 
@@ -83,12 +83,12 @@ target_sources(app INTERFACE
     App/AppDtmf.c
     App/AppFm.c
     App/AppMain.c
-    App/AppMenu.c
+    App/AppMenu_GB.c
     App/AppMoni.c
     App/AppScan.c
     App/AppScanQT.c
     App/AppSearch.c
-    App/AppStopWatch.c
+    App/AppStopWatch_GB.c
     App/AppTask.c
     App/AppWeather.c
     App/Battery.c
