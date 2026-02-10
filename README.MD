@@ -5,7 +5,7 @@ This repository contains the firmware source code for the Baofeng UV-K6x series 
 
 ## Building
 
-Build the code with CMake and a recent version of gcc.
+Build the code with CMake and a recent version of GCC.
 
 ## Uploading
 
@@ -34,4 +34,4 @@ Copyright © 2024 Baofeng. All rights reserved.
 The following repositories are highly valuable for BF K6 development:
 
 - https://github.com/amoxu/platform-openradiox provides SVD definitions for KD32
-- https://github.com/cnt7/tool-openocd-kd32.git offers an OpenOCD distribution that works well with KD32
+- https://github.com/cnt7/tool-openocd-kd32 offers an OpenOCD distribution that works well with KD32
