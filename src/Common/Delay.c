@@ -30,14 +30,23 @@ void DelayUs(U16 n) // 1US
      */
 }
 
-void DelayMs(U16 n)
+void DelayMs(uint32_t n)
 {
-    // TODO: Use systick ?
+    __IO uint32_t tmp = SysTick->CTRL; /* Clear the COUNTFLAG first */
+    /* Add this code to indicate that local variable is not used */
+    ((void)tmp);
 
-    U16 i = 0;
-    for (i = 0; i < n; i++)
+    /* Add a period to guaranty minimum wait */
+    if (n < 0xffffffff)
     {
-        // Based on actual profiling :)
-        DelayUs(550);
+        n++;
+    }
+
+    while (n)
+    {
+        if ((SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk) != 0U)
+        {
+            n--;
+        }
     }
 }

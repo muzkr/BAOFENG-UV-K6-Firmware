@@ -4,6 +4,18 @@ static U8 g_msCont;
 static U8 g_10msCont;
 static U8 g_100msCont;
 
+// 定时1ms
+void SysTick_Init(void)
+{
+    SysTick->CTRL = 0;
+    if (SysTick_Config(SystemCoreClock / 1000))
+    {
+        /* Capture error */
+        while (1)
+            ;
+    }
+}
+
 void SysTick_Handler(void)
 {
     g_msCont++;

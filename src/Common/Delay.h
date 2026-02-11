@@ -4,6 +4,6 @@
 #include "PublType.h"
 
 extern void DelayUs(U16 n);
-extern void DelayMs(U16 n);
+extern void DelayMs(uint32_t n);
 
 #endif

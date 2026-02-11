@@ -1,5 +1,4 @@
 #include "includes.h"
-#include "stdio.h"
 
 void _putchar(char c)
 {
@@ -28,6 +27,9 @@ static void BeepPowerOn(void)
 
 int main(void)
 {
+    // Do this as early as possible: DelayMs() depends on systick
+    SysTick_Init();
+
     Board_Init();
     RadioConfig_Init();
     UI_DisplayPowerOn();

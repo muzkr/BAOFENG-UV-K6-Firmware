@@ -2,18 +2,6 @@
 #include "kd32f328_it.h"
 #include "vec_table.h"
 
-// 定时1ms
-void SysTick_Init(void)
-{
-    SysTick->CTRL = 0;
-    if (SysTick_Config(SystemCoreClock / 1000))
-    {
-        /* Capture error */
-        while (1)
-            ;
-    }
-}
-
 void Gpio_Init(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
@@ -330,7 +318,6 @@ extern void Board_Init(void)
 {
     vec_table_init();
 
-    SysTick_Init();
     NVIC_Configuration();
     Gpio_Init();
     SPI2_Init();
