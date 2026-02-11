@@ -281,7 +281,7 @@ void UserADC_Init(void)
     /* Initialize ADC structure */
     ADC_StructInit(&ADC_InitStructure);
 
-    /* Configure the ADC1 in continuous mode withe a resolution equal to 12 bits  */
+    /* Configure the ADC1 in single mode with a resolution equal to 12 bits  */
     ADC_InitStructure.ADC_Resolution = ADC_Resolution_12b;
     ADC_InitStructure.ADC_ContinuousConvMode = DISABLE;
     ADC_InitStructure.ADC_ExternalTrigConvEdge = ADC_ExternalTrigConvEdge_None;
@@ -289,7 +289,7 @@ void UserADC_Init(void)
     ADC_InitStructure.ADC_ScanDirection = ADC_ScanDirection_Upward;
     ADC_Init(ADC1, &ADC_InitStructure);
 
-    /* Convert the ADC1 Channel0 and channel1 with 55.5 Cycles as sampling time */
+    /* Config the ADC1 channel1 */
     ADC_ChannelConfig(ADC1, ADC_Channel_1, ADC_SampleTime_239_5Cycles);
 
     /* ADC Calibration */

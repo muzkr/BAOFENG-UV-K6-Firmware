@@ -11,15 +11,19 @@ static void BeepPowerOn(void)
     if (g_radioInform.OpFlag1.Bit.b2 == 1)
     {
         BeepOut(BEEP_FMSW2);
+        DelayMs(500);
     }
     else if (g_radioInform.OpFlag1.Bit.b2 == 2)
     {
         Audio_PlayVoiceLock(vo_Welcome);
+        DelayMs(200);
     }
     else
     {
-        DelayMs(300);
+        DelayMs(800);
     }
+
+    // Note: This function will also delay power on message display
 }
 
 int main(void)

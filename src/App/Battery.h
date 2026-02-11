@@ -54,4 +54,6 @@ extern Boolean CheckPowerBusy(void);
 extern void PowerSaveTask(void);
 extern void ResetTimeKeyLockAndPowerSave(void);
 
+uint32_t get_battery_voltage(uint8_t ADC_value);
+
 #endif

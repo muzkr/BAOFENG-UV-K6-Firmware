@@ -5,6 +5,17 @@ const U8 *battIcon[] = {iconBatt1, iconBatt2, iconBatt3, iconBattFull, iconBattE
 STR_BATTERY battery;
 STR_POWERSAVE powerSave;
 
+/**
+ * Convert ADC value to voltage in mV
+ *
+ * Note: The calculated voltage is nominal, not an exact value, due to variations
+ * in batteries and devices.
+ */
+uint32_t get_battery_voltage(uint8_t ADC_value)
+{
+    return 330000 * ADC_value / 0xff / 27;
+}
+
 extern void BatteryInitLevel(void)
 {
     memset(&battery, 0x00, sizeof(STR_BATTERY));

@@ -315,17 +315,17 @@ const String *ReflexEnStr[] =
         "Normal",
         "Reflex"};
 
-const String *PwrOnToneSelEnStr[] =
-    {
-        "None",
-        "Tone",
-        "Voice"};
+const String *PwrOnToneSelEnStr[] = {
+    "None",
+    "Tone",
+    "Voice",
+};
 
-const String *PwrOnToneSelCnStr[] =
-    {
-        "无",
-        "音调",
-        "语音"};
+const String *PwrOnToneSelCnStr[] = {
+    "无",
+    "音调",
+    "语音",
+};
 
 const String *SpMuteSelCnStr[] =
     {

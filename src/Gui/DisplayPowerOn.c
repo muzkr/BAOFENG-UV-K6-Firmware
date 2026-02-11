@@ -25,7 +25,7 @@ extern void UI_DisplayPowerOn(void)
     }
     else if (g_radioInform.OpFlag1.Bit.b0 == 2)
     {
-        DisplayBatteryVol(0);
+        DisplayBatteryVol();
     }
     else
     {
@@ -37,6 +37,7 @@ extern void UI_DisplayPowerOn(void)
     LCD_UpdateFullScreen();
 
     LcdBackLightSwitch(LED_ON);
-    // 延时500ms
-    DelayMs(500);
+
+    // Let caller do delay
+    // DelayMs(500);
 }
