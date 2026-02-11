@@ -4,6 +4,7 @@
  */
 
 #include "includes.h"
+#include "version.h"
 
 const U8 *SignalLevelStr[] =
     {
@@ -922,7 +923,7 @@ extern void DisplaySoftVersion(void)
     LCD_DisplayText(4, 60 - (len << 2), disbuf, FONTSIZE_16x16, LCD_DIS_NORMAL);
 
     // 显示版本号
-    sprintf((String *)&disbuf, "VER:%s", "V0.22");
+    sprintf((String *)&disbuf, "VER:%s", VERSION_STRING);
     LCD_DisplayText(24, 28, disbuf, FONTSIZE_16x16, LCD_DIS_NORMAL);
 
     // 显示国家码
@@ -933,5 +934,5 @@ extern void DisplaySoftVersion(void)
     LcdBackLightSwitch(LED_ON);
 
     // 延时2S用于显示版本号
-    DelaySysMs(2000);
+    DelaySysMs(3000);
 }
