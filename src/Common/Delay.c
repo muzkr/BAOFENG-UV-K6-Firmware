@@ -32,9 +32,12 @@ void DelayUs(U16 n) // 1US
 
 void DelayMs(U16 n)
 {
+    // TODO: Use systick ?
+
     U16 i = 0;
     for (i = 0; i < n; i++)
     {
-        DelayUs(1000);
+        // Based on actual profiling :)
+        DelayUs(550);
     }
 }
