@@ -21,6 +21,15 @@ message("Build type: " ${CMAKE_BUILD_TYPE})
 
 enable_language(C CXX ASM)
 
+execute_process(
+    COMMAND git rev-parse --short HEAD
+    OUTPUT_VARIABLE GIT_HASH
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
+# Use git hash as version number
+set(VERSION_NUMBER ${GIT_HASH})
+
 set(EXE_NAME ${CMAKE_PROJECT_NAME}-${VERSION_NUMBER})
 message("Binary name: " ${EXE_NAME})
 
