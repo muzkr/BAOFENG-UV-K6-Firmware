@@ -16,7 +16,7 @@ To upload the code to the radio, follow these steps:
 2. Connect the programming cable to the radio and the computer.
 3. Press and hold 2 ORANGE side buttons on the radio, then turn on the radio, you will see the screen shows "UPDATE" and the radio will be in the update mode.
 4. Run the BFK6_Bootloader.exe program on your computer.
-5. Click the "..." button and select the output binary file from the ./out/ folder.
+5. Click the "..." button and select the binary file (*.bin).
 6. Select the COM port that the programming cable is connected to.
 6. Click the large "按两个侧键开机进入升级(Power on with side buttons pressed to Enter Upgrade)" button to upload the code to the radio.
 
