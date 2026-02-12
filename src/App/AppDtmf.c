@@ -191,12 +191,21 @@ extern void KeyProcess_DtmfInput(U8 keyEvent)
     case KEYID_MENU:
         InputDtmfCode('A');
         break;
+#if SWAP_UP_DOWN
+    case KEYID_DOWN:
+        InputDtmfCode('B');
+        break;
+    case KEYID_UP:
+        InputDtmfCode('C');
+        break;
+#else
     case KEYID_UP:
         InputDtmfCode('B');
         break;
     case KEYID_DOWN:
         InputDtmfCode('C');
         break;
+#endif
     case KEYID_EXIT:
         InputDtmfCode('D');
         break;

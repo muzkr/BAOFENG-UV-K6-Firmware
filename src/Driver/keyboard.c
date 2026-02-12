@@ -18,8 +18,12 @@ static const KeyID_Enum KEYBOARD_TABLE[][4] = {
     {KEYID_7, KEYID_8, KEYID_9, KEYID_NUM},                   // L0
     {KEYID_4, KEYID_5, KEYID_6, KEYID_0},                     // L1
     {KEYID_1, KEYID_2, KEYID_3, KEYID_STAR},                  // L2
-    {KEYID_MENU, KEYID_UP, KEYID_DOWN, KEYID_EXIT},           // L3
-    {KEYID_VM, KEYID_AB, KEYID_BAND, KEYID_NONE},             // L4
+#if SWAP_UP_DOWN
+    {KEYID_MENU, KEYID_DOWN, KEYID_UP, KEYID_EXIT}, // L3
+#else
+    {KEYID_MENU, KEYID_UP, KEYID_DOWN, KEYID_EXIT}, // L3
+#endif
+    {KEYID_VM, KEYID_AB, KEYID_BAND, KEYID_NONE}, // L4
 };
 
 /**

@@ -406,7 +406,7 @@ extern void Menu_ExitMode(void)
     DisplayHomePage();
 }
 
-extern void Menu_Down(void)
+extern void Menu_Up(void)
 {
     ResetMenuExitTime();
     ResetInputBuf();
@@ -444,7 +444,7 @@ extern void Menu_Down(void)
     Menu_Display();
 }
 
-extern void Menu_Up(void)
+extern void Menu_Down(void)
 {
     ResetMenuExitTime();
     ResetInputBuf();

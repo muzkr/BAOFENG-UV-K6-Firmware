@@ -6,6 +6,9 @@ target_compile_definitions(app INTERFACE HSE_VALUE=16000000)
 target_link_libraries(app INTERFACE printf)
 target_compile_definitions(app INTERFACE PRINTF_INCLUDE_CONFIG_H)
 
+#
+target_compile_definitions(app INTERFACE SWAP_UP_DOWN=1)
+
 target_include_directories(app INTERFACE
     .
     Voice
