@@ -4,11 +4,11 @@
 extern U8 gLcdBuffer[8][128];
 
 extern void SC5260_Init(void);
-extern void SC5620_SetContpastRatio(U8 level);
+extern void SC5620_SetContrastRatio(U8 level);
 
-extern void SC5260_DisplaySmallArea(U8 posY, U8 posX, U8 length, U8 wide, const U8 *pdat, U8 flagClear, U8 flagInvert);
-extern void SC5260_DisplayArea(U8 posY, U8 posX, U8 length, U8 wide, const U8 *pdat, U8 flagInvert);
-extern void SC5260_ClearArea(U8 posY, U8 posX, U8 length, U8 wide, U8 fillData);
+extern void SC5260_DisplaySmallArea(U8 posY, U8 posX, U8 width, U8 height, const U8 *pdat, U8 flagClear, U8 flagInvert);
+extern void SC5260_DisplayArea(U8 posY, U8 posX, U8 width, U8 height, const U8 *pdat, U8 flagInvert);
+extern void SC5260_ClearArea(U8 posY, U8 posX, U8 width, U8 height, U8 fillData);
 
 extern void LCD_UpdateFullScreen(void);
 extern void LCD_UpdateStateBar(void);

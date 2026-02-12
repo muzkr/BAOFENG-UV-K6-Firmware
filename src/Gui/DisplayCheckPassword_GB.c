@@ -16,12 +16,12 @@ extern void DisplayPassword(void)
     {
         buf[i] = '*';
     }
-    LCD_DisplayText(39, 40, (U8 *)buf, FONTSIZE_16x16, LCD_DIS_NORMAL);
+    LCD_DisplayText(39, 40, (U8 *)buf, FONTSIZE_16, LCD_DIS_NORMAL);
 }
 extern void DisplayPasswordHome(void)
 {
     LCD_ClearFullBuf();
-    LCD_DisplayText(20, 8, (U8 *)((g_radioInform.language == LANG_CN) ? "«Î ‰»Îø™ª˙√‹¬Î" : "Input Password"), FONTSIZE_16x16, LCD_DIS_NORMAL);
+    LCD_DisplayText(20, 8, (U8 *)((g_radioInform.language == LANG_CN) ? "«Î ‰»Îø™ª˙√‹¬Î" : "Input Password"), FONTSIZE_16, LCD_DIS_NORMAL);
     DisplayPassword();
     LCD_UpdateFullScreen();
 }
@@ -29,7 +29,7 @@ extern void DisplayPasswordHome(void)
 extern void DisplayPasswordError(void)
 {
     LCD_ClearFullBuf();
-    LCD_DisplayText(23, 12, (U8 *)((g_radioInform.language == LANG_CN) ? "   √‹¬Î¥ÌŒÛ   " : "Password Error"), FONTSIZE_16x16, LCD_DIS_NORMAL);
+    LCD_DisplayText(23, 12, (U8 *)((g_radioInform.language == LANG_CN) ? "   √‹¬Î¥ÌŒÛ   " : "Password Error"), FONTSIZE_16, LCD_DIS_NORMAL);
     LCD_UpdateFullScreen();
     DelayMs(2000);
     ResetInputBuf();

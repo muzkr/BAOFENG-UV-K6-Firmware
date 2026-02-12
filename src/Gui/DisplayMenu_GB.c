@@ -797,7 +797,7 @@ extern void Menu_DisplayFreqError(void)
     {
         TranStrToMiddle(disBuf, (String *)"out of range!", 16);
     }
-    LCD_DisplayText(47, 0, (U8 *)disBuf, FONTSIZE_16x16, 0);
+    LCD_DisplayText(47, 0, (U8 *)disBuf, FONTSIZE_16, 0);
     LCD_UpdateWorkAre();
 
     // 延时1S显示保存成功界面
@@ -1005,13 +1005,13 @@ extern void UpdateMenuDisplay(void)
         }
     }
     TranStrToMiddle(lcdDisBuf, headbuf, 12);
-    LCD_DisplayText(20, 16, (U8 *)lcdDisBuf, FONTSIZE_16x16, LCD_DIS_NORMAL);
+    LCD_DisplayText(20, 16, (U8 *)lcdDisBuf, FONTSIZE_16, LCD_DIS_NORMAL);
 
     sprintf(lcdDisBuf, "%02d", g_menuInfo.menuIndex);
     LCD_DisplayNumber(18, 2, (U8 *)lcdDisBuf, 0);
 
     TranStrToMiddle(lcdDisBuf, disBuf, 16);
-    LCD_DisplayText(47, 0, (U8 *)lcdDisBuf, FONTSIZE_16x16, 0);
+    LCD_DisplayText(47, 0, (U8 *)lcdDisBuf, FONTSIZE_16, 0);
 
     if (g_menuInfo.isSubMenu)
     {
@@ -1087,7 +1087,7 @@ void DisplaySelectHz(void)
             displayBuf[16] = 0;
         }
         SC5260_ClearArea(30, 2, 124, 1, 1);
-        LCD_DisplayText(InputPosY[i], 4, (U8 *)displayBuf, FONTSIZE_16x16, 0);
+        LCD_DisplayText(InputPosY[i], 4, (U8 *)displayBuf, FONTSIZE_16, 0);
     }
 }
 
@@ -1100,7 +1100,7 @@ extern void MenuShowInputChar(void)
     // 显示输入的字符串
     sprintf((String *)disBuf, "%*.*s", 16, 16, g_inputbuf.buf);
     // 显示内容在右下角
-    LCD_DisplayText(47, 0, (U8 *)disBuf, FONTSIZE_16x16, 0);
+    LCD_DisplayText(47, 0, (U8 *)disBuf, FONTSIZE_16, 0);
     uartSendChar(disBuf[0]);
 
     /*绘制汉字输入框*/
