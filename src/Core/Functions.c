@@ -263,12 +263,23 @@ extern void Radio_TxKeyTone(U8 event, U8 para)
             DtmfSendKeypadCode(10);
             break;
         case KEYID_VM:
+            DtmfSendKeypadCode(11); // B
+            break;
+#if SWAP_UP_DOWN
+        case KEYID_DOWN:
+            DtmfSendKeypadCode(11); // B
+            break;
         case KEYID_UP:
-            DtmfSendKeypadCode(11);
+            DtmfSendKeypadCode(12); // C
+            break;
+#else
+        case KEYID_UP:
+            DtmfSendKeypadCode(11); // B
             break;
         case KEYID_DOWN:
-            DtmfSendKeypadCode(12);
+            DtmfSendKeypadCode(12); // C
             break;
+#endif
         case KEYID_EXIT:
             DtmfSendKeypadCode(13);
             break;
