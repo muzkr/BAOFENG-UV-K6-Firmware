@@ -10,7 +10,7 @@ extern void DisplayBatteryVol()
     {
         const char *str = "Battery";
         uint32_t len = strlen(str);
-        LCD_DisplayText(2 * 8, (128 - len * 8) / 2, (U8 *)str, FONTSIZE_16x16, LCD_DIS_NORMAL);
+        LCD_DisplayText(2 * 8, (128 - len * 8) / 2, (U8 *)str, FONTSIZE_16, LCD_DIS_NORMAL);
     } while (0);
 
     do
@@ -22,6 +22,6 @@ extern void DisplayBatteryVol()
         );
 
         uint32_t len = strlen(buf);
-        LCD_DisplayText(4 * 8, (128 - len * 8) / 2, (U8 *)buf, FONTSIZE_16x16, LCD_DIS_NORMAL);
+        LCD_DisplayText(4 * 8, (128 - len * 8) / 2, (U8 *)buf, FONTSIZE_16, LCD_DIS_NORMAL);
     } while (0);
 }

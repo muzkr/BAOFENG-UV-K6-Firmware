@@ -29,7 +29,7 @@ extern void FmDisplayInputFreq(void)
         buf[j++] = g_inputbuf.buf[i];
     }
     LCD_ClearArea(35, 0, 128, 16);
-    LCD_DisplayText(35, xpos, (U8 *)buf, FONTSIZE_16x16, LCD_DIS_NORMAL);
+    LCD_DisplayText(35, xpos, (U8 *)buf, FONTSIZE_16, LCD_DIS_NORMAL);
     LCD_UpdateWorkAre();
 }
 
@@ -52,8 +52,8 @@ extern void FmDisplayInputChNum(void)
 extern void FmDisplaySeek(void)
 {
     LCD_ClearWorkArea();
-    LCD_DisplayText(17, 56, "FM", FONTSIZE_16x16, LCD_DIS_NORMAL);
-    LCD_DisplayText(35, 36, "SEEK...", FONTSIZE_16x16, LCD_DIS_NORMAL);
+    LCD_DisplayText(17, 56, "FM", FONTSIZE_16, LCD_DIS_NORMAL);
+    LCD_DisplayText(35, 36, "SEEK...", FONTSIZE_16, LCD_DIS_NORMAL);
     LCD_UpdateWorkAre();
 }
 
@@ -85,7 +85,7 @@ extern void FmDisplayFreq(void)
         xpos += 4;
     }
     LCD_ClearArea(35, 0, 128, 16);
-    LCD_DisplayText(35, xpos, (U8 *)disBuf, FONTSIZE_16x16, LCD_DIS_NORMAL);
+    LCD_DisplayText(35, xpos, (U8 *)disBuf, FONTSIZE_16, LCD_DIS_NORMAL);
 
     // 显示信道号
     FmDisplayChNum();
@@ -97,6 +97,6 @@ extern void FmDisplayHome(void)
 {
     LCD_ClearWorkArea();
 
-    LCD_DisplayText(17, 56, "FM", FONTSIZE_16x16, LCD_DIS_NORMAL);
+    LCD_DisplayText(17, 56, "FM", FONTSIZE_16, LCD_DIS_NORMAL);
     FmDisplayFreq();
 }

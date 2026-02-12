@@ -14,7 +14,7 @@ extern void DisplayProgrom(void)
 {
     LCD_ClearFullBuf();
     LCD_DisplayPicture(8, 48, ICON_PROG_SIZEX, ICON_PROG_SIZEY, iconProgrom, LCD_DIS_NORMAL);
-    LCD_DisplayText(42, 24, "Program...", FONTSIZE_16x16, LCD_DIS_NORMAL);
+    LCD_DisplayText(42, 24, "Program...", FONTSIZE_16, LCD_DIS_NORMAL);
     LCD_UpdateFullScreen();
 
     // 开启按键背光灯
@@ -368,11 +368,11 @@ extern void DisplayChannelMsg(U8 disMode, U8 disAB, U8 txOrRx)
     {
         if (FillChannelName2Buf(g_ChannelVfoInfo.chVfoInfo[disAB].channelName, nameBuf) == TRUE)
         {
-            LCD_DisplayText(ypox, 30, (U8 *)nameBuf, FONTSIZE_12x12, LCD_DIS_NORMAL);
+            LCD_DisplayText(ypox, 30, (U8 *)nameBuf, FONTSIZE_12, LCD_DIS_NORMAL);
         }
         else
         {
-            LCD_DisplayText(ypox, 30, (U8 *)((g_radioInform.language == LANG_CN) ? "   未命名   " : "   No Name  "), FONTSIZE_12x12, LCD_DIS_NORMAL);
+            LCD_DisplayText(ypox, 30, (U8 *)((g_radioInform.language == LANG_CN) ? "   未命名   " : "   No Name  "), FONTSIZE_12, LCD_DIS_NORMAL);
         }
 
         if (txOrRx == DIS_TX)
@@ -386,14 +386,14 @@ extern void DisplayChannelMsg(U8 disMode, U8 disAB, U8 txOrRx)
     }
     else if (disMode == CH_DISNAME && FillChannelName2Buf(g_ChannelVfoInfo.chVfoInfo[disAB].channelName, nameBuf) == TRUE)
     { // 显示信道名称
-        LCD_DisplayText(ypox, 30, (U8 *)nameBuf, FONTSIZE_16x16, LCD_DIS_NORMAL);
+        LCD_DisplayText(ypox, 30, (U8 *)nameBuf, FONTSIZE_16, LCD_DIS_NORMAL);
     }
     else if (disMode == CH_DISCHNUM)
     {
         // 清除显示区域的数据
         memset(nameBuf, ' ', 12);
         nameBuf[12] = '\0';
-        LCD_DisplayText(ypox - 2, 30, (U8 *)nameBuf, FONTSIZE_16x16, LCD_DIS_NORMAL);
+        LCD_DisplayText(ypox - 2, 30, (U8 *)nameBuf, FONTSIZE_16, LCD_DIS_NORMAL);
 
         sprintf((String *)(nameBuf), " CH-%03d", chNum + 1);
         LCD_DisplayBoldNum12X13(ypox, 30, (U8 *)nameBuf);
@@ -436,7 +436,7 @@ extern void DisplayChannelName(U8 disAB)
         }
     }
 
-    LCD_DisplayText(14, 16, (U8 *)nameBuf, FONTSIZE_16x16, LCD_DIS_NORMAL);
+    LCD_DisplayText(14, 16, (U8 *)nameBuf, FONTSIZE_16, LCD_DIS_NORMAL);
 }
 
 extern void DisplayRadioHome(void)
@@ -858,7 +858,7 @@ extern void DisplayAniMsg(U8 *pCallerId, U8 *pCalledId)
         nameBuf[8] = '\0';
     }
 
-    LCD_DisplayText(ypox, xpos, (U8 *)nameBuf, FONTSIZE_16x16, LCD_DIS_NORMAL);
+    LCD_DisplayText(ypox, xpos, (U8 *)nameBuf, FONTSIZE_16, LCD_DIS_NORMAL);
 
     nameBuf[0] = '>';
     nameBuf[1] = '>';
@@ -868,7 +868,7 @@ extern void DisplayAniMsg(U8 *pCallerId, U8 *pCalledId)
         nameBuf[3 + i] = dtmfSymbol[pCalledId[i]];
     }
     nameBuf[6] = '\0';
-    LCD_DisplayText(ypox + 13, xpos, (U8 *)nameBuf, FONTSIZE_16x16, LCD_DIS_NORMAL);
+    LCD_DisplayText(ypox + 13, xpos, (U8 *)nameBuf, FONTSIZE_16, LCD_DIS_NORMAL);
 
     LCD_UpdateWorkAre();
 }
@@ -920,15 +920,15 @@ extern void DisplaySoftVersion(void)
 
     LCD_ClearFullBuf();
     len = sprintf((String *)&disbuf, "%sNRF", strModelType);
-    LCD_DisplayText(4, 60 - (len << 2), disbuf, FONTSIZE_16x16, LCD_DIS_NORMAL);
+    LCD_DisplayText(4, 60 - (len << 2), disbuf, FONTSIZE_16, LCD_DIS_NORMAL);
 
     // 显示版本号
     sprintf((String *)&disbuf, "VER:%s", VERSION_STRING);
-    LCD_DisplayText(24, 28, disbuf, FONTSIZE_16x16, LCD_DIS_NORMAL);
+    LCD_DisplayText(24, 28, disbuf, FONTSIZE_16, LCD_DIS_NORMAL);
 
     // 显示国家码
     sprintf((String *)&disbuf, "%s", modelTypeStr[g_sysRunPara.moduleType]);
-    LCD_DisplayText(44, 51, disbuf, FONTSIZE_16x16, LCD_DIS_NORMAL);
+    LCD_DisplayText(44, 51, disbuf, FONTSIZE_16, LCD_DIS_NORMAL);
 
     LCD_UpdateFullScreen();
     LcdBackLightSwitch(LED_ON);

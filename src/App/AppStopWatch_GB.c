@@ -83,7 +83,7 @@ extern void StopWatchDisplayHome(void)
     LCD_ClearWorkArea();
 
     sprintf(disBuf, "%s", (U8 *)((g_radioInform.language == LANG_CN) ? "   √Î ±Ì    " : " STOP WATCH "));
-    LCD_DisplayText(17, 20, (U8 *)disBuf, FONTSIZE_16x16, LCD_DIS_NORMAL);
+    LCD_DisplayText(17, 20, (U8 *)disBuf, FONTSIZE_16, LCD_DIS_NORMAL);
 
     StopWatchDisplayTime();
 }
@@ -97,7 +97,7 @@ extern void StopWatchDisplayTime(void)
     }
 
     sprintf(disBuf, " %.2d--%.2d--%.2d   ", g_stopWatch.minute, g_stopWatch.second, g_stopWatch.millisecond);
-    LCD_DisplayText(35, 16, (U8 *)disBuf, FONTSIZE_16x16, LCD_DIS_NORMAL);
+    LCD_DisplayText(35, 16, (U8 *)disBuf, FONTSIZE_16, LCD_DIS_NORMAL);
     LCD_UpdateWorkAre();
 }
 

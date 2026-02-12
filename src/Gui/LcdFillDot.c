@@ -2,41 +2,17 @@
 
 void LCD_DisplayText(U8 posY, U8 posX, U8 *pString, U8 fontSize, U8 flagInvert)
 {
-    U8 i = 0;
-    U8 bufDat[64];
-    U8 changeFlag = 0;
-    U16 revBackFlag;
+    U8 font_buf[64];
+    bool force_invert = FALSE;
 
-    revBackFlag = flagInvert;
-
-    for (i = 0;;)
+    for (uint32_t i = 0;;)
     {
         if (pString[i] == '\0')
         {
-            return;
+            break;
         }
 
-        if (pString[i] >= 0xA1)
-        {
-            if (fontSize == FONTSIZE_16x16)
-            {
-                Font_Read_16x16_CN(pString + i, bufDat);
-            }
-            else if (fontSize == FONTSIZE_12x12)
-            {
-                Font_Read_12x12_CN(pString + i, bufDat);
-            }
-            SC5260_DisplayArea(posY, posX, fontSize, fontSize, bufDat, flagInvert);
-
-            posX += fontSize;
-            i += 2;
-            if (changeFlag == 1)
-            {
-                flagInvert = revBackFlag;
-                changeFlag = 0;
-            }
-        }
-        else if (pString[i] == 0x08)
+        if (pString[i] == 0x08)
         {
             if (i != 0)
             {
@@ -44,37 +20,60 @@ void LCD_DisplayText(U8 posY, U8 posX, U8 *pString, U8 fontSize, U8 flagInvert)
                 posX += (fontSize >> 1);
             }
 
-            changeFlag = 1;
-            flagInvert = 1;
+            force_invert = TRUE;
 
             i += 1;
+            continue;
+        }
+
+        U8 flagInvert1;
+        if (force_invert)
+        {
+            force_invert = FALSE;
+            flagInvert1 = TRUE;
+        }
+        else
+        {
+            flagInvert1 = flagInvert;
+        }
+
+        if (pString[i] >= 0xA1)
+        {
+            if (fontSize == FONTSIZE_16)
+            {
+                Font_Read_16x16_CN(pString + i, font_buf);
+            }
+            else if (fontSize == FONTSIZE_12)
+            {
+                Font_Read_12x12_CN(pString + i, font_buf);
+            }
+            SC5260_DisplayArea(posY, posX, fontSize, fontSize, font_buf, flagInvert1);
+
+            posX += fontSize;
+            i += 2;
         }
         else
         {
             if (pString[i] >= 0x20 && pString[i] <= 0x7E)
             {
-                if (fontSize == FONTSIZE_16x16)
+                if (fontSize == FONTSIZE_16)
                 {
-                    Font_Read_8x16_ASCII(pString + i, bufDat);
+                    Font_Read_8x16_ASCII(pString + i, font_buf);
                 }
-                else if (fontSize == FONTSIZE_12x12)
+                else if (fontSize == FONTSIZE_12)
                 {
-                    Font_Read_6x12_ASCII(pString + i, bufDat);
+                    Font_Read_6x12_ASCII(pString + i, font_buf);
                 }
 
-                SC5260_DisplayArea(posY, posX, fontSize >> 1, fontSize, bufDat, flagInvert);
+                SC5260_DisplayArea(posY, posX, fontSize >> 1, fontSize, font_buf, flagInvert1);
 
                 posX += (fontSize >> 1);
             }
-            i += 1;
 
-            if (changeFlag == 1)
-            {
-                flagInvert = revBackFlag;
-                changeFlag = 0;
-            }
-        }
-    }
+            i += 1;
+        } // else
+
+    } // for
 }
 
 void LCD_DisplayNumber(U8 posY, U8 posX, U8 *pString, U8 flagInvert)
@@ -109,35 +108,33 @@ void LCD_DrawRectangle(U8 posY, U8 posX, U8 length, U8 wide, U8 flagFill)
     }
 }
 
-void LCD_DisplayPicture(U8 posY,
-                        U8 posX,
-                        U8 length,
-                        U8 wide,
-                        const U8 *pdat,
-                        U8 flagInvert)
+void LCD_DisplayPicture(U8 posY, U8 posX, U8 width, U8 height, const U8 *pdat, U8 flagInvert)
 {
-    U8 i = 0;
-    U16 j = 0;
 
-    if (wide == 0 || length == 0)
+    if (height == 0 || width == 0)
     {
         return;
     }
 
-    j = 0;
-    for (i = wide / 8 + 1; i > 0; i--)
+    const uint32_t pages = (height + 7) / 8;
+
+    for (uint32_t i = 0; i < pages; i++)
     {
-        if (i > 1)
+        if (i < pages - 1)
         {
-            SC5260_DisplaySmallArea(posY, posX, length, 8, &pdat[j], 0, flagInvert);
+            SC5260_DisplaySmallArea(posY, posX, width, 8, &pdat[i * height], 0, flagInvert);
         }
         else
         {
-            SC5260_DisplaySmallArea(posY, posX, length, wide % 8, &pdat[j], 0, flagInvert);
+            U8 height1 = height % 8;
+            if (0 == height1)
+            {
+                height1 = 8;
+            }
+            SC5260_DisplaySmallArea(posY, posX, width, height1, &pdat[i * height], 0, flagInvert);
         }
 
         posY += 8;
-        j += length;
     }
 }
 

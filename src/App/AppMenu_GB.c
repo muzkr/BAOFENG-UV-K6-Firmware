@@ -965,7 +965,7 @@ extern void SaveChDelete(void)
             {
                 sprintf(disBuf, "%-*.*s\n\r", 16, 16, "Wait...");
             }
-            LCD_DisplayText(47, 0, (U8 *)disBuf, FONTSIZE_16x16, LCD_DIS_NORMAL);
+            LCD_DisplayText(47, 0, (U8 *)disBuf, FONTSIZE_16, LCD_DIS_NORMAL);
             LCD_UpdateWorkAre();
 
             // 初始化为默认信道信息
@@ -1024,7 +1024,7 @@ extern void EnterResetMode(void)
     {
         sprintf(disBuf, "%-*.*s\n\r", 16, 16, "Sure to Reset?");
     }
-    LCD_DisplayText(47, 0, (U8 *)disBuf, FONTSIZE_16x16, LCD_DIS_NORMAL);
+    LCD_DisplayText(47, 0, (U8 *)disBuf, FONTSIZE_16, LCD_DIS_NORMAL);
     LCD_UpdateWorkAre();
 
     while (1)
@@ -1075,7 +1075,7 @@ extern void EnterResetMode(void)
     {
         sprintf(disBuf, "%-*.*s\n\r", 16, 16, "Please Wait...");
     }
-    LCD_DisplayText(47, 0, (U8 *)disBuf, FONTSIZE_16x16, LCD_DIS_NORMAL);
+    LCD_DisplayText(47, 0, (U8 *)disBuf, FONTSIZE_16, LCD_DIS_NORMAL);
     LCD_UpdateWorkAre();
 
     if (g_menuInfo.selectedItem == 1)
@@ -1338,7 +1338,7 @@ extern void Menu_SaveSelectItem(U8 menuIndex)
         break;
     case S_BRIGHT:
         g_radioInform.brightness = g_menuInfo.selectedItem;
-        SC5620_SetContpastRatio(g_radioInform.brightness);
+        SC5620_SetContrastRatio(g_radioInform.brightness);
         break;
     case S_REFLEX:
         g_radioInform.DisplayStyles = g_menuInfo.selectedItem;

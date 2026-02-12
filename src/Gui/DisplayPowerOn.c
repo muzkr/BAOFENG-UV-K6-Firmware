@@ -4,7 +4,7 @@
 extern void UI_DisplayPowerOn(void)
 {
 
-    SC5620_SetContpastRatio(g_radioInform.brightness);
+    SC5620_SetContrastRatio(g_radioInform.brightness);
 
     // printf("power on type: %d\n", g_radioInform.OpFlag1.Bit.b0);
 
@@ -21,7 +21,7 @@ extern void UI_DisplayPowerOn(void)
 
         // printf("power on message len: %d\n", len);
 
-        LCD_DisplayText(3 * 8, (128 - len * 8) / 2, powerOnMsg, FONTSIZE_16x16, LCD_DIS_NORMAL);
+        LCD_DisplayText(3 * 8, (128 - len * 8) / 2, powerOnMsg, FONTSIZE_16, LCD_DIS_NORMAL);
     }
     else if (g_radioInform.OpFlag1.Bit.b0 == 2)
     {
