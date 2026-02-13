@@ -19,6 +19,9 @@ static const KeyID_Enum KEYBOARD_TABLE[][4] = {
     {KEYID_4, KEYID_5, KEYID_6, KEYID_0},                     // L1
     {KEYID_1, KEYID_2, KEYID_3, KEYID_STAR},                  // L2
 #if SWAP_UP_DOWN
+    // TODO: This is a convenient however "temporary" solution
+    // It's better to handle the UP/DOWN key navigation case by case
+    // and allow user customizing (via menu for example) when appropriate
     {KEYID_MENU, KEYID_DOWN, KEYID_UP, KEYID_EXIT}, // L3
 #else
     {KEYID_MENU, KEYID_UP, KEYID_DOWN, KEYID_EXIT}, // L3
