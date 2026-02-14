@@ -304,16 +304,6 @@ void USART1_IRQHandler(void)
     }
 }
 
-void DMA1_Channel4_5_IRQHandler(void)
-{
-    if (DMA_GetITStatus(DMA1_IT_GL5))
-    {
-        DMA_ClearFlag(DMA1_FLAG_GL5);
-
-        VoiceOutput_Interrupt();
-    }
-}
-
 extern void Board_Init(void)
 {
     vec_table_init();

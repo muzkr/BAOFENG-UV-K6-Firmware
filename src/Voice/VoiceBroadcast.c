@@ -15,7 +15,7 @@ static void DmaUpdateMemery(DMA_Channel_TypeDef *channelx, uint32_t memoryAddr, 
     DMA_Cmd(DMA1_Channel5, ENABLE);
 }
 
-extern void VoiceOutput_Interrupt(void)
+static inline void VoiceOutput_Interrupt(void)
 {
     U16 length;
 
@@ -53,34 +53,43 @@ extern void VoiceOutput_Interrupt(void)
     }
 }
 
+void DMA1_Channel4_5_IRQHandler(void)
+{
+    if (DMA_GetITStatus(DMA1_IT_GL5))
+    {
+        DMA_ClearFlag(DMA1_FLAG_GL5);
+        VoiceOutput_Interrupt();
+    }
+}
+
 extern void AudioHard_Init(void)
 {
-    DMA_InitTypeDef DMA_InitStructure = {0};
-    GPIO_InitTypeDef GPIO_InitStructure = {0};
-    TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure = {0};
-    TIM_OCInitTypeDef TIM_OCInitStructure = {0};
-
     /* enable DMA clock */
     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1, ENABLE);
 
     /* DMA1 Channel5 Config */
-    DMA_DeInit(DMA1_Channel5);
-    DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)&TIM1->DMAR;
-    DMA_InitStructure.DMA_MemoryBaseAddr = (uint32_t)g_voiceInform.voicePlay.dmaBufA;
-    DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralDST;
-    DMA_InitStructure.DMA_BufferSize = 1024;
-    DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
-    DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
-    DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord;
-    DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord;
-    DMA_InitStructure.DMA_Mode = DMA_Mode_Circular;
-    DMA_InitStructure.DMA_Priority = DMA_Priority_High;
-    DMA_InitStructure.DMA_M2M = DMA_M2M_Disable;
+    do
+    {
+        DMA_DeInit(DMA1_Channel5);
 
-    DMA_Init(DMA1_Channel5, &DMA_InitStructure);
+        DMA_InitTypeDef DMA_InitStructure = {0};
+        DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)&TIM1->DMAR;
+        DMA_InitStructure.DMA_MemoryBaseAddr = (uint32_t)g_voiceInform.voicePlay.dmaBufA;
+        DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralDST;
+        DMA_InitStructure.DMA_BufferSize = 1024;
+        DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
+        DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
+        DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord;
+        DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord;
+        DMA_InitStructure.DMA_Mode = DMA_Mode_Circular;
+        DMA_InitStructure.DMA_Priority = DMA_Priority_High;
+        DMA_InitStructure.DMA_M2M = DMA_M2M_Disable;
 
-    /*DMA 允许数据传输完成中断*/
+        DMA_Init(DMA1_Channel5, &DMA_InitStructure);
+    } while (0);
+
+    /* DMA 允许数据传输完成中断 */
     DMA_ITConfig(DMA1_Channel5, DMA_IT_TC, ENABLE);
 
     /* DMA1 Channel5 enable */
@@ -88,32 +97,44 @@ extern void AudioHard_Init(void)
 
     GPIO_PinAFConfig(GPIOA, GPIO_PinSource11, GPIO_AF_2); // PA11 as TIM1 CH4
 
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; // GPIO_Speed_10MHz;
-    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL; // GPIO_PuPd_UP;
-    GPIO_Init(GPIOA, &GPIO_InitStructure);
+    do
+    {
+        GPIO_InitTypeDef GPIO_InitStructure = {0};
+        GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;
+        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+        GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; // GPIO_Speed_10MHz;
+        GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+        GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL; // GPIO_PuPd_UP;
+        GPIO_Init(GPIOA, &GPIO_InitStructure);
+    } while (0);
 
-    /* TIMER configuration 设置载波频率为48K
-    配置每4次改变PWM 1次实现输出频率固定为8K*/
-    TIM_TimeBaseStructure.TIM_Prescaler = 0;
-    TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
-    TIM_TimeBaseStructure.TIM_Period = 1000;
-    TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
-    TIM_TimeBaseStructure.TIM_RepetitionCounter = 5; // 6 固定为8K
-    TIM_TimeBaseInit(TIM1, &TIM_TimeBaseStructure);
+    /* TIMER configuration
+    设置载波频率为48K, update 频率8K = sample rate */
+    do
+    {
+        TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure = {0};
+        TIM_TimeBaseStructure.TIM_Prescaler = 0;
+        TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+        TIM_TimeBaseStructure.TIM_Period = 999; // 48 MHz / (1+999) -> 48 kHz
+        TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
+        TIM_TimeBaseStructure.TIM_RepetitionCounter = 5; // 48 kHz / (1+5) -> 8 kHz
+        TIM_TimeBaseInit(TIM1, &TIM_TimeBaseStructure);
+    } while (0);
 
     /* Channel 4 Configuration in PWM mode */
-    TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM2;
-    TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
-    TIM_OCInitStructure.TIM_OutputNState = TIM_OutputNState_Disable;
-    TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_Low;
-    TIM_OCInitStructure.TIM_OCNPolarity = TIM_OCNPolarity_Low;
-    TIM_OCInitStructure.TIM_OCIdleState = TIM_OCIdleState_Set;
-    TIM_OCInitStructure.TIM_OCNIdleState = TIM_OCIdleState_Reset;
-    TIM_OCInitStructure.TIM_Pulse = 0;
-    TIM_OC4Init(TIM1, &TIM_OCInitStructure);
+    do
+    {
+        TIM_OCInitTypeDef TIM_OCInitStructure = {0};
+        TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM2;
+        TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
+        TIM_OCInitStructure.TIM_OutputNState = TIM_OutputNState_Disable;
+        TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_Low;
+        TIM_OCInitStructure.TIM_OCNPolarity = TIM_OCNPolarity_Low;
+        TIM_OCInitStructure.TIM_OCIdleState = TIM_OCIdleState_Set;
+        TIM_OCInitStructure.TIM_OCNIdleState = TIM_OCIdleState_Reset;
+        TIM_OCInitStructure.TIM_Pulse = 0;
+        TIM_OC4Init(TIM1, &TIM_OCInitStructure);
+    } while (0);
 
     /* TIM1 DMA Update enable */
     TIM_DMACmd(TIM1, TIM_DMA_Update, ENABLE);
@@ -386,7 +407,7 @@ extern void Audio_PlayChanNum(U8 Data)
     }
 }
 
-extern void ChangeSigned2unsigned(U16 *dest, U16 *src, U16 length)
+static void ChangeSigned2unsigned(U16 *dest, U16 *src, U16 length)
 {
     U16 i;
     S16 dat;
@@ -398,7 +419,7 @@ extern void ChangeSigned2unsigned(U16 *dest, U16 *src, U16 length)
     }
 }
 
-int Audio_Decoder(U8 *indata, S16 *outdata, int len)
+static int Audio_Decoder(U8 *indata, S16 *outdata, int len)
 {
     U8 *inp;
     S16 *outp;
@@ -477,7 +498,7 @@ int Audio_Decoder(U8 *indata, S16 *outdata, int len)
     return count;
 }
 
-extern void Audio_PlayStart(U8 index)
+static void Audio_PlayStart(U8 index)
 {
     U32 indexAddr;
     U16 i, startLen;
@@ -541,7 +562,7 @@ extern void Audio_PlayStart(U8 index)
     g_sysRunPara.rfTxFlag.voxDetDly = 10;
 }
 
-extern void Audio_PlayContinue(void)
+static void Audio_PlayContinue(void)
 {
     U8 dacBuf[512];
 
@@ -593,41 +614,40 @@ extern U8 Audio_CheckBusy(void)
 
 extern void Audio_PlayTask(void)
 {
-    if (voice.voiceState == 1)
+    if (voice.voiceState != 1)
     {
-        if (voice.busyFlag == 0)
-        {
-            if (voice.voiceCnt == 0)
-            {
-                // 语音播报结束
-                voice.voiceState = 0;
-                g_sysRunPara.rfTxFlag.voxDetDly = 8;
+        return;
+    }
 
-                // 关闭喇叭
-                SpeakerSwitch(OFF);
-                DelayMs(30);
+    if (voice.busyFlag != 0)
+    {
+        Audio_PlayContinue();
+        return;
+    }
 
-                TIM_CtrlPWMOutputs(TIM1, DISABLE);
+    if (voice.voiceCnt != 0)
+    {
+        Audio_PlayStart(voice.voiceBuf[--voice.voiceCnt]);
+        return;
+    }
 
-                if (g_rfRxState == WAIT_RXEND)
-                {
-                    g_rfRxState = RX_READY;
-                }
-                else
-                {
-                    Rfic_RxTxOnOffSetup(RFIC_RXON);
-                }
-                return;
-            }
-            else
-            {
-                Audio_PlayStart(voice.voiceBuf[--voice.voiceCnt]);
-            }
-        }
-        else
-        {
-            Audio_PlayContinue();
-        }
+    // 语音播报结束
+    voice.voiceState = 0;
+    g_sysRunPara.rfTxFlag.voxDetDly = 8;
+
+    // 关闭喇叭
+    SpeakerSwitch(OFF);
+    DelayMs(30);
+
+    TIM_CtrlPWMOutputs(TIM1, DISABLE);
+
+    if (g_rfRxState == WAIT_RXEND)
+    {
+        g_rfRxState = RX_READY;
+    }
+    else
+    {
+        Rfic_RxTxOnOffSetup(RFIC_RXON);
     }
 }
 

@@ -46,7 +46,6 @@ extern STR_VOICE voice;
 extern STR_VOICE_ONFO g_voiceInform;
 extern U8 FastChangeVoice;
 
-extern void VoiceOutput_Interrupt(void);
 extern void AudioHard_Init(void);
 
 extern void Audio_PlayVoice(U8 Data);
