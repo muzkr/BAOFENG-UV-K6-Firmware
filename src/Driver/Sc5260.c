@@ -16,17 +16,13 @@ U8 gLcdBuffer[8][128] __attribute__((section(".bss.LARGE")));
 // In ~120 ns
 void SC5260_delay(U32 i)
 {
-    const register U32 f = SystemCoreClock;
     while (i--)
     {
-        if (f > 48000000)
-        {
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-            __NOP();
-        }
+        __NOP();
+        __NOP();
+        __NOP();
+        __NOP();
+        __NOP();
     }
 }
 
