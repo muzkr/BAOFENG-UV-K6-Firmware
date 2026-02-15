@@ -22,7 +22,7 @@ extern void CheckPowerOff(void)
             DualStandbyWorkOFF();
 
             // 保存设置的数据
-            Flash_SaveRadioImfosData();
+            Flash_SaveRadioInfoData();
 
             if (g_ChannelVfoInfo.chVfoInfo[g_ChannelVfoInfo.switchAB].chVfoMode == CHAN_MODE)
             {

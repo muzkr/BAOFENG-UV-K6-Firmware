@@ -1,14 +1,15 @@
 #include "includes.h"
 
-const U16 stepList[9] = {250, 500, 625, 1000, 1250, 2000, 2500, 5000, 10000};
+static const U16 stepList[9] = {250, 500, 625, 1000, 1250, 2000, 2500, 5000, 10000};
+
 // 定义频率修正补偿值
 const U8 MOD_LIST[10] = {0, 25, 50, 75, 100, 0, 25, 50, 75, 25};
 
 extern void RadioConfig_Init(void)
 {
     Flash_ReadSystemRunData();
-    Flash_ReadRadioImfosData();
-    Flash_ReadDebugImfosData();
+    Flash_ReadRadioInfoData();
+    Flash_ReadDebugInfoData();
     DtmfInfoInit();
     Flash_ReadFmData();
     FmCheckChannelActive();
@@ -57,25 +58,25 @@ Boolean CheckFreqInRange(U32 freq)
 
     if ((tempFreq >= 1080) && (tempFreq < 1360))
     {
-        if (g_rfMoudel.amRxEn == 0)
+        if (g_rfModel.amRxEn == 0)
         { // 不允许航空接收
             return FALSE;
         }
         return TRUE;
     }
-    else if ((tempFreq >= bandRang.bandFreq.vhf2L) && (tempFreq < bandRang.bandFreq.vhf2H))
+    else if ((tempFreq >= g_bandRang.bandFreq.vhf2L) && (tempFreq < g_bandRang.bandFreq.vhf2H))
     {
         return TRUE;
     }
-    else if ((tempFreq >= bandRang.bandFreq.B350ML) && (tempFreq < bandRang.bandFreq.B350MH))
+    else if ((tempFreq >= g_bandRang.bandFreq.B350ML) && (tempFreq < g_bandRang.bandFreq.B350MH))
     {
         return TRUE;
     }
-    else if ((tempFreq >= bandRang.bandFreq.vhfL) && (tempFreq < bandRang.bandFreq.vhfH))
+    else if ((tempFreq >= g_bandRang.bandFreq.vhfL) && (tempFreq < g_bandRang.bandFreq.vhfH))
     {
         return TRUE;
     }
-    else if ((tempFreq >= bandRang.bandFreq.uhfL) && (tempFreq < bandRang.bandFreq.uhfH))
+    else if ((tempFreq >= g_bandRang.bandFreq.uhfL) && (tempFreq < g_bandRang.bandFreq.uhfH))
     {
         return TRUE;
     }
@@ -152,25 +153,23 @@ U16 SeekActiveChannel_Down(U16 curChanNum, U8 isScan)
 
 extern void ChannelCheckActiveAll(void)
 {
-    U16 i;
-    U16 addr = CHAN_ADDR;
-    U8 readData[4];
-    U32 bufFreq;
-    U8 j;
 
     memset(g_ChannelVfoInfo.chanActiveList, 0x00, sizeof(g_ChannelVfoInfo.chanActiveList));
     memset(g_ChannelVfoInfo.scanList, 0x00, sizeof(g_ChannelVfoInfo.scanList));
 
     g_ChannelVfoInfo.haveChannel = 0;
     g_ChannelVfoInfo.haveScan = 0;
-    for (i = 0; i < 999; i++)
+
+    U8 readData[4];
+    for (uint32_t i = 0; i < 999; i++)
     {
+        const U16 addr = CHAN_ADDR + i * CHAN_SIZE;
         SpiFlash_ReadBytes(addr, readData, 4);
 
         if ((readData[0] != 0xff) && (readData[3] != 0))
         {
-            bufFreq = 0;
-            for (j = 4; j > 0; j--)
+            U32 bufFreq = 0;
+            for (uint32_t j = 4; j > 0; j--)
             {
                 readData[j - 1] = changeHexToInt(readData[j - 1]);
                 bufFreq = (bufFreq * 100) + readData[j - 1];
@@ -189,7 +188,6 @@ extern void ChannelCheckActiveAll(void)
                 }
             }
         }
-        addr += CHAN_SIZE;
     }
 
     if (g_ChannelVfoInfo.haveChannel == 1)
@@ -325,7 +323,7 @@ extern U8 GetCurWorkBand(U16 freq)
 
     for (i = 0; i < BAND_BUF_CNT; i++)
     {
-        if (freq >= bandRang.bandbuf.freq[2 * i] && freq < bandRang.bandbuf.freq[2 * i + 1])
+        if (freq >= g_bandRang.bandbuf.freq[2 * i] && freq < g_bandRang.bandbuf.freq[2 * i + 1])
         {
             return i;
         }
@@ -394,7 +392,7 @@ extern void VfoFreqUp(U8 isScan)
     }
     else
     {
-        if (g_rfMoudel.amRxEn == 1 && lastFreq < 1360)
+        if (g_rfModel.amRxEn == 1 && lastFreq < 1360)
         {
             if (tempFreq >= 1360)
             { // AM模式
@@ -406,9 +404,9 @@ extern void VfoFreqUp(U8 isScan)
             // 获取当前工作频段
             workBand = GetCurWorkBand(lastFreq);
 
-            if (tempFreq >= bandRang.bandbuf.freq[workBand * 2 + 1])
+            if (tempFreq >= g_bandRang.bandbuf.freq[workBand * 2 + 1])
             {
-                g_ChannelVfoInfo.chVfoInfo[g_ChannelVfoInfo.switchAB].freqRx.frequency = bandRang.bandbuf.freq32[workBand * 2];
+                g_ChannelVfoInfo.chVfoInfo[g_ChannelVfoInfo.switchAB].freqRx.frequency = g_bandRang.bandbuf.freq32[workBand * 2];
             }
         }
     }
@@ -448,7 +446,7 @@ extern void VfoFreqDown(U8 isScan)
     }
     else
     {
-        if ((g_rfMoudel.amRxEn == 1) && (lastFreq < 1080 && lastFreq >= 1360))
+        if ((g_rfModel.amRxEn == 1) && (lastFreq < 1080 && lastFreq >= 1360))
         {
             if (tempFreq < 10800000)
             { // AM模式
@@ -460,9 +458,9 @@ extern void VfoFreqDown(U8 isScan)
             // 获取当前工作频段
             workBand = GetCurWorkBand(lastFreq);
 
-            if (tempFreq < bandRang.bandbuf.freq[workBand * 2])
+            if (tempFreq < g_bandRang.bandbuf.freq[workBand * 2])
             {
-                g_ChannelVfoInfo.chVfoInfo[g_ChannelVfoInfo.switchAB].freqRx.frequency = bandRang.bandbuf.freq32[workBand * 2 + 1] - bandRang.bandbuf.freq32[workBand * 2] + g_ChannelVfoInfo.chVfoInfo[g_ChannelVfoInfo.switchAB].freqRx.frequency;
+                g_ChannelVfoInfo.chVfoInfo[g_ChannelVfoInfo.switchAB].freqRx.frequency = g_bandRang.bandbuf.freq32[workBand * 2 + 1] - g_bandRang.bandbuf.freq32[workBand * 2] + g_ChannelVfoInfo.chVfoInfo[g_ChannelVfoInfo.switchAB].freqRx.frequency;
             }
         }
     }
@@ -676,7 +674,7 @@ U32 VfoFreqCalculate(U8 *buf)
 
     if (!CheckFreqInRange(freq))
     {
-        freq = bandRang.bandFreq.freqVL;
+        freq = g_bandRang.bandFreq.freqVL;
     }
 
     return freq;
@@ -698,12 +696,10 @@ U32 VfoOffsetCalculate(U8 *buf)
 // 初始化信道数据
 extern void ChannleVfoDataInit(U8 flagAB, U8 readFlag)
 {
-    U16 chNum;
-    U8 *buf;
-    U8 calcBuf[8];
-    U8 i;
 
     g_ChannelVfoInfo.chVfoInfo[flagAB].reverseFlag = 0;
+
+    U16 chNum = 0;
 
     if (g_ChannelVfoInfo.haveChannel == 0)
     {
@@ -711,16 +707,11 @@ extern void ChannleVfoDataInit(U8 flagAB, U8 readFlag)
     }
     else
     {
-        if (flagAB)
-        {
-            g_ChannelVfoInfo.chVfoInfo[1].chVfoMode = g_radioInform.chOrVfoMode.Bit.chVofB;
-            chNum = g_ChannelVfoInfo.channelNum[1];
-        }
-        else
-        {
-            g_ChannelVfoInfo.chVfoInfo[0].chVfoMode = g_radioInform.chOrVfoMode.Bit.chVofA;
-            chNum = g_ChannelVfoInfo.channelNum[0];
-        }
+        g_ChannelVfoInfo.chVfoInfo[flagAB].chVfoMode =         //
+            0 == flagAB ? g_radioInform.chOrVfoMode.Bit.chVofA //
+                        : g_radioInform.chOrVfoMode.Bit.chVofB //
+            ;
+        chNum = g_ChannelVfoInfo.channelNum[flagAB];
     }
 
     if (g_ChannelVfoInfo.chVfoInfo[flagAB].chVfoMode == CHAN_MODE)
@@ -731,15 +722,15 @@ extern void ChannleVfoDataInit(U8 flagAB, U8 readFlag)
             SpiFlash_ReadBytes(chNum * CHAN_SIZE + NAME_ADDR_SHIFT, g_ChannelVfoInfo.chVfoInfo[flagAB].channelName, NAME_SIZE);
         }
 
-        buf = (U8 *)&g_ChannelVfoInfo.channelInfo[flagAB].rxFreq;
-
-        for (i = 0; i < 8; i++)
+        U8 *buf = (U8 *)&g_ChannelVfoInfo.channelInfo[flagAB].rxFreq;
+        U8 calcBuf[8];
+        for (uint32_t i = 0; i < 8; i++)
         {
             calcBuf[i] = changeHexToInt(buf[i]);
         }
         g_ChannelVfoInfo.chVfoInfo[flagAB].freqRx.frequency = 0;
         g_ChannelVfoInfo.chVfoInfo[flagAB].freqTx.frequency = 0;
-        for (i = 4; i > 0; i--)
+        for (uint32_t i = 4; i > 0; i--)
         {
             g_ChannelVfoInfo.chVfoInfo[flagAB].freqRx.frequency = (g_ChannelVfoInfo.chVfoInfo[flagAB].freqRx.frequency * 100) + calcBuf[i - 1];
             g_ChannelVfoInfo.chVfoInfo[flagAB].freqTx.frequency = (g_ChannelVfoInfo.chVfoInfo[flagAB].freqTx.frequency * 100) + calcBuf[i + 3];
@@ -810,6 +801,7 @@ extern void ChannleVfoDataInit(U8 flagAB, U8 readFlag)
         g_ChannelVfoInfo.chVfoInfo[flagAB].freqStep = g_ChannelVfoInfo.vfoInfo[flagAB].STEP;
         g_ChannelVfoInfo.chVfoInfo[flagAB].pttIdMode = g_radioInform.pttIdMode;
     }
+
     g_ChannelVfoInfo.chVfoInfo[flagAB].rx = &g_ChannelVfoInfo.chVfoInfo[flagAB].freqRx;
     g_ChannelVfoInfo.chVfoInfo[flagAB].tx = &g_ChannelVfoInfo.chVfoInfo[flagAB].freqTx;
 }

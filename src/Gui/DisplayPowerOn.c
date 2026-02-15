@@ -13,7 +13,7 @@ extern void UI_DisplayPowerOn(void)
         uint32_t len = 0;
         for (; len < 16; len++)
         {
-            if (powerOnMsg[len] == 0xFF || powerOnMsg[len] == 0x00)
+            if (g_powerOnMsg[len] == 0xFF || g_powerOnMsg[len] == 0x00)
             {
                 break;
             }
@@ -21,7 +21,7 @@ extern void UI_DisplayPowerOn(void)
 
         // printf("power on message len: %d\n", len);
 
-        LCD_DisplayText(3 * 8, (128 - len * 8) / 2, powerOnMsg, FONTSIZE_16, LCD_DIS_NORMAL);
+        LCD_DisplayText(3 * 8, (128 - len * 8) / 2, g_powerOnMsg, FONTSIZE_16, LCD_DIS_NORMAL);
     }
     else if (g_radioInform.OpFlag1.Bit.b0 == 2)
     {

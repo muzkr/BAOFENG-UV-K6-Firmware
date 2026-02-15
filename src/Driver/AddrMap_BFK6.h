@@ -5,25 +5,22 @@
 #define CHAN_SIZE 32       // 信道信息大小
 #define CHAN_ADDR 0x0000   // 信道首地址
 #define NAME_ADDR_SHIFT 20 // 信道名称地址偏移
-#define NAME_SIZE 12       // 信道名称信息大小为16字节
+#define NAME_SIZE 12       // 信道名称信息大小
 
 #define VFO_INFO_ADDR 0x8000 // 频率模式存储地址
 #define VFO_SIZE 32          // 频率模式信道信息大小
 #define VFO1_ADDR 0x8000     // 频率模式地址
 #define VFO2_ADDR 0x8020     // 频率模式地址
 
-#define RADIO_IMFOS_ADDR 0X9000 // 对讲机 频率模式/功能信息/收音机 地址
-#define RADIO_SIZE 64           // 可选信息大小
-
-#define PWR_MSG_ADDR 0x9040 // 开机显示信息
+#define RADIO_INFO_ADDR 0X9000 // 对讲机 频率模式/功能信息/收音机 地址
+#define RADIO_SIZE 64          // 可选信息大小
+#define PWR_ON_MSG_ADDR 0x9040 // 开机显示信息
 
 // 双音多频[DTMF]
-#define DTMFINFOR_ADDR 0xA000
-
+#define DTMF_INFO_ADDR 0xA000
 // 遥毙码地址16个字节
-#define DTMF_KILLED_ADDR 0xA010
-
-// 定义DTMF存储地址  16
+#define DTMF_KILL_CODE_ADDR 0xA010
+// 定义DTMF存储 size
 #define DTMF_SIZE 10
 #define DTMF_CODE_ADDR 0xA020
 
@@ -31,19 +28,18 @@
 #define SCAN_LIST_ADDR 0xB000
 
 /************************************************************************/
-#define FM_IMFOS_ADDR 0XC000 // 对讲机功能信息/收音机 地址
-#define FM_SIDZE 32
+#define FM_INFO_ADDR 0XC000 // 对讲机功能信息/收音机 地址
+#define FM_SIZE 32
 #define FM_ADDR 0xC000 // 收音机频点存储地址
 
 /************************************************************************/
 #define RF_MODEL_ADDR 0xD000 // 机型码存储地址
-
 #define RF_TXEN_ADDR 0xD001 // 发射允许 220M 350M  520M 发射允许  航空频段接收允许
 /************************************************************************/
 /*本机运行信息存储*/
 /************************************************************************/
 // 定义信道号、收音机等使用地址
-#define SYSTEMRAN_ADDR 0xE000
+#define SYSTEM_RUN_ADDR 0xE000
 #define F1CHAN_ADDR 0xE000
 #define F2CHAN_ADDR 0xE002
 

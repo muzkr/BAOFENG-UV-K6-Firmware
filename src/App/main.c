@@ -46,6 +46,7 @@ int main(void)
     {
         DisplaySoftVersion();
     }
+
     RadioVfoInfo_Init();
 
     ResetTimeKeyLockAndPowerSave();
@@ -64,7 +65,6 @@ int main(void)
 
     while (1)
     {
-        // 10ms运行一次
         if (g_10msFlag)
         {
             App_10msTask();
@@ -75,13 +75,11 @@ int main(void)
             App_50msTask();
         }
 
-        // 100ms运行一次
         if (g_100msFlag)
         {
             App_100msTask();
         }
 
-        // 500ms运行一次
         if (g_500msFlag)
         {
             App_500msTask();

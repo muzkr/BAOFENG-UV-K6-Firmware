@@ -606,11 +606,11 @@ extern void Menu_GetSubItemString(U8 menuIndex)
             memset(disBuf, 0x00, 16);
             for (i = 0; i < 16; i++)
             {
-                if (powerOnMsg[i] == 0xFF || powerOnMsg[i] == 0x00)
+                if (g_powerOnMsg[i] == 0xFF || g_powerOnMsg[i] == 0x00)
                 {
                     break;
                 }
-                disBuf[i] = powerOnMsg[i];
+                disBuf[i] = g_powerOnMsg[i];
             }
         }
         break;

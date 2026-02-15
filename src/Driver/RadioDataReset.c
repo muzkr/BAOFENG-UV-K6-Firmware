@@ -234,12 +234,12 @@ extern void ResetRadioFunData(void)
     U8  writeBuf[16] = {0x00};
     
     memcpy((U8  *)&g_radioInform.sqlLevel,RADIO_INFORM_DEFAULT, sizeof(STR_RADIOINFORM));
-    memset(powerOnMsg,0xFF,16);
+    memset(g_powerOnMsg,0xFF,16);
     
-    Flash_SaveRadioImfosData();
+    Flash_SaveRadioInfoData();
 
-    SpiFlash_EraseSector(DTMFINFOR_ADDR);
-    SpiFlash_WriteBytes( DTMFINFOR_ADDR, DTMF_INFORM_DEFAULT, sizeof(DTMF_INFORM_DEFAULT));
+    SpiFlash_EraseSector(DTMF_INFO_ADDR);
+    SpiFlash_WriteBytes( DTMF_INFO_ADDR, DTMF_INFORM_DEFAULT, sizeof(DTMF_INFORM_DEFAULT));
     
     addr = DTMF_CODE_ADDR;
     memcpy(writeBuf,DTMF_CODE_DEFAULT,sizeof(DTMF_CODE_DEFAULT));

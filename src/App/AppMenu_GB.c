@@ -235,9 +235,9 @@ extern void Menu_GetSubItemPara(U8 menuIndex)
         g_inputbuf.isFirstInput = 0xaa;
 
         // 名称未设置
-        if (!(powerOnMsg[0] == 0xFF || powerOnMsg[0] == 0x00))
+        if (!(g_powerOnMsg[0] == 0xFF || g_powerOnMsg[0] == 0x00))
         {
-            g_inputbuf.len = sprintf(g_inputbuf.buf, "%s", powerOnMsg);
+            g_inputbuf.len = sprintf(g_inputbuf.buf, "%s", g_powerOnMsg);
         }
         g_menuInfo.selectedItem = 0;
         break;
@@ -384,7 +384,7 @@ extern void Menu_ExitMode(void)
     }
 
     // 保存设置的数据
-    Flash_SaveRadioImfosData();
+    Flash_SaveRadioInfoData();
     if (g_ChannelVfoInfo.chVfoInfo[g_ChannelVfoInfo.switchAB].chVfoMode == CHAN_MODE)
     {
         // 保存信道数据/信道名称
@@ -1289,8 +1289,8 @@ extern void Menu_SaveSelectItem(U8 menuIndex)
         {
             g_inputbuf.len = 16;
         }
-        memcpy(powerOnMsg, g_inputbuf.buf, g_inputbuf.len);
-        powerOnMsg[g_inputbuf.len] = 0;
+        memcpy(g_powerOnMsg, g_inputbuf.buf, g_inputbuf.len);
+        g_powerOnMsg[g_inputbuf.len] = 0;
         LCD_UpdateWorkAre();
         break;
     case S_PWR:

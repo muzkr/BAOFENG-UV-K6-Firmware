@@ -22,6 +22,7 @@ enum
     CH_DISNAME_FREQ,
     VFO_DISFREQ
 };
+
 enum
 {
     DIS_RX = 0,

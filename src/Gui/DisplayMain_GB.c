@@ -6,9 +6,9 @@
 #include "includes.h"
 #include "version.h"
 
-const U8 *SignalLevelStr[] =
-    {
-        iconSingalEmpty, iconSingal1, iconSingal2, iconSingal3, iconSingalFull};
+const U8 *SignalLevelStr[] = {
+    iconSingalEmpty, iconSingal1, iconSingal2, iconSingal3, iconSingalFull //
+};
 
 extern void DisplayProgrom(void)
 {
@@ -441,8 +441,6 @@ extern void DisplayChannelName(U8 disAB)
 
 extern void DisplayRadioHome(void)
 {
-    U8 chDisMode;
-
     if (g_radioInform.dualRxFlag == 0)
     {
         if (g_ChannelVfoInfo.chVfoInfo[g_ChannelVfoInfo.switchAB].chVfoMode == VFO_MODE)
@@ -460,14 +458,8 @@ extern void DisplayRadioHome(void)
         }
         else
         {
-            if (g_ChannelVfoInfo.switchAB == 0)
-            {
-                chDisMode = g_radioInform.channleDisA;
-            }
-            else
-            {
-                chDisMode = g_radioInform.channleDisB;
-            }
+            U8 chDisMode = g_ChannelVfoInfo.switchAB == 0 ? g_radioInform.channleDisA //
+                                                          : g_radioInform.channleDisB;
             DisplayChannelMsg(chDisMode, g_ChannelVfoInfo.switchAB, DIS_RX);
             DisplayChannelNum(g_ChannelVfoInfo.channelNum[g_ChannelVfoInfo.switchAB], g_ChannelVfoInfo.switchAB);
         }

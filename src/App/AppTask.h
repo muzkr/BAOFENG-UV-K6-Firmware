@@ -1,7 +1,7 @@
 #ifndef __APPTASK_H
 #define __APPTASK_H
 
-enum WORKMODE_Type
+typedef enum
 {
     MODE_MAIN = 0,
     MODE_MENU,
@@ -15,7 +15,8 @@ enum WORKMODE_Type
     MODE_DTMF,
     MODE_PROGRAM,
     MODE_FLASH_PROGRAM
-};
+} app_mode_t;
+
 /***********************************************************************************************/
 
 extern void App_10msTask(void);

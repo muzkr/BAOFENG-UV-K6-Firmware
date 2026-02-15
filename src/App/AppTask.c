@@ -24,6 +24,7 @@ extern void App_50msTask(void)
 extern void App_100msTask(void)
 {
     g_100msFlag = FALSE;
+
     SearchFreqTask();
     TaskRemoteScanQT();
     CheckExitMenu();
@@ -36,6 +37,7 @@ extern void App_100msTask(void)
 extern void App_500msTask(void)
 {
     g_500msFlag = FALSE;
+
     BatteryCheckTask();
     CalculateSqlLevel();
     CheckSjTimeout();
@@ -43,18 +45,19 @@ extern void App_500msTask(void)
 
 extern void AppRunTask(void)
 {
-    U8 keyEvent;
-
-    switch (g_rfState)
+    do
     {
-    case RF_TX:
-        Radio_TxKeyTone(g_keyScan.keyEvent, g_keyScan.keyPara);
-        break;
-    case RF_RX:
-    default:
+        if (RF_TX == g_rfState)
+        {
+            Radio_TxKeyTone(g_keyScan.keyEvent, g_keyScan.keyPara);
+            break;
+        }
+
+        // RX or idle ---------
+
         if (g_keyScan.keyEvent != KEYID_NONE)
         {
-            keyEvent = Key_GetRealEvent();
+            U8 keyEvent = Key_GetRealEvent();
 
             if (alarmDat.alarmStates)
             {
@@ -105,17 +108,17 @@ extern void AppRunTask(void)
                 break;
             }
         }
+
         Audio_PlayTask();
         DtmfReceiveTask();
-        break;
-    }
+
+    } while (0);
 
     if (g_sysRunPara.sysRunMode == MODE_PROGRAM)
     {
         EnterProgromMode();
     }
-
-    if (g_sysRunPara.sysRunMode == MODE_FLASH_PROGRAM)
+    else if (g_sysRunPara.sysRunMode == MODE_FLASH_PROGRAM)
     {
         EnterFlashProgromMode();
     }

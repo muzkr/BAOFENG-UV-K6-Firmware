@@ -243,7 +243,7 @@ extern void KeyProcess_DtmfInput(U8 keyEvent)
 
 extern void DtmfInfoInit(void)
 {
-    SpiFlash_ReadBytes(DTMFINFOR_ADDR, (U8 *)&g_dtmfStore.machineId[0], sizeof(STF_DTMFSTORE));
+    SpiFlash_ReadBytes(DTMF_INFO_ADDR, (U8 *)&g_dtmfStore.machineId[0], sizeof(STF_DTMFSTORE));
     if (g_dtmfStore.separator > 5)
     {
         g_dtmfStore.separator = 4;
@@ -264,10 +264,10 @@ extern void DtmfInfoInit(void)
         g_dtmfStore.offTime = 1;
     }
 
-    SpiFlash_ReadBytes(DTMFINFOR_ADDR + 0x20, (U8 *)&dtmfInfo.contact[0].id[0], sizeof(STR_CONTACT) * 20);
+    SpiFlash_ReadBytes(DTMF_INFO_ADDR + 0x20, (U8 *)&dtmfInfo.contact[0].id[0], sizeof(STR_CONTACT) * 20);
 
-    SpiFlash_ReadBytes(DTMFINFOR_ADDR + 0x0180, (U8 *)&dtmfInfo.onlineCode, 16);
-    SpiFlash_ReadBytes(DTMFINFOR_ADDR + 0X0180 + 16, (U8 *)&dtmfInfo.offlineCode, 16);
+    SpiFlash_ReadBytes(DTMF_INFO_ADDR + 0x0180, (U8 *)&dtmfInfo.onlineCode, 16);
+    SpiFlash_ReadBytes(DTMF_INFO_ADDR + 0X0180 + 16, (U8 *)&dtmfInfo.offlineCode, 16);
 }
 
 extern void DtmfSendKeypadCode(U8 code)

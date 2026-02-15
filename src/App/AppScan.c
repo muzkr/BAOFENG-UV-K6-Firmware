@@ -17,33 +17,33 @@ extern U8 CheckInputScanRange(U16 freqL, U16 freqH)
         }
     }
 
-    if ((freqL >= bandRang.bandFreq.vhf2L) && (freqL < bandRang.bandFreq.vhf2H))
+    if ((freqL >= g_bandRang.bandFreq.vhf2L) && (freqL < g_bandRang.bandFreq.vhf2H))
     {
-        if (freqH <= bandRang.bandFreq.vhf2H)
+        if (freqH <= g_bandRang.bandFreq.vhf2H)
         {
             return OK;
         }
     }
 
-    if ((freqL >= bandRang.bandFreq.B350ML) && (freqL < bandRang.bandFreq.B350MH))
+    if ((freqL >= g_bandRang.bandFreq.B350ML) && (freqL < g_bandRang.bandFreq.B350MH))
     {
-        if (freqH <= bandRang.bandFreq.B350MH)
+        if (freqH <= g_bandRang.bandFreq.B350MH)
         {
             return OK;
         }
     }
 
-    if ((freqL >= bandRang.bandFreq.vhfL) && (freqL < bandRang.bandFreq.vhfH))
+    if ((freqL >= g_bandRang.bandFreq.vhfL) && (freqL < g_bandRang.bandFreq.vhfH))
     {
-        if (freqH <= bandRang.bandFreq.vhfH)
+        if (freqH <= g_bandRang.bandFreq.vhfH)
         {
             return OK;
         }
     }
 
-    if ((freqL >= bandRang.bandFreq.uhfL) && (freqL < bandRang.bandFreq.uhfH))
+    if ((freqL >= g_bandRang.bandFreq.uhfL) && (freqL < g_bandRang.bandFreq.uhfH))
     {
-        if (freqH <= bandRang.bandFreq.uhfH)
+        if (freqH <= g_bandRang.bandFreq.uhfH)
         {
             return OK;
         }

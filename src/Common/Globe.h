@@ -23,9 +23,9 @@ extern volatile U8 g_100msFlag;
 extern volatile U8 g_500msFlag;
 
 extern Boolean g_UpdateDisplay;
-extern U8 g_rfState;
-extern U8 g_rfRxState;
-extern U8 g_rfTxState;
+extern rf_state_t g_rfState;
+extern rf_rx_state_t g_rfRxState;
+extern rf_tx_state_t g_rfTxState;
 
 extern U8 inputTypeBack;
 #endif

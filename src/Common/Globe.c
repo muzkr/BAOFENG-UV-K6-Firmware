@@ -1,6 +1,7 @@
 #include "includes.h"
 
 // 定义对讲机参数全局变量
+
 STR_RADIOINFORM g_radioInform;
 STR_FMINFOS g_FMInform;
 STR_SYSTEM g_sysRunPara;
@@ -16,8 +17,8 @@ volatile U8 g_100msFlag;
 volatile U8 g_500msFlag;
 
 Boolean g_UpdateDisplay;
-U8 g_rfState;
-U8 g_rfRxState;
-U8 g_rfTxState;
+rf_state_t g_rfState;
+rf_rx_state_t g_rfRxState;
+rf_tx_state_t g_rfTxState;
 
 U8 inputTypeBack;

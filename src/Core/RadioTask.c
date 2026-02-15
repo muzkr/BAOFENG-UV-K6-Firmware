@@ -36,7 +36,7 @@ Boolean CheckCanTxOverRange(U32 freq)
 {
     U32 tempFreq;
 
-    if (g_rfMoudel.txEn520M && (freq >= 48000000 && freq <= 52000000))
+    if (g_rfModel.txEn520M && (freq >= 48000000 && freq <= 52000000))
     {
         return TRUE;
     }
@@ -45,7 +45,7 @@ Boolean CheckCanTxOverRange(U32 freq)
     {
         tempFreq = freq / 10000;
 
-        if (g_rfMoudel.txEn220M && (tempFreq >= TxCheckFreq[g_sysRunPara.moduleType][4] && tempFreq < TxCheckFreq[g_sysRunPara.moduleType][5]))
+        if (g_rfModel.txEn220M && (tempFreq >= TxCheckFreq[g_sysRunPara.moduleType][4] && tempFreq < TxCheckFreq[g_sysRunPara.moduleType][5]))
         {
             return TRUE;
         }
@@ -69,7 +69,7 @@ Boolean CheckFreqInTxFreqRange(U32 freq)
 
     if (g_sysRunPara.moduleType <= 1)
     {
-        if ((g_rfMoudel.txEn220M == 0) && (tempFreq >= TxCheckFreq[g_sysRunPara.moduleType][4] && tempFreq < TxCheckFreq[g_sysRunPara.moduleType][5]))
+        if ((g_rfModel.txEn220M == 0) && (tempFreq >= TxCheckFreq[g_sysRunPara.moduleType][4] && tempFreq < TxCheckFreq[g_sysRunPara.moduleType][5]))
         { // 强制关闭220M发射
             return FALSE;
         }
@@ -81,20 +81,20 @@ Boolean CheckFreqInTxFreqRange(U32 freq)
         return TRUE;
     }
 
-    if ((tempFreq >= bandRang.bandFreq.uhfL) && (tempFreq < bandRang.bandFreq.uhfH))
+    if ((tempFreq >= g_bandRang.bandFreq.uhfL) && (tempFreq < g_bandRang.bandFreq.uhfH))
     {
         return TRUE;
     }
 
-    if ((tempFreq >= bandRang.bandFreq.B350ML) && (tempFreq < bandRang.bandFreq.B350MH))
+    if ((tempFreq >= g_bandRang.bandFreq.B350ML) && (tempFreq < g_bandRang.bandFreq.B350MH))
     {
         return TRUE;
     }
-    if ((tempFreq >= bandRang.bandFreq.vhf2L) && (tempFreq < bandRang.bandFreq.vhf2H))
+    if ((tempFreq >= g_bandRang.bandFreq.vhf2L) && (tempFreq < g_bandRang.bandFreq.vhf2H))
     {
         return TRUE;
     }
-    if ((tempFreq >= bandRang.bandFreq.vhfL) && (tempFreq < bandRang.bandFreq.vhfH))
+    if ((tempFreq >= g_bandRang.bandFreq.vhfL) && (tempFreq < g_bandRang.bandFreq.vhfH))
     {
         return TRUE;
     }

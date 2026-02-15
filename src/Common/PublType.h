@@ -86,21 +86,25 @@ typedef struct
     U8 isFirstInput; // 是否是第一次输入
     String buf[20];  // 输入的字串资料
 } STR_INPUTBOX;
+
 //--------------------------以下为系统运行需要的结构体--------------------------------------------------------
-enum
+
+typedef enum
 {
     RF_NONE = 0,
     RF_RX,
     RF_TX
-};
-enum
+} rf_state_t;
+
+typedef enum
 {
     RX_READY = 0,
     GET_CALL,
     WAIT_RXEND,
     RX_MONI
-}; // RXSTATE
-enum
+} rf_rx_state_t;
+
+typedef enum
 {
     TX_READY = 0,
     WAIT_PTT_RELEASE,
@@ -108,12 +112,14 @@ enum
     TX_STOP,
     ALARM_TXID,
     TX_KILLED
-}; // TXSTATE
+} rf_tx_state_t;
+
 enum
 {
-    VFO_MODE = 0,
-    CHAN_MODE
+    VFO_MODE = 0, // Freq mode
+    CHAN_MODE,    // MR mode
 };
+
 enum
 {
     CHAN_DISABLE = 0,
@@ -130,6 +136,7 @@ typedef struct
     U8 txChEnable;        // 信道模式下发射允许
     U8 txEnable[4];       // 发射允许
 } __attribute__((packed)) STR_TXFLAG;
+
 // 定义接收使用结构体
 typedef struct
 {
@@ -149,7 +156,7 @@ typedef struct
 
 typedef struct
 {
-    U8 sysRunMode;
+    U8 sysRunMode; // app_mode_t
     STR_TXFLAG rfTxFlag;
     STR_RXFLAG rfRxFlag;
     U8 moniFlag;
@@ -202,6 +209,7 @@ typedef union
 } STR_BAND;
 
 //-------------------------------------------------------------------------------------------------------------
+
 typedef union
 {
     __BYTE Byte;
@@ -231,7 +239,9 @@ typedef union
         __BYTE b7 : 1;
     } Bit;
 } VfoParaFlag1;
+
 /***************************对讲机信道信息定义********************************************************/
+
 typedef struct
 {
     U32 rxFreq;
@@ -243,16 +253,19 @@ typedef struct
     U8 txPower;
     ChParaFlag1 chFlag3; /*channel flag 3*/
                          // BIT6: 宽窄带       0: 宽带（25K）1: 窄带（12.5K）2:20K 带宽 默认: 宽带
-    // BIT5 BIT4: 接收静音模式 0:QT  1:DTMF  2:QT+DTMF  3:QT*DTMF
-    // BIT3: 繁忙信道锁定 00: OFF 01: ON  默认: 无
-    // BIT2: 扫描添加     00: OFF 01: ON  默认: 无
-    // BIT1: 保留
-    // BIT0: 破码标志 0:无  1:有 (带破码功能的机器)
+                         // BIT5 BIT4: 接收静音模式 0:QT  1:DTMF  2:QT+DTMF  3:QT*DTMF
+                         // BIT3: 繁忙信道锁定 00: OFF 01: ON  默认: 无
+                         // BIT2: 扫描添加     00: OFF 01: ON  默认: 无
+                         // BIT1: 保留
+                         // BIT0: 破码标志 0:无  1:有 (带破码功能的机器)
+
     // U8  channelName[16];  //信道名称
+
     U32 decoderCode;
 } STR_CHANNEL;
 
 /***************************对讲机频率模式定义********************************************************/
+
 typedef struct
 {
     U8 freq[8];
@@ -263,21 +276,23 @@ typedef struct
     U8 dtmfgroup;
     U8 ANI;
     U8 txPower;
-    VfoParaFlag1 vfoFlag; /*channel flag 3*/
+    VfoParaFlag1 vfoFlag; // channel flag 3
                           // BIT6: 宽窄带       0: 宽带（25K）1: 窄带（12.5K） 2:20K 带宽 默认: 宽带
-    // BIT4 BIT5:
-    // 其他:保留
-    // BIT0:
+                          // BIT4 BIT5:
+                          // 其他:保留
+                          // BIT0:
+
     U8 remain1;
     U8 STEP; // 步进频率 :序号 0-7
     U8 Offset[7];
     U8 spMute;
     U32 decoderCode;
-} STR_VFOMODE;
+} STR_VFO;
 
 /*----------------------------------------------------------------------------------------------------------
       定义信道运行使用结构体
 -----------------------------------------------------------------------------------------------------------*/
+
 typedef struct
 {
     U32 frequency;
@@ -310,7 +325,7 @@ typedef struct
 typedef struct
 {
     STR_CH_VFO_INFO chVfoInfo[2]; // 计算后工作存储，AB段信息
-    STR_VFOMODE vfoInfo[2];
+    STR_VFO vfoInfo[2];
     STR_CHANNEL channelInfo[2];
     U8 scanList[999 / 8 + 1];       // 扫描列表
     U8 chanActiveList[999 / 8 + 1]; // 有效信道列表
@@ -322,9 +337,11 @@ typedef struct
     U16 channelNum[2];
     U16 currentChannelNum;
 } STR_CHANNEL_VFO;
+
 /*----------------------------------------------------------------------------------------------------------
       定义使用的位域信息
 -----------------------------------------------------------------------------------------------------------*/
+
 typedef union
 {
     __BYTE Byte;
@@ -375,9 +392,11 @@ typedef union
         __BYTE chVofB : 4;
     } Bit;
 } UNION_VM;
+
 /*----------------------------------------------------------------------------------------------------------
       对讲机可选功能信息(Radio Information)
 -----------------------------------------------------------------------------------------------------------*/
+
 typedef struct
 {
     U8 sqlLevel;    // SQL静噪电平          0 ~ 9
@@ -446,6 +465,7 @@ typedef struct
 /*----------------------------------------------------------------------------------------------------------
       定义报警模式使用结构体
 -----------------------------------------------------------------------------------------------------------*/
+
 typedef struct
 {
     U8 alarmStates;   // 报警状态
@@ -457,6 +477,7 @@ typedef struct
 } STR_ALARM;
 
 /***************************收音机存储结构体********************************************************/
+
 typedef struct
 {
     U16 FmCurFreq; // 频率模式收音机频率
@@ -468,15 +489,17 @@ typedef struct
 /*----------------------------------------------------------------------------------------------------------
       定义发射频段选中和扩展发射使用结构体
 -----------------------------------------------------------------------------------------------------------*/
+
 typedef struct
 {
-    U8 moduleType; //
-    U8 txEn220M;   // 220M发射允许  220-260M
-    U8 txEn350M;   // 350M发射允许  350-390M
-    U8 txEn520M;   // 520M发射允许  480-520M
-    U8 amRxEn;     // 航空频段接收允许 暂时不使用
-} STR_RF_MODELE;
+    U8 modelType; //
+    U8 txEn220M;  // 220M发射允许  220-260M
+    U8 txEn350M;  // 350M发射允许  350-390M
+    U8 txEn520M;  // 520M发射允许  480-520M
+    U8 amRxEn;    // 航空频段接收允许 暂时不使用
+} STR_RF_MODEL;
 
 #define changeIntToHex(dec) ((((dec) / 10) << 4) + ((dec) % 10))
 #define changeHexToInt(hex) ((((hex) >> 4) * 10) + ((hex) & 0x0f))
+
 #endif

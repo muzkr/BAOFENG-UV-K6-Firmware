@@ -1,10 +1,12 @@
 #include "includes.h"
 
-const U8 addrMap[8] = {0xFE, 0xFC, 0xF8, 0xF0, 0xE0, 0xC0, 0x80, 0x00};
+#define OFF_BYTE(n) ((uint8_t)(0xff << (n)))
 
-U8 powerOnMsg[17] = {0};
-STR_RF_MODELE g_rfMoudel;
-STR_BAND bandRang;
+U8 g_VfoBuf[66] = {0x00};
+U8 g_powerOnMsg[17] = {0};
+STR_RF_MODEL g_rfModel;
+STR_BAND g_bandRang;
+
 /*********************************************************************
  * 函 数 名: Flash_ModifyChannelData
  * 功能描述: 保存信道信息，包括信息数据和信道名称
@@ -13,19 +15,16 @@ STR_BAND bandRang;
  * 返　　回:
  * 说    明：
  ***********************************************************************/
-extern void Flash_ModifyChannelData(U16 channelNum, U8 *chData, U8 *chName)
+void Flash_ModifyChannelData(U16 channelNum, const U8 *chData, const U8 *chName)
 {
-    U8 buf[4 * 1024]; // 4K
-    U32 indexSector;  // 索引
-    U32 indexChannelNum;
-    U32 addr = CHAN_ADDR;
-
     // 计算存储信道逻辑地址
-    indexSector = channelNum / 128; // 4k / 32byte = 128
-    addr = addr + (indexSector * 0x1000);
-
+    U32 indexSector = channelNum / 128; // 4k / 32byte = 128
     // 换算信道位置
-    indexChannelNum = channelNum % 128;
+    U32 indexChannelNum = channelNum % 128;
+
+    const U32 addr = CHAN_ADDR + (indexSector * 0x1000);
+
+    U8 buf[4 * 1024]; // 4K
 
     // 读出数据/擦除FLASH
     SpiFlash_ReadBytes(addr, buf, 4 * 1024);
@@ -46,14 +45,16 @@ extern void Flash_ModifyChannelData(U16 channelNum, U8 *chData, U8 *chName)
  * 返　　回:
  * 说    明：数据有改变时才会进行数据存储操作
  ***********************************************************************/
-extern void Flash_SaveChannelData(U16 channelNum, U8 *chData, U8 *chName)
+void Flash_SaveChannelData(U16 channelNum, const U8 *chData, const U8 *chName)
 {
     U32 addr = CHAN_ADDR + channelNum * CHAN_SIZE;
     U8 channelBuf[CHAN_SIZE];
     SpiFlash_ReadBytes(addr, channelBuf, CHAN_SIZE);
 
     // 判断数据是否有改变
-    if (memcmp(channelBuf, chData, sizeof(STR_CHANNEL)) != 0 || memcmp(chName, &chData[NAME_ADDR_SHIFT], NAME_SIZE) != 0)
+    if (memcmp(channelBuf, chData, sizeof(STR_CHANNEL)) != 0        //
+        || memcmp(chName, &chData[NAME_ADDR_SHIFT], NAME_SIZE) != 0 //
+    )
     {
         Flash_ModifyChannelData(channelNum, chData, chName);
     }
@@ -66,12 +67,10 @@ extern void Flash_SaveChannelData(U16 channelNum, U8 *chData, U8 *chName)
  * 返　　回:
  * 说    明：只删除前8个字节频率数据，将数据清0
  ***********************************************************************/
-extern void Flash_DeleteChannelData(U16 channelNum)
+void Flash_DeleteChannelData(U16 channelNum)
 {
-    U32 addr;
+    U32 addr = CHAN_ADDR + channelNum * CHAN_SIZE;
     U8 resetBuf[8];
-
-    addr = channelNum * CHAN_SIZE + CHAN_ADDR;
     memset(resetBuf, 0x00, 8);
     SpiFlash_WriteBytes(addr, resetBuf, 8);
 }
@@ -79,12 +78,12 @@ extern void Flash_DeleteChannelData(U16 channelNum)
 /*********************************************************************
  * 函 数 名: Flash_GetLogicAddrShift
  * 功能描述: 获取地址偏移位置
- * 输入参数：addr:存储块地址   useByte:需要使用到的byte bit/8
+ * 输入参数：addr:存储块地址   useByte:需要使用到的byte (bit/8)
  * 输出参数:
  * 返　　回:
  * 说    明：
  ***********************************************************************/
-U16 Flash_GetLogicAddrShift(U32 addr, U8 useByte)
+static U16 Flash_GetLogicAddrShift(U32 addr, U8 useByte)
 {
     U8 addrMap[32];
 
@@ -92,16 +91,16 @@ U16 Flash_GetLogicAddrShift(U32 addr, U8 useByte)
 
     for (uint32_t i = 0; i < useByte; i++)
     {
-        uint32_t addrMask = 0x01;
+        if (0 == addrMap[i])
+        {
+            continue;
+        }
+
         for (uint32_t j = 0; j < 8; j++)
         {
-            if (addrMap[i] & addrMask)
+            if (addrMap[i] & (1 << j))
             {
                 return i * 8 + j;
-            }
-            else
-            {
-                addrMask <<= 1;
             }
         }
     }
@@ -110,66 +109,67 @@ U16 Flash_GetLogicAddrShift(U32 addr, U8 useByte)
 }
 
 // 保存对讲机 对讲机功能信息/收音机信道信息
-extern void Flash_SaveRadioImfosData(void)
+void Flash_SaveRadioInfoData(void)
 {
-    U8 addrOffset;
-    U8 dataMap;
-    U32 logicAddr;
-    U16 checkSum, CheckSumRd;
-    U8 buf[96] = {0x00}; // 对讲机功能信息1+对讲机功能信息2+收音机功能信息 = 94Byte + 2Byte(CheckSum)
-                         //  (84 - 16Byte) / 96 = 42  衰减次数: 42
-    U8 cmpBuf[80];
+    // 对讲机功能信息1+对讲机功能信息2+收音机功能信息 = 94Byte + 2Byte(CheckSum)
+    //  (84 - 16Byte) / 96 = 42  衰减次数: 42
 
-    // 读取存储位置信息
-    addrOffset = Flash_GetLogicAddrShift(RADIO_IMFOS_ADDR, 6);
-
+    U8 buf[96];
+    memset(buf, 0, sizeof(buf));
     memcpy(buf, (U8 *)&g_radioInform.sqlLevel, sizeof(STR_RADIOINFORM));
     // 用于存储开机显示信息
-    memcpy(buf + 64, powerOnMsg, 16);
+    memcpy(buf + 64, g_powerOnMsg, 16);
 
     // 计算CRC校验
-    checkSum = CRC_ValidationCalc(buf, 94);
-    memcpy(buf + 94, (U8 *)&checkSum, 2);
+    U16 checkSum = CRC_ValidationCalc(buf, 94);
+    memcpy(buf + 94, &checkSum, 2);
 
+    // 读取存储位置信息
+    U16 addrOffset = Flash_GetLogicAddrShift(RADIO_INFO_ADDR, 6);
     if (addrOffset < 41)
     {
-        logicAddr = addrOffset * 96 + RADIO_IMFOS_ADDR + 16;
+        U32 logicAddr = RADIO_INFO_ADDR + 16 + addrOffset * 96;
+
         // 读取当前校验和比较
+        U16 CheckSumRd;
         SpiFlash_ReadBytes(logicAddr + 94, (U8 *)&CheckSumRd, 2);
+
         if (CheckSumRd == checkSum)
         {
+            U8 cmpBuf[80];
             SpiFlash_ReadBytes(logicAddr, cmpBuf, 80);
             if (memcmp(cmpBuf, buf, 80) == 0)
             { // 数据相同直接返回
                 return;
             }
         }
+
         // 数据有改变才保存
         logicAddr += 96;
         SpiFlash_WriteBytes(logicAddr, buf, 96);
 
         // 标记地址工作块
-        dataMap = addrMap[(addrOffset % 8)];
-        SpiFlash_WriteBytes((RADIO_IMFOS_ADDR + (addrOffset / 8)), &dataMap, 1);
+        U8 dataMap = OFF_BYTE((addrOffset + 1) % 8);
+        SpiFlash_WriteBytes((RADIO_INFO_ADDR + (addrOffset / 8)), &dataMap, 1);
     }
     else
     { // 擦除
-        SpiFlash_EraseSector(RADIO_IMFOS_ADDR);
-        SpiFlash_WriteBytes((RADIO_IMFOS_ADDR + 16), buf, 96);
+        SpiFlash_EraseSector(RADIO_INFO_ADDR);
+        SpiFlash_WriteBytes((RADIO_INFO_ADDR + 16), buf, 96);
     }
 }
 
 // 读取对讲机 频率模式数据/对讲机功能信息/收音机信息
-extern void Flash_ReadRadioImfosData(void)
+void Flash_ReadRadioInfoData(void)
 {
     // 对讲机功能信息1+对讲机功能信息2+收音机功能信息 = 94Byte + 2Byte(CheckSum)
     //  (4K - 16Byte) / 96 = 42  衰减次数: 42
 
     // 读取存储位置信息
-    const uint16_t addrOffset = Flash_GetLogicAddrShift(RADIO_IMFOS_ADDR, 6);
+    const uint16_t addrOffset = Flash_GetLogicAddrShift(RADIO_INFO_ADDR, 6);
     if (addrOffset < 42)
     {
-        uint32_t logicAddr = RADIO_IMFOS_ADDR + 16 + addrOffset * 96;
+        uint32_t logicAddr = RADIO_INFO_ADDR + 16 + addrOffset * 96;
         U8 buf[96];
         SpiFlash_ReadBytes(logicAddr, buf, 96);
 
@@ -178,100 +178,76 @@ extern void Flash_ReadRadioImfosData(void)
         if (checkSum == CRC_ValidationCalc(buf, 94))
         { // 校验通过
             memcpy(&g_radioInform, buf, sizeof(STR_RADIOINFORM));
-            memcpy(powerOnMsg, buf + 64, 16);
+            memcpy(g_powerOnMsg, buf + 64, 16);
             return;
         }
     }
 
     // 数据错误，校验未通过/从备份区提取数据
-    SpiFlash_EraseSector(RADIO_IMFOS_ADDR);
+    SpiFlash_EraseSector(RADIO_INFO_ADDR);
     ResetRadioFunData();
 }
 
 // 保存对讲机频率模式数据,使用一块flash 4K,前16byte用于指示工作块
 // A段频率模式+B段频率模式 = 64 + 2Byte(CheckSum)
-//(4K - 16Byte) / 66 = 61  衰减次数: 61
-//  前16字节用于衰减算法  实际使用41bit
-U8 VfoBuf[66] = {0x00};
-extern void Flash_SaveVfoData(U8 workAB)
+// (4K - 16Byte) / 66 = 61  衰减次数: 61
+//  前16字节用于衰减算法
+void Flash_SaveVfoData(U8 workAB)
 {
-    U8 addrOffset;
-    U8 dataMap;
-    U32 logicAddr;
-    U16 checkSum;
-
-    if (workAB == 1)
+    if (workAB == 0 || workAB == 1)
     {
-        if (memcmp(VfoBuf + 32, g_ChannelVfoInfo.vfoInfo[1].freq, 32) == 0)
+        if (memcmp(g_VfoBuf + 32 * workAB, &g_ChannelVfoInfo.vfoInfo[workAB], 32) == 0)
         { // 数据未改变不保存
             return;
         }
-        memcpy(VfoBuf + 32, g_ChannelVfoInfo.vfoInfo[1].freq, 32);
-    }
-    else if (workAB == 0)
-    {
-        if (memcmp(VfoBuf, g_ChannelVfoInfo.vfoInfo[0].freq, 32) == 0)
-        { // 数据未改变不保存
-            return;
-        }
-        memcpy(VfoBuf, g_ChannelVfoInfo.vfoInfo[0].freq, 32);
+        memcpy(g_VfoBuf + 32 * workAB, &g_ChannelVfoInfo.vfoInfo[workAB], 32);
     }
     else if (workAB == 0XFF)
     { // 写频用
     }
     else
     { // 复位专用
-        memcpy(VfoBuf, g_ChannelVfoInfo.vfoInfo[0].freq, 32);
-        memcpy(VfoBuf + 32, g_ChannelVfoInfo.vfoInfo[1].freq, 32);
+        memcpy(g_VfoBuf, &g_ChannelVfoInfo.vfoInfo[0], 32);
+        memcpy(g_VfoBuf + 32, &g_ChannelVfoInfo.vfoInfo[1], 32);
     }
-    checkSum = CRC_ValidationCalc(VfoBuf, 64);
 
-    memcpy(VfoBuf + 64, (U8 *)&checkSum, 2);
+    U16 checkSum = CRC_ValidationCalc(g_VfoBuf, 64);
+    memcpy(g_VfoBuf + 64, &checkSum, 2);
 
-    addrOffset = Flash_GetLogicAddrShift(VFO_INFO_ADDR, 8);
-
+    const U16 addrOffset = Flash_GetLogicAddrShift(VFO_INFO_ADDR, 8);
     if (addrOffset < 60)
     { // 最后块地址时就需要擦除
-        logicAddr = (addrOffset + 1) * 66 + VFO_INFO_ADDR + 16;
-        SpiFlash_WriteBytes(logicAddr, VfoBuf, 66);
+        U32 logicAddr = VFO_INFO_ADDR + 16 + (addrOffset + 1) * 66;
+        SpiFlash_WriteBytes(logicAddr, g_VfoBuf, 66);
         // 标记地址工作块
-        dataMap = addrMap[(addrOffset % 8)];
+        U8 dataMap = OFF_BYTE((addrOffset + 1) % 8);
         SpiFlash_WriteBytes((VFO_INFO_ADDR + (addrOffset / 8)), &dataMap, 1);
     }
     else
     { // 整块擦除后写入
         SpiFlash_EraseSector(VFO_INFO_ADDR);
-        SpiFlash_WriteBytes((VFO_INFO_ADDR + 16), VfoBuf, 66);
+        SpiFlash_WriteBytes(VFO_INFO_ADDR + 16, g_VfoBuf, 66);
     }
 }
 
 // 读取对讲机频率模式数据
-extern void Flash_ReadVfoData(U8 workAB)
+void Flash_ReadVfoData(U8 workAB)
 {
-    U8 addrOffset;
-    U32 logicAddr;
-    U16 checkSum;
-
-    addrOffset = Flash_GetLogicAddrShift(VFO_INFO_ADDR, 8);
+    U16 addrOffset = Flash_GetLogicAddrShift(VFO_INFO_ADDR, 8);
     if (addrOffset < 61)
     {
-        logicAddr = (addrOffset * 66) + VFO_INFO_ADDR + 16;
-        SpiFlash_ReadBytes(logicAddr, VfoBuf, 66);
+        U32 logicAddr = VFO_INFO_ADDR + 16 + (addrOffset * 66);
+        SpiFlash_ReadBytes(logicAddr, g_VfoBuf, 66);
 
-        memcpy((U8 *)&checkSum, &VfoBuf[64], 2);
-        if (checkSum == CRC_ValidationCalc(VfoBuf, 64))
+        U16 checkSum;
+        memcpy(&checkSum, &g_VfoBuf[64], 2);
+        if (checkSum == CRC_ValidationCalc(g_VfoBuf, 64))
         { // 数据校验正确
-            if (workAB == 1)
-            {
-                memcpy(&g_ChannelVfoInfo.vfoInfo[1], VfoBuf + 32, 32);
-            }
-            else
-            {
-                memcpy(&g_ChannelVfoInfo.vfoInfo[0], VfoBuf, 32);
-            }
+            memcpy(&g_ChannelVfoInfo.vfoInfo[workAB], g_VfoBuf + 32 * workAB, 32);
             return;
         }
     }
+
     // 数据错误，从初始化数据恢复
     SpiFlash_EraseSector(VFO_INFO_ADDR);
     ResetVfoModeData();
@@ -281,35 +257,31 @@ extern void Flash_ReadVfoData(U8 workAB)
 // 预留14Byte + 2Byte(CheckSum)
 // (4K - 32Byte) / 16 = 254  衰减次数: 254
 //  前32字节用于衰减算法
-extern void Flash_SaveSystemRunData(void)
+void Flash_SaveSystemRunData(void)
 {
-    U16 addrOffset;
-    U8 dataMap;
-    U32 logicAddr;
-    U16 checkSum;
     U8 buf[16] = {0x00};
 
-    addrOffset = Flash_GetLogicAddrShift(SYSTEMRAN_ADDR, 32);
+    const U16 addrOffset = Flash_GetLogicAddrShift(SYSTEM_RUN_ADDR, 32);
 
     // 提取数据
     memcpy(buf, g_ChannelVfoInfo.channelNum, 4);
 
     // 计算CRC校验
-    checkSum = CRC_ValidationCalc(buf, 14);
-    memcpy(buf + 14, (U8 *)&checkSum, 2);
+    U16 checkSum = CRC_ValidationCalc(buf, 14);
+    memcpy(buf + 14, &checkSum, 2);
 
     if (addrOffset < 253)
     {
-        logicAddr = (addrOffset + 1) * 16 + SYSTEMRAN_ADDR + 32;
+        U32 logicAddr = SYSTEM_RUN_ADDR + 32 + (addrOffset + 1) * 16;
         SpiFlash_WriteBytes(logicAddr, buf, 16);
         // 标记地址工作块
-        dataMap = addrMap[(addrOffset % 8)];
-        SpiFlash_WriteBytes((SYSTEMRAN_ADDR + (addrOffset / 8)), &dataMap, 1);
+        U8 dataMap = OFF_BYTE((addrOffset + 1) % 8);
+        SpiFlash_WriteBytes(SYSTEM_RUN_ADDR + addrOffset / 8, &dataMap, 1);
     }
     else
     { // 整块擦除后写入
-        SpiFlash_EraseSector(SYSTEMRAN_ADDR);
-        SpiFlash_WriteBytes((SYSTEMRAN_ADDR + 32), buf, 16);
+        SpiFlash_EraseSector(SYSTEM_RUN_ADDR);
+        SpiFlash_WriteBytes(SYSTEM_RUN_ADDR + 32, buf, 16);
     }
 }
 
@@ -317,12 +289,12 @@ extern void Flash_SaveSystemRunData(void)
 // 预留14Byte + 2Byte(CheckSum)
 // (4K - 32Byte) / 16 = 254  衰减次数: 254
 // 前32字节用于衰减算法
-extern void Flash_ReadSystemRunData(void)
+void Flash_ReadSystemRunData(void)
 {
-    uint16_t addrOffset = Flash_GetLogicAddrShift(SYSTEMRAN_ADDR, 32);
+    uint16_t addrOffset = Flash_GetLogicAddrShift(SYSTEM_RUN_ADDR, 32);
     if (addrOffset < 254)
     {
-        uint32_t logicAddr = SYSTEMRAN_ADDR + 32 + (addrOffset * 16);
+        uint32_t logicAddr = SYSTEM_RUN_ADDR + 32 + (addrOffset * 16);
         U8 buf[16];
         SpiFlash_ReadBytes(logicAddr, buf, 16);
 
@@ -345,27 +317,25 @@ extern void Flash_SaveDtmfInfo(void)
 {
     U8 buf[288] = {0xFF};
 
-    SpiFlash_ReadBytes(DTMFINFOR_ADDR, buf, 288); // 32+16*16
+    SpiFlash_ReadBytes(DTMF_INFO_ADDR, buf, 288); // 32+16*16
 
     memcpy(buf, (U8 *)&g_dtmfStore, sizeof(g_dtmfStore));
-    SpiFlash_EraseSector(DTMFINFOR_ADDR);
+    SpiFlash_EraseSector(DTMF_INFO_ADDR);
 
-    SpiFlash_WriteBytes(DTMFINFOR_ADDR, buf, 288);
+    SpiFlash_WriteBytes(DTMF_INFO_ADDR, buf, 288);
 }
 
 // 定义固定频点信息
-const U8 fixBand1[][16] =
-    {
-        {0x01, 0x01, 0x36, 0x01, 0x74, 0x01, 0x04, 0x00, 0x06, 0x00, 0x01, 0x02, 0x00, 0x02, 0x60, 0x00},
+static const U8 fixBand1[][16] = {
+    {0x01, 0x01, 0x36, 0x01, 0x74, 0x01, 0x04, 0x00, 0x06, 0x00, 0x01, 0x02, 0x00, 0x02, 0x60, 0x00},
 };
 
-const U8 fixBand2[][8] =
-    {
-        {0x00, 0x03, 0x50, 0x03, 0x90, 0x00, 0x00, 0x00},
+static const U8 fixBand2[][8] = {
+    {0x00, 0x03, 0x50, 0x03, 0x90, 0x00, 0x00, 0x00},
 };
 
 // 读取对讲机 调试参数
-extern void Flash_ReadDebugImfosData(void)
+void Flash_ReadDebugInfoData(void)
 {
     U8 bandData[16];
     U8 bandData1[16];
@@ -396,8 +366,8 @@ extern void Flash_ReadDebugImfosData(void)
     }
 
     // 读取机型码
-    Flash_ReadRfMoudelType();
-    g_sysRunPara.moduleType = g_rfMoudel.moduleType;
+    Flash_ReadRfModelType();
+    g_sysRunPara.moduleType = g_rfModel.modelType;
 
     if (g_sysRunPara.moduleType >= 0x30 && g_sysRunPara.moduleType <= 0x35)
     {
@@ -420,42 +390,41 @@ extern void Flash_ReadDebugImfosData(void)
         bandData[i] = changeHexToInt(bandData[i]);
     }
     // U段频率范围
-    bandRang.bandFreq.vhfL = bandData[1] * 1000 + bandData[2] * 10;
-    bandRang.bandFreq.vhfH = bandData[3] * 1000 + bandData[4] * 10;
-    bandRang.bandFreq.freqVL = bandRang.bandFreq.vhfL * 10000;
-    bandRang.bandFreq.freqVH = bandRang.bandFreq.vhfH * 10000;
+    g_bandRang.bandFreq.vhfL = bandData[1] * 1000 + bandData[2] * 10;
+    g_bandRang.bandFreq.vhfH = bandData[3] * 1000 + bandData[4] * 10;
+    g_bandRang.bandFreq.freqVL = g_bandRang.bandFreq.vhfL * 10000;
+    g_bandRang.bandFreq.freqVH = g_bandRang.bandFreq.vhfH * 10000;
 
     // V段频率范围
-    bandRang.bandFreq.uhfL = bandData[6] * 1000 + bandData[7] * 10;
-    bandRang.bandFreq.uhfH = bandData[8] * 1000 + bandData[9] * 10;
-    bandRang.bandFreq.freqUL = bandRang.bandFreq.uhfL * 10000;
-    bandRang.bandFreq.freqUH = bandRang.bandFreq.uhfH * 10000;
+    g_bandRang.bandFreq.uhfL = bandData[6] * 1000 + bandData[7] * 10;
+    g_bandRang.bandFreq.uhfH = bandData[8] * 1000 + bandData[9] * 10;
+    g_bandRang.bandFreq.freqUL = g_bandRang.bandFreq.uhfL * 10000;
+    g_bandRang.bandFreq.freqUH = g_bandRang.bandFreq.uhfH * 10000;
 
     // 200M频率范围
-    bandRang.bandFreq.vhf2L = bandData[11] * 1000 + bandData[12] * 10;
-    bandRang.bandFreq.vhf2H = bandData[13] * 1000 + bandData[14] * 10;
-    bandRang.bandFreq.freqV2L = bandRang.bandFreq.vhf2L * 10000;
-    bandRang.bandFreq.freqV2H = bandRang.bandFreq.vhf2H * 10000;
+    g_bandRang.bandFreq.vhf2L = bandData[11] * 1000 + bandData[12] * 10;
+    g_bandRang.bandFreq.vhf2H = bandData[13] * 1000 + bandData[14] * 10;
+    g_bandRang.bandFreq.freqV2L = g_bandRang.bandFreq.vhf2L * 10000;
+    g_bandRang.bandFreq.freqV2H = g_bandRang.bandFreq.vhf2H * 10000;
 
     // 350M频率范围
     for (i = 0; i < 8; i++)
     {
         bandData1[i] = changeHexToInt(bandData1[i]);
     }
-    bandRang.bandFreq.B350ML = bandData1[1] * 1000 + bandData1[2] * 10;
-    bandRang.bandFreq.B350MH = bandData1[3] * 1000 + bandData1[4] * 10;
-    bandRang.bandFreq.freq350ML = bandRang.bandFreq.B350ML * 10000;
-    bandRang.bandFreq.freq350MH = bandRang.bandFreq.B350MH * 10000;
+    g_bandRang.bandFreq.B350ML = bandData1[1] * 1000 + bandData1[2] * 10;
+    g_bandRang.bandFreq.B350MH = bandData1[3] * 1000 + bandData1[4] * 10;
+    g_bandRang.bandFreq.freq350ML = g_bandRang.bandFreq.B350ML * 10000;
+    g_bandRang.bandFreq.freq350MH = g_bandRang.bandFreq.B350MH * 10000;
 }
 
 // 保存发射允许和频段选择功能
 // 预留14Byte + 2Byte(CheckSum)
 //(4K - 32Byte) / 16 = 254  衰减次数: 254
 //  前16字节用于衰减算法  实际使用61bit
-extern void Flash_SaveRfMoudelType(void)
+void Flash_SaveRfModelType(void)
 {
     U16 addrOffset;
-    U8 dataMap;
     U32 logicAddr;
     U16 checkSum;
     U8 buf[16] = {0x00};
@@ -463,7 +432,7 @@ extern void Flash_SaveRfMoudelType(void)
     addrOffset = Flash_GetLogicAddrShift(RF_MODEL_ADDR, 32);
 
     // 提取数据
-    memcpy(buf, (U8 *)&g_rfMoudel.moduleType, 5);
+    memcpy(buf, (U8 *)&g_rfModel.modelType, 5);
 
     // 计算CRC校验
     checkSum = CRC_ValidationCalc(buf, 14);
@@ -474,7 +443,7 @@ extern void Flash_SaveRfMoudelType(void)
         logicAddr = (addrOffset + 1) * 16 + RF_MODEL_ADDR + 32;
         SpiFlash_WriteBytes(logicAddr, buf, 16);
         // 标记地址工作块
-        dataMap = addrMap[(addrOffset % 8)];
+        U8 dataMap = OFF_BYTE((addrOffset + 1) % 8);
         SpiFlash_WriteBytes((RF_MODEL_ADDR + (addrOffset / 8)), &dataMap, 1);
     }
     else
@@ -488,7 +457,7 @@ extern void Flash_SaveRfMoudelType(void)
 // 预留14Byte + 2Byte(CheckSum)
 //(4K - 32Byte) / 16 = 254  衰减次数: 254
 //  前16字节用于衰减算法  实际使用61bit
-extern void Flash_ReadRfMoudelType(void)
+void Flash_ReadRfModelType(void)
 {
     U16 addrOffset;
     U32 logicAddr;
@@ -504,12 +473,12 @@ extern void Flash_ReadRfMoudelType(void)
         memcpy((U8 *)&checkSum, &buf[14], 2);
         if (checkSum == CRC_ValidationCalc(buf, 14))
         { // 数据校验正确
-            memcpy((U8 *)&g_rfMoudel.moduleType, buf, 5);
+            memcpy((U8 *)&g_rfModel.modelType, buf, 5);
             return;
         }
     }
     // 默认工厂模式，同时发射都不允许
-    memset((U8 *)&g_rfMoudel.moduleType, 0x00, 5);
+    memset((U8 *)&g_rfModel.modelType, 0x00, 5);
 
     // 提取数据
     memset(buf, 0x00, 16);
@@ -528,14 +497,13 @@ extern void Flash_ReadRfMoudelType(void)
 extern void Flash_SaveFmData(void)
 {
     U16 addrOffset;
-    U8 dataMap;
     U32 logicAddr;
     U16 checkSum, CheckSumRd;
     U8 buf[66] = {0x00};
     U8 cmpBuf[66];
 
     // 读取存储位置信息
-    addrOffset = Flash_GetLogicAddrShift(FM_IMFOS_ADDR, 8);
+    addrOffset = Flash_GetLogicAddrShift(FM_INFO_ADDR, 8);
 
     // 提取数据
     memcpy(buf, (U8 *)&g_FMInform.FmCurFreq, sizeof(STR_FMINFOS));
@@ -545,7 +513,7 @@ extern void Flash_SaveFmData(void)
 
     if (addrOffset < 60)
     {
-        logicAddr = addrOffset * 66 + FM_IMFOS_ADDR + 16;
+        logicAddr = addrOffset * 66 + FM_INFO_ADDR + 16;
         // 读取当前校验和比较
         SpiFlash_ReadBytes(logicAddr + 64, (U8 *)&CheckSumRd, 2);
         if (CheckSumRd == checkSum)
@@ -560,13 +528,13 @@ extern void Flash_SaveFmData(void)
         SpiFlash_WriteBytes(logicAddr + 66, buf, 66);
 
         // 标记地址工作块
-        dataMap = addrMap[(addrOffset % 8)];
-        SpiFlash_WriteBytes((FM_IMFOS_ADDR + (addrOffset / 8)), &dataMap, 1);
+        U8 dataMap = OFF_BYTE((addrOffset + 1) % 8);
+        SpiFlash_WriteBytes((FM_INFO_ADDR + (addrOffset / 8)), &dataMap, 1);
     }
     else
     { // 擦除
-        SpiFlash_EraseSector(FM_IMFOS_ADDR);
-        SpiFlash_WriteBytes((FM_IMFOS_ADDR + 16), buf, 66);
+        SpiFlash_EraseSector(FM_INFO_ADDR);
+        SpiFlash_WriteBytes((FM_INFO_ADDR + 16), buf, 66);
     }
 }
 
@@ -581,11 +549,11 @@ extern void Flash_ReadFmData(void)
     U16 checkSum;
     U8 buf[66] = {0x00};
 
-    addrOffset = Flash_GetLogicAddrShift(FM_IMFOS_ADDR, 8);
+    addrOffset = Flash_GetLogicAddrShift(FM_INFO_ADDR, 8);
 
     if (addrOffset < 61)
     {
-        logicAddr = (addrOffset * 66) + FM_IMFOS_ADDR + 16;
+        logicAddr = (addrOffset * 66) + FM_INFO_ADDR + 16;
         SpiFlash_ReadBytes(logicAddr, buf, 66);
 
         memcpy((U8 *)&checkSum, &buf[64], 2);
@@ -602,6 +570,6 @@ extern void Flash_ReadFmData(void)
     g_FMInform.fmChVfo = VFO_MODE;
 
     memcpy(buf, (U8 *)&g_FMInform.FmCurFreq, sizeof(STR_FMINFOS));
-    SpiFlash_EraseSector(FM_IMFOS_ADDR);
-    SpiFlash_WriteBytes((FM_IMFOS_ADDR + 16), buf, 66);
+    SpiFlash_EraseSector(FM_INFO_ADDR);
+    SpiFlash_WriteBytes((FM_INFO_ADDR + 16), buf, 66);
 }

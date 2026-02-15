@@ -220,23 +220,23 @@ void ProgromWriteReadData(U8 flag)
         switch (address)
         {
         case 0x8000:
-            memcpy(VfoBuf, buf, 64);
+            memcpy(g_VfoBuf, buf, 64);
             Flash_SaveVfoData(0xFF);
             break;
         case 0x9000:
             memcpy((U8 *)&g_radioInform.sqlLevel, buf, sizeof(STR_RADIOINFORM));
             break;
         case 0x9040:
-            memcpy(powerOnMsg, buf, 16);
-            Flash_SaveRadioImfosData();
+            memcpy(g_powerOnMsg, buf, 16);
+            Flash_SaveRadioInfoData();
             break;
-        case FM_IMFOS_ADDR:
+        case FM_INFO_ADDR:
             memcpy((U8 *)&g_FMInform.FmCurFreq, buf, 64);
             Flash_SaveFmData();
             break;
         case RF_MODEL_ADDR:
-            memcpy((U8 *)&g_rfMoudel.moduleType, buf, 5);
-            Flash_SaveRfMoudelType();
+            memcpy((U8 *)&g_rfModel.modelType, buf, 5);
+            Flash_SaveRfModelType();
             break;
         default:
             if ((address % 0x1000) == 0)
@@ -247,8 +247,8 @@ void ProgromWriteReadData(U8 flag)
 
             if (address == BAND2_ADDR)
             {
-                g_rfMoudel.moduleType = buf[21];
-                Flash_SaveRfMoudelType();
+                g_rfModel.modelType = buf[21];
+                Flash_SaveRfModelType();
             }
             break;
         }
@@ -259,7 +259,7 @@ void ProgromWriteReadData(U8 flag)
         {
         case 0x8000:
             Flash_ReadVfoData(0);
-            memcpy(&progromData0, VfoBuf, 64);
+            memcpy(&progromData0, g_VfoBuf, 64);
             break;
 
         case 0x9000:
@@ -267,19 +267,19 @@ void ProgromWriteReadData(U8 flag)
             break;
         case 0x9040:
             memset(&progromData0, 0xFF, 64);
-            memcpy(&progromData0, powerOnMsg, 16);
+            memcpy(&progromData0, g_powerOnMsg, 16);
             break;
-        case FM_IMFOS_ADDR:
+        case FM_INFO_ADDR:
             memcpy(&progromData0, (U8 *)&g_FMInform.FmCurFreq, 64);
             break;
         case RF_MODEL_ADDR:
-            memcpy(&progromData0, (U8 *)&g_rfMoudel.moduleType, 5);
+            memcpy(&progromData0, (U8 *)&g_rfModel.modelType, 5);
             break;
         default:
             SpiFlash_ReadBytes(address, &progromData0, PROGROMLEN);
             if (address == BAND2_ADDR)
             {
-                buf[21] = g_rfMoudel.moduleType;
+                buf[21] = g_rfModel.modelType;
             }
             break;
         }
