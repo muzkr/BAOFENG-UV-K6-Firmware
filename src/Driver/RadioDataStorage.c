@@ -48,10 +48,8 @@ extern void Flash_ModifyChannelData(U16 channelNum, U8 *chData, U8 *chName)
  ***********************************************************************/
 extern void Flash_SaveChannelData(U16 channelNum, U8 *chData, U8 *chName)
 {
-    U32 addr;
-    U8 channelBuf[32] = {0x00};
-
-    addr = g_ChannelVfoInfo.currentChannelNum * CHAN_SIZE + CHAN_ADDR;
+    U32 addr = CHAN_ADDR + channelNum * CHAN_SIZE;
+    U8 channelBuf[CHAN_SIZE];
     SpiFlash_ReadBytes(addr, channelBuf, CHAN_SIZE);
 
     // 判断数据是否有改变
