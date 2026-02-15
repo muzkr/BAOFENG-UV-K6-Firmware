@@ -281,8 +281,8 @@ extern void Flash_ReadVfoData(U8 workAB)
 
 // 保存对讲机信道号,天气预报信道号,收音机当前频率
 // 预留14Byte + 2Byte(CheckSum)
-//(4K - 32Byte) / 16 = 254  衰减次数: 254
-//  前16字节用于衰减算法  实际使用61bit
+// (4K - 32Byte) / 16 = 254  衰减次数: 254
+//  前32字节用于衰减算法
 extern void Flash_SaveSystemRunData(void)
 {
     U16 addrOffset;
@@ -294,7 +294,7 @@ extern void Flash_SaveSystemRunData(void)
     addrOffset = Flash_GetLogicAddrShift(SYSTEMRAN_ADDR, 32);
 
     // 提取数据
-    memcpy(buf, (U8 *)&g_ChannelVfoInfo.channelNum, 2);
+    memcpy(buf, g_ChannelVfoInfo.channelNum, 4);
 
     // 计算CRC校验
     checkSum = CRC_ValidationCalc(buf, 14);
@@ -318,7 +318,7 @@ extern void Flash_SaveSystemRunData(void)
 // 读取对讲机信道号,天气预报信道号,收音机当前频率
 // 预留14Byte + 2Byte(CheckSum)
 // (4K - 32Byte) / 16 = 254  衰减次数: 254
-// 前32字节用于衰减算法  实际使用61bit
+// 前32字节用于衰减算法
 extern void Flash_ReadSystemRunData(void)
 {
     uint16_t addrOffset = Flash_GetLogicAddrShift(SYSTEMRAN_ADDR, 32);
@@ -332,7 +332,7 @@ extern void Flash_ReadSystemRunData(void)
         memcpy(&checkSum, &buf[14], 2);
         if (checkSum == CRC_ValidationCalc(buf, 14))
         { // 数据校验正确
-            memcpy(g_ChannelVfoInfo.channelNum, buf, 2);
+            memcpy(g_ChannelVfoInfo.channelNum, buf, 4);
             return;
         }
     }
