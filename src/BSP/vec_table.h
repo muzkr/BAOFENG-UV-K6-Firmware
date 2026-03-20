@@ -1,6 +1,6 @@
 #ifndef _VEC_TABLE_H
 #define _VEC_TABLE_H
 
-void vec_table_init();
+void vec_table_setup();
 
 #endif

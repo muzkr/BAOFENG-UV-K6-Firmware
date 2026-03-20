@@ -7,10 +7,8 @@ bf_uvk6
 **/*.i
 **/*.s
 !Libraries/CMSIS/Device/suport/**/*.s
-.vscode
 .pio
 
 /.venv
 /build
-/tools
-/requirements.txt
+/tmp

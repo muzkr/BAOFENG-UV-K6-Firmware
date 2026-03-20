@@ -1,16 +1,10 @@
 #include "includes.h"
 #include "kd32f328_it.h"
-#include "vec_table.h"
 
 void Gpio_Init(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
 
-    RCC_AHBPeriphResetCmd(RCC_AHBPeriph_GPIOA, ENABLE);
-    RCC_AHBPeriphResetCmd(RCC_AHBPeriph_GPIOA, DISABLE);
-
-    /* Enable GPIO clock */
-    RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA | RCC_AHBPeriph_GPIOB | RCC_AHBPeriph_GPIOC | RCC_AHBPeriph_GPIOF, ENABLE);
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1 | RCC_APB2Periph_SPI1, ENABLE);
 
     // 初始化GPIO A 输出相关PIN
@@ -306,8 +300,6 @@ void USART1_IRQHandler(void)
 
 extern void Board_Init(void)
 {
-    vec_table_init();
-
     NVIC_Configuration();
     Gpio_Init();
     SPI2_Init();

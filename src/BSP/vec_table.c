@@ -1,16 +1,23 @@
 
 #include "vec_table.h"
-#include <string.h>
 #include "KD32f328_flash.h"
-#include "Delay.h"
 #include "kd32f328_it.h"
-#include "PublType.h"
+#include <string.h>
+#include <stdbool.h>
 
-#define PAGE_SIZE 0x400  // 1 KB
-#define FW_OFFSET 0x2000 // 8 KB
+#define PAGE_SIZE 1024
+#define BL_SIZE (8 * 1024)
 
-typedef void (*intHandle)(void);
-static __IO intHandle UserVectors[4] __attribute__((section(".intfun")));
+#define SCRATCH_RAM SRAM_BASE
+
+typedef void (*isr_func)();
+
+static __IO isr_func isr_list[4] __attribute__((section(".isr_list"), used)) = {
+    SysTick_Handler,
+    USART1_IRQHandler,
+    USART2_IRQHandler,
+    DMA1_Channel4_5_IRQHandler,
+};
 
 static const IRQn_Type IRQn_LIST[] = {
     NonMaskableInt_IRQn,
@@ -45,43 +52,39 @@ static inline uint32_t IRQn_index(IRQn_Type IRQn) { return 16 + IRQn; }
 static inline uint32_t vector_address(IRQn_Type IRQn) { return FLASH_BASE + 4 * IRQn_index(IRQn); }
 static inline uint32_t vector_target_address(IRQn_Type IRQn) { return *((__IO uint32_t *)vector_address(IRQn)); }
 
-static void vec_patch();
+static void do_patch();
 static void erase_OB();
 static void erase_page();
 static void program_page(const void *buf);
 
-void vec_table_init()
+void vec_table_setup()
 {
-    vec_patch();
+    do_patch();
 
-    UserVectors[0] = SysTick_Handler;
-    UserVectors[1] = USART1_IRQHandler;
-    UserVectors[2] = USART2_IRQHandler;
-    UserVectors[3] = DMA1_Channel4_5_IRQHandler;
+    (void)isr_list;
 }
 
 void USART2_IRQHandler()
 {
     uint32_t index = __get_IPSR() & 0x3f;
-    uint32_t vec = *((__IO uint32_t *)(FLASH_BASE + FW_OFFSET + 4 * index));
-    vec &= ~1u;
-    ((intHandle)vec)();
+    uint32_t vec = *((__IO uint32_t *)(FLASH_BASE + BL_SIZE + 4 * index));
+    ((isr_func)vec)();
 }
 
-static void vec_patch()
+static void do_patch()
 {
     // -----------------------------
     //  Check patching needed
 
     const uint32_t target = vector_target_address(USART2_IRQn);
 
-    bool need_patch = FALSE;
+    bool need_patch = false;
     for (uint32_t i = 0; i < sizeof(IRQn_LIST) / sizeof(IRQn_Type); i++)
     {
         uint32_t target1 = vector_target_address(IRQn_LIST[i]);
         if (target1 != target)
         {
-            need_patch = TRUE;
+            need_patch = true;
             break;
         }
     }
@@ -102,8 +105,8 @@ static void vec_patch()
     // ------------------------
     //  Patch vector table
 
-    uint32_t buf[PAGE_SIZE / 4];
-    memcpy(buf, (void *)FLASH_BASE, sizeof(buf));
+    uint32_t *buf = (uint32_t *)SCRATCH_RAM;
+    memcpy(buf, (void *)FLASH_BASE, PAGE_SIZE);
 
     for (uint32_t i = 0; i < sizeof(IRQn_LIST) / sizeof(IRQn_Type); i++)
     {
@@ -219,7 +222,6 @@ static void erase_OB()
     // Will reset automatically
 
     // THIS SHOULD NOT HAPPEN!
-    DelayMs(10);
     NVIC_SystemReset();
     while (1)
     {

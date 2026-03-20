@@ -6,6 +6,8 @@ target_compile_definitions(app INTERFACE HSE_VALUE=16000000)
 target_link_libraries(app INTERFACE printf)
 target_compile_definitions(app INTERFACE PRINTF_INCLUDE_CONFIG_H)
 
+target_link_options(app INTERFACE -T ${CMAKE_CURRENT_SOURCE_DIR}/kd32f328xb.ld)
+
 #
 target_compile_definitions(app INTERFACE SWAP_UP_DOWN=1)
 

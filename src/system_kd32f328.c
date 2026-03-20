@@ -57,7 +57,20 @@ static void SetSysClock(void);
   * @retval None
   */
 void SystemInit (void)
-{    
+{
+    // Undo bootloader changes
+    __disable_irq();
+    NVIC_DisableIRQ(SysTick_IRQn);
+    SysTick->CTRL = 0;
+    SPI1->CR1 &= ~SPI_CR1_SPE;
+    SPI2->CR1 &= ~SPI_CR1_SPE;
+    USART1->CR1 &= ~USART_CR1_UE;
+    RCC->APB2ENR &= ~(RCC_APB2ENR_SPI1EN | RCC_APB2ENR_USART1EN);
+    RCC->APB1ENR &= ~(RCC_APB1ENR_SPI2EN);
+    RCC->AHBRSTR |= (RCC_AHBRSTR_GPIOARST | RCC_AHBRSTR_GPIOBRST | RCC_AHBRSTR_GPIOCRST | RCC_AHBRSTR_GPIOFRST);
+    RCC->AHBRSTR &= ~(RCC_AHBRSTR_GPIOARST | RCC_AHBRSTR_GPIOBRST | RCC_AHBRSTR_GPIOCRST | RCC_AHBRSTR_GPIOFRST);
+    __enable_irq();
+
   /* Set HSION bit */
   RCC->CR |= (uint32_t)0x00000001;
 

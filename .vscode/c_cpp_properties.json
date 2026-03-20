@@ -1,0 +1,19 @@
+{
+    "configurations": [
+        {
+            "name": "user",
+            "includePath": [
+                "${workspaceFolder}/**"
+            ],
+            "defines": [],
+            "cStandard": "gnu11",
+            "cppStandard": "gnu++17",
+            "intelliSenseMode": "gcc-arm",
+            "configurationProvider": "ms-vscode.cmake-tools",
+            "compileCommands": [
+                "build/Release/compile_commands.json"
+            ]
+        }
+    ],
+    "version": 4
+}

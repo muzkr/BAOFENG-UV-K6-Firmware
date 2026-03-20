@@ -21,29 +21,36 @@ message("Build type: " ${CMAKE_BUILD_TYPE})
 
 enable_language(C CXX ASM)
 
+set(VERSION_NUMBER 0.1.0)
+
 set(EXE_NAME ${CMAKE_PROJECT_NAME}-${VERSION_NUMBER})
 message("Binary name: " ${EXE_NAME})
 
 add_executable(${EXE_NAME})
 
-add_subdirectory(Libraries)
+add_subdirectory(lib)
 add_subdirectory(src)
 
 target_link_libraries(${EXE_NAME} app)
 target_compile_definitions(${EXE_NAME} PRIVATE $<$<CONFIG:Debug>:DEBUG>)
-
 target_compile_definitions(${EXE_NAME} PRIVATE VERSION_NUMBER="${VERSION_NUMBER}")
+target_link_options(${EXE_NAME} PRIVATE -Wl,-Map=${EXE_NAME}.map)
 
 # Remove wrong libob.a library dependency when using cpp files
 list(REMOVE_ITEM CMAKE_C_IMPLICIT_LINK_LIBRARIES ob)
-
-# Add the map file to the list of files to be removed with 'clean' target
-set_target_properties(${EXE_NAME} PROPERTIES ADDITIONAL_CLEAN_FILES ${CMAKE_PROJECT_NAME}.map)
 
 # Generate .bin file
 add_custom_command(
     TARGET ${EXE_NAME}
     POST_BUILD
     COMMAND ${CMAKE_OBJCOPY} -O binary ${EXE_NAME}.elf ${EXE_NAME}.bin
-    COMMENT "Generating .bin file"
+    COMMENT "Generate .bin file"
+)
+
+# 
+add_custom_command(
+    TARGET ${EXE_NAME}
+    POST_BUILD
+    COMMAND arm-none-eabi-objdump -D ${EXE_NAME}.elf > ${EXE_NAME}.asm
+    COMMENT "Disassemble"
 )

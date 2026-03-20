@@ -10,7 +10,9 @@
 #define LCD_RST_H GPIOB->BSRR = GPIO_Pin_8
 #define LCD_RST_L GPIOB->BRR = GPIO_Pin_8
 /*********************************************************************/
-U8 gLcdBuffer[8][128] __attribute__((section(".bss.LARGE")));
+
+U8 gLcdBuffer[8][128];
+
 /*********************************************************************/
 
 // In ~120 ns
@@ -85,24 +87,24 @@ extern void SC5260_Init(void)
     LCD_RST_H;
 
     DelayMs(100);
-    SC5260_writeCmd(0xE2);
+    SC5260_writeCmd(0xE2); // soft reset
     DelayMs(100);
 
-    SC5260_writeCmd(0x2c);
+    SC5260_writeCmd(0x2c); // power: booster on
     DelayMs(10);
-    SC5260_writeCmd(0x2e);
+    SC5260_writeCmd(0x2e); // power: rgulator on
     DelayMs(10);
-    SC5260_writeCmd(0x2f);
+    SC5260_writeCmd(0x2f); // power: follower on
     DelayMs(10);
 
-    SC5260_writeCmd(0x23);
-    SC5260_writeCmd(0x81);
-    SC5260_writeCmd(0x26);
-    SC5260_writeCmd(0xA2);
-    SC5260_writeCmd(0xA1);
-    SC5260_writeCmd(0xC0);
-    SC5260_writeCmd(0x40);
-    SC5260_writeCmd(0xAE);
+    SC5260_writeCmd(0x23); // regulation ratio: 011 = 4.5
+    SC5260_writeCmd(0x81); // set EV
+    SC5260_writeCmd(0x26); // EV = 0x26
+    SC5260_writeCmd(0xA2); // BS = 0: 1/9
+    SC5260_writeCmd(0xA1); // SEG: MX = 1 (reverse)
+    SC5260_writeCmd(0xC0); // COM: MY = 0
+    SC5260_writeCmd(0x40); // start line = 0
+    SC5260_writeCmd(0xAE); // display off
 
     SC5260_FillScreen(0x00);
 

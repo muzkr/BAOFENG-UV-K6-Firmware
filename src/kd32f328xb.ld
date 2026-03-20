@@ -10,7 +10,7 @@ _Min_Stack_Size = 0x400; /* required amount of stack */
 /* Memories definition */
 MEMORY
 {
-  RAM    (xrw)    : ORIGIN = 0x20000000,   LENGTH = 21856
+  RAM    (xrw)    : ORIGIN = 0x20001000,   LENGTH = 24K - 0x1000
   FLASH    (rx)    : ORIGIN = 0x8002000,   LENGTH = 120K
 }
 
@@ -102,6 +102,9 @@ SECTIONS
   {
     . = ALIGN(4);
     _sdata = .;        /* create a global symbol at data start */
+
+    KEEP(*(.isr_list))        /* Required to be at fixed address (0x20001000) */
+
     *(.data)           /* .data sections */
     *(.data*)          /* .data* sections */
 
@@ -122,11 +125,6 @@ SECTIONS
     /* This is used by the startup in order to initialize the .bss section */
     _sbss = .;         /* define a global symbol at bss start */
     __bss_start__ = _sbss;
-
-    *(.bss.LARGE*)              /* Large .bss objects placed before .intfun to utilize available RAM */  
-
-    . = ABSOLUTE(0x20001000);   /* Jump to fixed address for .intfun */
-    KEEP(*(.intfun))            /* UserVectors[] interrupt table must be at 0x20001000 */
 
     *(.bss)                     /* Regular .bss objects placed after .intfun */ 
     *(.bss*)

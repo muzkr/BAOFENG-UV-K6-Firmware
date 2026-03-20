@@ -1,9 +1,12 @@
 #include "includes.h"
+#include "vec_table.h"
 
 void _putchar(char c)
 {
     uartSendChar((U8)c);
 }
+
+static void board_pre_init();
 
 static void BeepPowerOn(void)
 {
@@ -27,6 +30,9 @@ static void BeepPowerOn(void)
 
 int main(void)
 {
+    vec_table_setup();
+    board_pre_init();
+
     // Do this as early as possible: DelayMs() depends on systick
     SysTick_Init();
 
@@ -88,4 +94,20 @@ int main(void)
         AppRunTask();
         AlarmTask();
     }
+}
+
+static void board_pre_init()
+{
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR, ENABLE);
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
+
+    do
+    {
+        uint32_t periph = RCC_AHBPeriph_GPIOA | RCC_AHBPeriph_GPIOB | RCC_AHBPeriph_GPIOC | RCC_AHBPeriph_GPIOF;
+        RCC_AHBPeriphResetCmd(periph, ENABLE);
+        RCC_AHBPeriphResetCmd(periph, DISABLE);
+        RCC_AHBPeriphClockCmd(periph, ENABLE);
+    } while (0);
+
+    RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);
 }
